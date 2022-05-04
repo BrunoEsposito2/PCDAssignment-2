@@ -1,12 +1,18 @@
 package asynchJavaParser.eventDrivenJavaParser.reports;
 
+import asynchJavaParser.eventDrivenJavaParser.reporters.PackageReporter;
+
 import java.util.List;
 
 public class PackageReport implements IPackageReport{
-  private final String fullClassName;
-  private final String srcFullClassName;
-  private final List<IMethodInfo> methodsInfo;
-  private final List<IFieldInfo> fieldsInfo;
+  private String fullClassName;
+  private String srcFullClassName;
+  private List<IMethodInfo> methodsInfo;
+  private List<IFieldInfo> fieldsInfo;
+
+  public PackageReport(){
+
+  }
 
   public PackageReport(String fullClassName, String srcFullClassName, List<IMethodInfo> methodsInfo, List<IFieldInfo> fieldsInfo) {
     this.fullClassName = fullClassName;

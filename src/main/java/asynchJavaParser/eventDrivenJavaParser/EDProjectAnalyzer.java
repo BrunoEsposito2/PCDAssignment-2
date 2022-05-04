@@ -1,6 +1,7 @@
 package asynchJavaParser.eventDrivenJavaParser;
 
 import asynchJavaParser.eventDrivenJavaParser.reporters.ClassReporter;
+import asynchJavaParser.eventDrivenJavaParser.reporters.PackageReporter;
 import asynchJavaParser.eventDrivenJavaParser.reports.IClassReport;
 import asynchJavaParser.eventDrivenJavaParser.reports.IPackageReport;
 import asynchJavaParser.eventDrivenJavaParser.reports.IProjectReport;
@@ -24,17 +25,18 @@ public class EDProjectAnalyzer implements IProjectAnalyzer {
 
   @Override
   public Future<IClassReport> getClassReport(String srcClassPath) {
-    log("1");
     Promise<IClassReport> promise = Promise.promise();
     ClassReporter reporter = new ClassReporter(promise, srcClassPath);
     this.vertx.deployVerticle(reporter);
-    log("2");
     return promise.future();
   }
 
   @Override
   public Future<IPackageReport> getPackageReport(String srcPackagePath) {
-    return null;
+    Promise<IPackageReport> promise = Promise.promise();
+    PackageReporter reporter = new PackageReporter(promise, srcPackagePath);
+    this.vertx.deployVerticle(reporter);
+    return promise.future();
   }
 
   @Override

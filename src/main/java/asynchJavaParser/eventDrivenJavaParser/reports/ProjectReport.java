@@ -5,8 +5,10 @@ import java.util.List;
 import java.util.Map;
 
 public class ProjectReport implements IProjectReport{
-  private final IClassReport mainClass;
-  private final Map<String, IClassReport> allClasses;
+  private IClassReport mainClass;
+  private Map<String, IClassReport> allClasses;
+
+  public ProjectReport(){}
 
   public ProjectReport(IClassReport mainClass, Map<String, IClassReport> allClasses) {
     this.mainClass = mainClass;
