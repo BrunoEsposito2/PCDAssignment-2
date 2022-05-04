@@ -1,4 +1,4 @@
-package asynchJavaParser.eventDrivenJavaParser.reports;
+package asynchJavaParser.EventDrivenJavaParser.Reports;
 
 import com.github.javaparser.Position;
 import com.github.javaparser.ast.type.Type;

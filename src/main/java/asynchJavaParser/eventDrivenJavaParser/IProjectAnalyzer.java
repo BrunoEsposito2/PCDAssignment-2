@@ -1,8 +1,8 @@
-package asynchJavaParser.eventDrivenJavaParser;
+package asynchJavaParser.EventDrivenJavaParser;
 
-import asynchJavaParser.eventDrivenJavaParser.reports.IClassReport;
-import asynchJavaParser.eventDrivenJavaParser.reports.IPackageReport;
-import asynchJavaParser.eventDrivenJavaParser.reports.IProjectReport;
+import asynchJavaParser.EventDrivenJavaParser.Reports.IClassReport;
+import asynchJavaParser.EventDrivenJavaParser.Reports.IPackageReport;
+import asynchJavaParser.EventDrivenJavaParser.Reports.IProjectReport;
 import io.vertx.core.*;
 import java.util.function.*;
 

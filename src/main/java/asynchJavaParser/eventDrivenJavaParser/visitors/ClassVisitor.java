@@ -1,6 +1,9 @@
-package asynchJavaParser.eventDrivenJavaParser.visitors;
+package asynchJavaParser.EventDrivenJavaParser.Visitors;
 
-import asynchJavaParser.eventDrivenJavaParser.reports.*;
+import asynchJavaParser.EventDrivenJavaParser.Reports.ClassReport;
+import asynchJavaParser.EventDrivenJavaParser.Reports.IMethodInfo;
+import asynchJavaParser.EventDrivenJavaParser.Reports.MethodInfo;
+import asynchJavaParser.EventDrivenJavaParser.Reports.ParameterInfo;
 import com.github.javaparser.ast.PackageDeclaration;
 import com.github.javaparser.ast.body.ClassOrInterfaceDeclaration;
 import com.github.javaparser.ast.body.FieldDeclaration;
@@ -8,10 +11,10 @@ import com.github.javaparser.ast.body.MethodDeclaration;
 import com.github.javaparser.ast.visitor.VoidVisitorAdapter;
 
 public class ClassVisitor extends VoidVisitorAdapter<Void> implements Visitor {
-    private IClassReport classReport;
+    private ClassReport classReport;
     private IMethodInfo methodInfo;
 
-    public ClassVisitor(IClassReport classReport) {
+    public ClassVisitor(ClassReport classReport) {
         this.classReport = new ClassReport();
     }
 

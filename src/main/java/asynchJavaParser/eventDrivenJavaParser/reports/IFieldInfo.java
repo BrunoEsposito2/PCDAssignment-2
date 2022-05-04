@@ -1,4 +1,4 @@
-package asynchJavaParser.eventDrivenJavaParser.reports;
+package asynchJavaParser.EventDrivenJavaParser.Reports;
 
 public interface IFieldInfo {
 

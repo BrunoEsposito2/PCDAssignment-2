@@ -1,4 +1,4 @@
-package asynchJavaParser.eventDrivenJavaParser.reports;
+package asynchJavaParser.EventDrivenJavaParser.Reports;
 
 import asynchJavaParser.eventDrivenJavaParser.reporters.PackageReporter;
 

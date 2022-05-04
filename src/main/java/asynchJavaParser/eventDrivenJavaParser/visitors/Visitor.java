@@ -1,4 +1,4 @@
-package asynchJavaParser.eventDrivenJavaParser.visitors;
+package asynchJavaParser.EventDrivenJavaParser.Visitors;
 
 import com.github.javaparser.ast.PackageDeclaration;
 import com.github.javaparser.ast.body.ClassOrInterfaceDeclaration;

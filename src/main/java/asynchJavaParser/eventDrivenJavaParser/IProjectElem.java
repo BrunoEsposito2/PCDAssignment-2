@@ -1,4 +1,4 @@
-package asynchJavaParser.eventDrivenJavaParser;
+package asynchJavaParser.EventDrivenJavaParser;
 
 public interface IProjectElem {
 
