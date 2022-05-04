@@ -26,7 +26,8 @@ public class EDProjectAnalyzer implements IProjectAnalyzer {
   public Future<IClassReport> getClassReport(String srcClassPath) {
     log("1");
     Promise<IClassReport> promise = Promise.promise();
-    this.vertx.deployVerticle(new ClassReporter(promise, srcClassPath));
+    ClassReporter reporter = new ClassReporter(promise, srcClassPath);
+    this.vertx.deployVerticle(reporter);
     log("2");
     return promise.future();
   }

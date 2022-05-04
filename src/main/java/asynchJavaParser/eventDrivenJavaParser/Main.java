@@ -8,9 +8,10 @@ public class Main {
     public static void main(String[] args){
         Vertx v = Vertx.vertx();
         IProjectAnalyzer pa = new EDProjectAnalyzer(v);
-        Future<IClassReport> res = pa.getClassReport("aaa");
+        Future<IClassReport> res = pa.getClassReport("src/main/java/asynchJavaParser/eventDrivenJavaParser/EDProjectAnalyzer.java");
         res.onComplete(result -> {
-           System.out.println("4");
+           System.out.println(res.result().getFullClassName());
         });
+        System.out.println("Aaaaaaa");
     }
 }

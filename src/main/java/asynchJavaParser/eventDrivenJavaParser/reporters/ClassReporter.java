@@ -2,6 +2,7 @@ package asynchJavaParser.eventDrivenJavaParser.reporters;
 
 import asynchJavaParser.eventDrivenJavaParser.reports.ClassReport;
 import asynchJavaParser.eventDrivenJavaParser.reports.IClassReport;
+import asynchJavaParser.eventDrivenJavaParser.visitors.ClassVisitor;
 import asynchJavaParser.eventDrivenJavaParser.visitors.FullCollector;
 import asynchJavaParser.eventDrivenJavaParser.visitors.MethodNameCollector;
 import com.github.javaparser.StaticJavaParser;
@@ -24,25 +25,18 @@ public class ClassReporter extends AbstractVerticle {
 
     @Override
     public void start() throws Exception {
-            CompilationUnit cu = null;
-            try {
-                cu = StaticJavaParser.parse(new File("src/main/java/Ass_02/AsynchJavaParser.EventDrivenJavaParser/EDProjectAnalyzer.java"));
-            } catch (FileNotFoundException e) {
-                log("3");
-                res.fail("invalid path");
-            }
-
-            var methodNames = new ArrayList<String>();
-            var methodNameCollector = new MethodNameCollector();
-            methodNameCollector.visit(cu,methodNames);
-            methodNames.forEach(n -> System.out.println("MethodNameCollected:" + n));
-
-            var fullc = new FullCollector();
-            fullc.visit(cu, null);
-            ClassReport classReport = new ClassReport("nomeClasse", "nomeFile", new ArrayList<>(), new ArrayList<>());
-            log("3");
-
+        CompilationUnit cu = null;
+        try {
+            log("task started...");
+            cu = StaticJavaParser.parse(new File(this.path));
+            IClassReport classReport = new ClassReport();
+            ClassVisitor visitor = new ClassVisitor(classReport);
+            visitor.visit(cu, null);
             res.complete(classReport);
+        } catch (FileNotFoundException e) {
+            log("task failed...");
+            res.fail("invalid path");
+        }
     }
     private static void log(String msg) {
         System.out.println("" + Thread.currentThread() + " " + msg);
