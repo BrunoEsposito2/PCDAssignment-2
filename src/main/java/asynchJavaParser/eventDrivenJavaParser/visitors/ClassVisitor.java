@@ -1,18 +1,17 @@
 package asynchJavaParser.EventDrivenJavaParser.Visitors;
 
-import asynchJavaParser.EventDrivenJavaParser.Reports.ClassReport;
-import asynchJavaParser.EventDrivenJavaParser.Reports.IMethodInfo;
-import asynchJavaParser.EventDrivenJavaParser.Reports.MethodInfo;
-import asynchJavaParser.EventDrivenJavaParser.Reports.ParameterInfo;
+import asynchJavaParser.EventDrivenJavaParser.Reports.*;
 import com.github.javaparser.ast.PackageDeclaration;
 import com.github.javaparser.ast.body.ClassOrInterfaceDeclaration;
 import com.github.javaparser.ast.body.FieldDeclaration;
 import com.github.javaparser.ast.body.MethodDeclaration;
 import com.github.javaparser.ast.visitor.VoidVisitorAdapter;
 
-public class ClassVisitor extends VoidVisitorAdapter<Void> implements Visitor {
+public class ClassVisitor extends VoidVisitorAdapter<Void> implements IClassVisitor {
     private ClassReport classReport;
     private IMethodInfo methodInfo;
+
+    private IFieldInfo fieldInfo;
 
     public ClassVisitor(ClassReport classReport) {
         this.classReport = new ClassReport();
@@ -39,7 +38,11 @@ public class ClassVisitor extends VoidVisitorAdapter<Void> implements Visitor {
         this.classReport.addMethodsInfo(methodInfo);
     }
 
+    @Override
     public void visit(FieldDeclaration fd, Void collector) {
         super.visit(fd, collector);
+        fieldInfo = new FieldInfo();
+        fd.getVariables().forEach(x -> fieldInfo.addField(new FieldInfo(x.getNameAsString(), x.getTypeAsString()).toString()));
+        this.classReport.addFieldsInfo(fieldInfo);
     }
 }

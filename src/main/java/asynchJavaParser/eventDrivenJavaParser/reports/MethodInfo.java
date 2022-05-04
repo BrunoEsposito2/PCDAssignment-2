@@ -11,7 +11,6 @@ public class MethodInfo implements IMethodInfo{
   private final Optional<Position> endBeginLine;
   private IClassReport parent;
   private Type returnType;
-
   private List<String> parameters;
 
   public MethodInfo(String name, Optional<Position> srcBeginLine, Optional<Position> endBeginLine) {
