@@ -12,4 +12,12 @@ public interface IClassReport {
 
 	List<IFieldInfo> getFieldsInfo();
 
+	void setFullClassName(String fullClassName);
+
+	void setSrcFullFileName(String srcFullFileName);
+
+	void addMethodsInfo(IMethodInfo methodsInfo);
+
+	void addFieldsInfo(IFieldInfo fieldsInfo);
+
 }
