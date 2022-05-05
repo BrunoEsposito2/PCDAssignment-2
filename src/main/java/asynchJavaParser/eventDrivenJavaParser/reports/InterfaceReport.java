@@ -1,5 +1,6 @@
 package asynchJavaParser.eventDrivenJavaParser.reports;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class InterfaceReport implements IInterfaceReport {
@@ -9,6 +10,7 @@ public class InterfaceReport implements IInterfaceReport {
     private List<IMethodInfo> methodsInfo;
 
     public InterfaceReport() {
+        this.methodsInfo = new ArrayList<>();
     }
 
     public void setFullInterfaceName(String fullInterfaceName) {

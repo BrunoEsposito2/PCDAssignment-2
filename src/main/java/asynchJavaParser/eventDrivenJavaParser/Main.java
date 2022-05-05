@@ -3,6 +3,7 @@ package asynchJavaParser.eventDrivenJavaParser;
 import asynchJavaParser.eventDrivenJavaParser.reports.ClassReport;
 import asynchJavaParser.eventDrivenJavaParser.reports.IClassReport;
 import asynchJavaParser.eventDrivenJavaParser.visitors.ClassVisitor;
+import asynchJavaParser.eventDrivenJavaParser.visitors.InterfaceVisitor;
 import com.github.javaparser.StaticJavaParser;
 import com.github.javaparser.ast.CompilationUnit;
 import io.vertx.core.Future;
@@ -22,10 +23,12 @@ public class Main {
 
         try {
             CompilationUnit cu = StaticJavaParser.parse(new File("src/main/java/asynchJavaParser/eventDrivenJavaParser/EDProjectAnalyzer.java"));
-            IClassReport classReport = new ClassReport();
-            ClassVisitor visitor = new ClassVisitor(classReport);
 
-            visitor.visit(cu, null);
+            ClassVisitor cVisitor = new ClassVisitor();
+            cVisitor.visit(cu, null);
+
+            InterfaceVisitor iVisitor = new InterfaceVisitor();
+            iVisitor.visit(cu, null);
         } catch (FileNotFoundException e) {
             e.printStackTrace();
         }

@@ -13,7 +13,7 @@ public class ClassVisitor extends VoidVisitorAdapter<Void> implements IClassVisi
 
     private IFieldInfo fieldInfo;
 
-    public ClassVisitor(IClassReport classReport) {
+    public ClassVisitor() {
         this.classReport = new ClassReport();
     }
 
@@ -36,14 +36,13 @@ public class ClassVisitor extends VoidVisitorAdapter<Void> implements IClassVisi
         methodInfo.setReturnType(md.getType());
         md.getParameters().forEach(x -> methodInfo.addParameter(new ParameterInfo(x.getNameAsString(), x.getType()).toString()));
         this.classReport.addMethodsInfo(methodInfo);
-        System.out.println(methodInfo.getName());
     }
 
     @Override
     public void visit(FieldDeclaration fd, Void collector) {
         super.visit(fd, collector);
         fieldInfo = new FieldInfo();
-        fd.getVariables().forEach(x -> fieldInfo.addField(new FieldInfo(x.getNameAsString(), x.getTypeAsString()).toString()));
+        fd.getVariables().forEach(x -> fieldInfo.addField(new FieldInfo(x.getNameAsString(), x.getTypeAsString())));
         this.classReport.addFieldsInfo(fieldInfo);
     }
 }

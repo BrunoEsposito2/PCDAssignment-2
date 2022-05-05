@@ -13,7 +13,7 @@ public class InterfaceVisitor extends VoidVisitorAdapter<Void> implements Visito
     private InterfaceReport interfaceReport;
     private IMethodInfo methodInfo;
 
-    public InterfaceVisitor(InterfaceReport interfaceReport) {
+    public InterfaceVisitor() {
         this.interfaceReport = new InterfaceReport();
     }
 
