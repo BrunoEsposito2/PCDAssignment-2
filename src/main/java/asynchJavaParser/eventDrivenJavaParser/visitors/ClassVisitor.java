@@ -41,8 +41,9 @@ public class ClassVisitor extends VoidVisitorAdapter<Void> implements IClassVisi
     @Override
     public void visit(FieldDeclaration fd, Void collector) {
         super.visit(fd, collector);
-        fieldInfo = new FieldInfo();
-        fd.getVariables().forEach(x -> fieldInfo.addField(new FieldInfo(x.getNameAsString(), x.getTypeAsString())));
-        this.classReport.addFieldsInfo(fieldInfo);
+        fd.getVariables().forEach(x -> {
+            fieldInfo = new FieldInfo(x.getNameAsString(), x.getTypeAsString());
+            this.classReport.addFieldsInfo(fieldInfo);
+        } );
     }
 }
