@@ -3,8 +3,6 @@ package asynchJavaParser.eventDrivenJavaParser.reporters;
 import asynchJavaParser.eventDrivenJavaParser.reports.ClassReport;
 import asynchJavaParser.eventDrivenJavaParser.reports.IClassReport;
 import asynchJavaParser.eventDrivenJavaParser.visitors.ClassVisitor;
-import asynchJavaParser.eventDrivenJavaParser.visitors.FullCollector;
-import asynchJavaParser.eventDrivenJavaParser.visitors.MethodNameCollector;
 import com.github.javaparser.StaticJavaParser;
 import com.github.javaparser.ast.CompilationUnit;
 import io.vertx.core.AbstractVerticle;
@@ -12,7 +10,6 @@ import io.vertx.core.Promise;
 
 import java.io.File;
 import java.io.FileNotFoundException;
-import java.util.ArrayList;
 
 public class ClassReporter extends AbstractVerticle {
     private final Promise<IClassReport> res;

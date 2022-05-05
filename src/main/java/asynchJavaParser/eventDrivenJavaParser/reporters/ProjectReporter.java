@@ -1,10 +1,7 @@
 package asynchJavaParser.eventDrivenJavaParser.reporters;
 
-import asynchJavaParser.eventDrivenJavaParser.reports.IPackageReport;
 import asynchJavaParser.eventDrivenJavaParser.reports.IProjectReport;
-import asynchJavaParser.eventDrivenJavaParser.reports.PackageReport;
 import asynchJavaParser.eventDrivenJavaParser.reports.ProjectReport;
-import asynchJavaParser.eventDrivenJavaParser.visitors.PackageVisitor;
 import asynchJavaParser.eventDrivenJavaParser.visitors.ProjectVisitor;
 import com.github.javaparser.StaticJavaParser;
 import com.github.javaparser.ast.CompilationUnit;

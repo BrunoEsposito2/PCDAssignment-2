@@ -1,4 +1,4 @@
-package asynchJavaParser.EventDrivenJavaParser;
+package asynchJavaParser.eventDrivenJavaParser;
 
 public class MyClass {
 

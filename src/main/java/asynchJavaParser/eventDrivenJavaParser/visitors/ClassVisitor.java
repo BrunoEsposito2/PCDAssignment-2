@@ -1,6 +1,6 @@
-package asynchJavaParser.EventDrivenJavaParser.Visitors;
+package asynchJavaParser.eventDrivenJavaParser.visitors;
 
-import asynchJavaParser.EventDrivenJavaParser.Reports.*;
+import asynchJavaParser.eventDrivenJavaParser.reports.*;
 import com.github.javaparser.ast.PackageDeclaration;
 import com.github.javaparser.ast.body.ClassOrInterfaceDeclaration;
 import com.github.javaparser.ast.body.FieldDeclaration;
@@ -13,7 +13,7 @@ public class ClassVisitor extends VoidVisitorAdapter<Void> implements IClassVisi
 
     private IFieldInfo fieldInfo;
 
-    public ClassVisitor(ClassReport classReport) {
+    public ClassVisitor(IClassReport classReport) {
         this.classReport = new ClassReport();
     }
 

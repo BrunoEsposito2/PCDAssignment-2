@@ -1,4 +1,4 @@
-package asynchJavaParser.EventDrivenJavaParser.Visitors;
+package asynchJavaParser.eventDrivenJavaParser.visitors;
 
 import com.github.javaparser.ast.body.FieldDeclaration;
 

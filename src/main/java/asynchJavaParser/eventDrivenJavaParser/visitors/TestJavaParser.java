@@ -1,4 +1,4 @@
-package asynchJavaParser.EventDrivenJavaParser.Visitors;
+package asynchJavaParser.eventDrivenJavaParser.visitors;
 
 import java.io.File;
 import java.util.ArrayList;
