@@ -8,7 +8,7 @@ import com.github.javaparser.ast.body.MethodDeclaration;
 import com.github.javaparser.ast.visitor.VoidVisitorAdapter;
 
 public class ClassVisitor extends VoidVisitorAdapter<Void> implements IClassVisitor {
-    private ClassReport classReport;
+    private final IClassReport classReport;
     private IMethodInfo methodInfo;
 
     private IFieldInfo fieldInfo;
