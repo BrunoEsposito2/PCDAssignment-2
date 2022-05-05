@@ -24,11 +24,14 @@ public class ClassReporter extends AbstractVerticle {
     public void start() throws Exception {
         CompilationUnit cu = null;
         try {
-            log("task started...");
+
             cu = StaticJavaParser.parse(new File(this.path));
+
             IClassReport classReport = new ClassReport();
             ClassVisitor visitor = new ClassVisitor(classReport);
+
             visitor.visit(cu, null);
+            log("task started...");
             res.complete(classReport);
         } catch (FileNotFoundException e) {
             log("task failed...");

@@ -1,5 +1,6 @@
 package asynchJavaParser.eventDrivenJavaParser;
 
+import asynchJavaParser.eventDrivenJavaParser.reporters.ProjectReporter;
 import asynchJavaParser.eventDrivenJavaParser.reports.IClassReport;
 import asynchJavaParser.eventDrivenJavaParser.reports.IPackageReport;
 import asynchJavaParser.eventDrivenJavaParser.reports.IProjectReport;
@@ -41,7 +42,10 @@ public class EDProjectAnalyzer implements IProjectAnalyzer {
 
   @Override
   public Future<IProjectReport> getProjectReport(String srcProjectFolderPath) {
-    return null;
+    Promise<IProjectReport> promise = Promise.promise();
+    ProjectReporter reporter = new ProjectReporter(promise, srcProjectFolderPath);
+    this.vertx.deployVerticle(reporter);
+    return promise.future();
   }
 
   @Override

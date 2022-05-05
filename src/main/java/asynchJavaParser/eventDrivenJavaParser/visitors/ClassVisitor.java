@@ -36,6 +36,7 @@ public class ClassVisitor extends VoidVisitorAdapter<Void> implements IClassVisi
         methodInfo.setReturnType(md.getType());
         md.getParameters().forEach(x -> methodInfo.addParameter(new ParameterInfo(x.getNameAsString(), x.getType()).toString()));
         this.classReport.addMethodsInfo(methodInfo);
+        System.out.println(methodInfo.getName());
     }
 
     @Override
