@@ -8,7 +8,4 @@ public interface IFieldInfo {
 	String getFieldTypeFullName();
 	IClassReport getParent();
 
-	void addField(String field);
-
-	List<String> getFields();
 }

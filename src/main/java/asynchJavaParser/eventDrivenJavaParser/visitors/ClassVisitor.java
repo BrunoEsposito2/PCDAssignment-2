@@ -9,6 +9,7 @@ import com.github.javaparser.ast.visitor.VoidVisitorAdapter;
 
 public class ClassVisitor extends VoidVisitorAdapter<Void> implements IClassVisitor {
     private final IClassReport classReport;
+    private IMethodInfo methodInfo;
 
     private IFieldInfo fieldInfo;
 
@@ -31,7 +32,7 @@ public class ClassVisitor extends VoidVisitorAdapter<Void> implements IClassVisi
     @Override
     public void visit(MethodDeclaration md, Void collector) {
         super.visit(md, collector);
-        IMethodInfo methodInfo = new MethodInfo(md.getNameAsString(), md.getBegin(), md.getEnd());
+        methodInfo = new MethodInfo(md.getNameAsString(), md.getBegin(), md.getEnd());
         methodInfo.setReturnType(md.getType());
         md.getParameters().forEach(x -> methodInfo.addParameter(new ParameterInfo(x.getNameAsString(), x.getType()).toString()));
         this.classReport.addMethodsInfo(methodInfo);
@@ -40,8 +41,9 @@ public class ClassVisitor extends VoidVisitorAdapter<Void> implements IClassVisi
     @Override
     public void visit(FieldDeclaration fd, Void collector) {
         super.visit(fd, collector);
-        fieldInfo = new FieldInfo();
-        //fd.getVariables().forEach(x -> fieldInfo.addField(new FieldInfo(x.getNameAsString(), x.getTypeAsString())));
-        this.classReport.addFieldsInfo(fieldInfo);
+        fd.getVariables().forEach(x -> {
+            fieldInfo = new FieldInfo(x.getNameAsString(), x.getTypeAsString());
+            this.classReport.addFieldsInfo(fieldInfo);
+        } );
     }
 }
