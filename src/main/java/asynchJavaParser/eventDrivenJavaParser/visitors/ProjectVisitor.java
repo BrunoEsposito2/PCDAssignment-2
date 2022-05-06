@@ -1,6 +1,6 @@
 package asynchJavaParser.eventDrivenJavaParser.visitors;
 
-import asynchJavaParser.eventDrivenJavaParser.reports.IProjectReport;
+import asynchJavaParser.eventDrivenJavaParser.reports.interfaces.IProjectReport;
 import com.github.javaparser.ast.PackageDeclaration;
 import com.github.javaparser.ast.body.ClassOrInterfaceDeclaration;
 import com.github.javaparser.ast.body.MethodDeclaration;

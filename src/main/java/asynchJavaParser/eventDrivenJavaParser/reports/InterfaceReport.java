@@ -1,5 +1,8 @@
 package asynchJavaParser.eventDrivenJavaParser.reports;
 
+import asynchJavaParser.eventDrivenJavaParser.reports.interfaces.IInterfaceReport;
+import asynchJavaParser.eventDrivenJavaParser.reports.interfaces.IMethodInfo;
+
 import java.util.ArrayList;
 import java.util.List;
 

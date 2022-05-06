@@ -1,10 +1,13 @@
 package asynchJavaParser.eventDrivenJavaParser.reports;
 
+import asynchJavaParser.eventDrivenJavaParser.reports.interfaces.IClassReport;
+import asynchJavaParser.eventDrivenJavaParser.reports.interfaces.IProjectReport;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
-public class ProjectReport implements IProjectReport{
+public class ProjectReport implements IProjectReport {
   private IClassReport mainClass;
   private Map<String, IClassReport> allClasses;
 

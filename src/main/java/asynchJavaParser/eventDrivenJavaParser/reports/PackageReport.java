@@ -1,8 +1,12 @@
 package asynchJavaParser.eventDrivenJavaParser.reports;
 
+import asynchJavaParser.eventDrivenJavaParser.reports.interfaces.IFieldInfo;
+import asynchJavaParser.eventDrivenJavaParser.reports.interfaces.IMethodInfo;
+import asynchJavaParser.eventDrivenJavaParser.reports.interfaces.IPackageReport;
+
 import java.util.List;
 
-public class PackageReport implements IPackageReport{
+public class PackageReport implements IPackageReport {
   private String fullClassName;
   private String srcFullClassName;
   private List<IMethodInfo> methodsInfo;

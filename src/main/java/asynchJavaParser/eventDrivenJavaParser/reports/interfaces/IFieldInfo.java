@@ -1,6 +1,4 @@
-package asynchJavaParser.eventDrivenJavaParser.reports;
-
-import java.util.List;
+package asynchJavaParser.eventDrivenJavaParser.reports.interfaces;
 
 public interface IFieldInfo {
 

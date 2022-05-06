@@ -1,5 +1,6 @@
 package asynchJavaParser.eventDrivenJavaParser.reports;
 
+import asynchJavaParser.eventDrivenJavaParser.reports.interfaces.IParameterInfo;
 import com.github.javaparser.ast.type.Type;
 
 public class ParameterInfo implements IParameterInfo {

@@ -1,11 +1,13 @@
 package asynchJavaParser.eventDrivenJavaParser.reports;
 
+import asynchJavaParser.eventDrivenJavaParser.reports.interfaces.IClassReport;
+import asynchJavaParser.eventDrivenJavaParser.reports.interfaces.IMethodInfo;
 import com.github.javaparser.Position;
 import com.github.javaparser.ast.type.Type;
 
 import java.util.*;
 
-public class MethodInfo implements IMethodInfo{
+public class MethodInfo implements IMethodInfo {
   private final String name;
   private final Optional<Position> srcBeginLine;
   private final Optional<Position> endBeginLine;

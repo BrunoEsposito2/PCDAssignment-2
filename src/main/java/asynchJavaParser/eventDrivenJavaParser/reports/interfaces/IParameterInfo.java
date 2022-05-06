@@ -1,4 +1,4 @@
-package asynchJavaParser.eventDrivenJavaParser.reports;
+package asynchJavaParser.eventDrivenJavaParser.reports.interfaces;
 
 import com.github.javaparser.ast.type.Type;
 

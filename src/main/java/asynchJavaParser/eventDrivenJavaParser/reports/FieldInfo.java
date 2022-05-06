@@ -1,10 +1,9 @@
 package asynchJavaParser.eventDrivenJavaParser.reports;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
+import asynchJavaParser.eventDrivenJavaParser.reports.interfaces.IClassReport;
+import asynchJavaParser.eventDrivenJavaParser.reports.interfaces.IFieldInfo;
 
-public class FieldInfo implements IFieldInfo{
+public class FieldInfo implements IFieldInfo {
   private String name;
   private String fieldTypeFullName;
   private IClassReport parent;

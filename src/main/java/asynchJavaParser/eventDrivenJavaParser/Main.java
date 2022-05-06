@@ -1,18 +1,8 @@
 package asynchJavaParser.eventDrivenJavaParser;
 
-import asynchJavaParser.eventDrivenJavaParser.reports.ClassReport;
-import asynchJavaParser.eventDrivenJavaParser.reports.IClassReport;
-import asynchJavaParser.eventDrivenJavaParser.reports.IInterfaceReport;
-import asynchJavaParser.eventDrivenJavaParser.reports.InterfaceReport;
-import asynchJavaParser.eventDrivenJavaParser.visitors.ClassVisitor;
-import asynchJavaParser.eventDrivenJavaParser.visitors.InterfaceVisitor;
-import com.github.javaparser.StaticJavaParser;
-import com.github.javaparser.ast.CompilationUnit;
+import asynchJavaParser.eventDrivenJavaParser.reports.interfaces.IClassReport;
 import io.vertx.core.Future;
 import io.vertx.core.Vertx;
-
-import java.io.File;
-import java.io.FileNotFoundException;
 
 public class Main {
     public static void main(String[] args){
