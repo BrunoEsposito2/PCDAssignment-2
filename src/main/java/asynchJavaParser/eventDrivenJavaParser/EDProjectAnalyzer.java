@@ -6,6 +6,7 @@ import asynchJavaParser.eventDrivenJavaParser.reports.IPackageReport;
 import asynchJavaParser.eventDrivenJavaParser.reports.IProjectReport;
 import asynchJavaParser.eventDrivenJavaParser.reporters.ClassReporter;
 import asynchJavaParser.eventDrivenJavaParser.reporters.PackageReporter;
+import asynchJavaParser.eventDrivenJavaParser.reports.projectElements.IProjectElem;
 import io.vertx.core.Future;
 import io.vertx.core.*;
 import io.vertx.core.eventbus.EventBus;
