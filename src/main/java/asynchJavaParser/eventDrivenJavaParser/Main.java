@@ -24,7 +24,7 @@ public class Main {
         });*/
 
         try {
-            CompilationUnit cu = StaticJavaParser.parse(new File("src/main/java/asynchJavaParser/eventDrivenJavaParser/EDProjectAnalyzer.java"));
+            /*CompilationUnit cu = StaticJavaParser.parse(new File("src/main/java/asynchJavaParser/eventDrivenJavaParser/EDProjectAnalyzer.java"));
 
             IClassReport classReport = new ClassReport();
             ClassVisitor cVisitor = new ClassVisitor(classReport);
@@ -35,9 +35,14 @@ public class Main {
             iVisitor.visit(cu, null);
 
             classReport.getFieldsInfo().forEach(x -> System.out.println(x));
-            classReport.getMethodsInfo().forEach(x -> System.out.println(x.getName()));
+            classReport.getMethodsInfo().forEach(x -> System.out.println(x.getName()));*/
 
-        } catch (FileNotFoundException e) {
+            Vertx vx = Vertx.vertx();
+            EDProjectAnalyzer analyzer = new EDProjectAnalyzer(vx);
+            Future<IClassReport> cr = analyzer.getClassReport("src/main/java/asynchJavaParser/eventDrivenJavaParser/EDProjectAnalyzer.java");
+            System.out.println(cr.result().toString());
+
+        } catch (Exception e) {
             e.printStackTrace();
         }
     }
