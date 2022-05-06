@@ -13,8 +13,8 @@ public class ClassVisitor extends VoidVisitorAdapter<Void> implements IClassVisi
 
     private IFieldInfo fieldInfo;
 
-    public ClassVisitor() {
-        this.classReport = new ClassReport();
+    public ClassVisitor(IClassReport classReport) {
+        this.classReport = classReport;
     }
 
     @Override

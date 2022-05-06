@@ -28,7 +28,7 @@ public class ClassReporter extends AbstractVerticle {
             cu = StaticJavaParser.parse(new File(this.path));
 
             IClassReport classReport = new ClassReport();
-            ClassVisitor visitor = new ClassVisitor();
+            ClassVisitor visitor = new ClassVisitor(classReport);
 
             visitor.visit(cu, null);
             log("task started...");
