@@ -3,12 +3,9 @@ package asynchJavaParser.eventDrivenJavaParser.reports.projectElements;
 import com.github.javaparser.ast.body.FieldDeclaration;
 
 public enum ElemType {
-    FIELD ("FieldDeclaration"),
+    FIELD,
     METHOD,
     CLASS,
     INTERFACE,
     PACKAGE;
-
-    ElemType(String fieldDeclaration) {
-    }
 }

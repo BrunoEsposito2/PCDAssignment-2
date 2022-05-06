@@ -30,7 +30,13 @@ public class Main {
             Vertx vx = Vertx.vertx();
             EDProjectAnalyzer analyzer = new EDProjectAnalyzer(vx);
             Future<IClassReport> cr = analyzer.getClassReport("src/main/java/asynchJavaParser/eventDrivenJavaParser/EDProjectAnalyzer.java");
-            System.out.println(cr.result().toString());
+            cr.onSuccess(res -> {
+                System.out.println(res.getFullClassName());
+            });
+
+            cr.onFailure(res -> {
+                System.out.println("failure");
+            });
 
         } catch (Exception e) {
             e.printStackTrace();

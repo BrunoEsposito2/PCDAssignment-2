@@ -1,11 +1,11 @@
 package asynchJavaParser.eventDrivenJavaParser;
 
-import asynchJavaParser.eventDrivenJavaParser.reporters.ProjectReporter;
+import asynchJavaParser.eventDrivenJavaParser.activeAgents.reporters.ProjectReporter;
 import asynchJavaParser.eventDrivenJavaParser.reports.interfaces.IClassReport;
 import asynchJavaParser.eventDrivenJavaParser.reports.interfaces.IPackageReport;
 import asynchJavaParser.eventDrivenJavaParser.reports.interfaces.IProjectReport;
-import asynchJavaParser.eventDrivenJavaParser.reporters.ClassReporter;
-import asynchJavaParser.eventDrivenJavaParser.reporters.PackageReporter;
+import asynchJavaParser.eventDrivenJavaParser.activeAgents.reporters.ClassReporter;
+import asynchJavaParser.eventDrivenJavaParser.activeAgents.reporters.PackageReporter;
 import asynchJavaParser.eventDrivenJavaParser.reports.projectElements.IProjectElem;
 import io.vertx.core.Future;
 import io.vertx.core.*;
