@@ -13,14 +13,17 @@ public class InterfaceReport implements IInterfaceReport {
         this.methodsInfo = new ArrayList<>();
     }
 
+    @Override
     public void setFullInterfaceName(String fullInterfaceName) {
         this.fullInterfaceName = fullInterfaceName;
     }
 
+    @Override
     public void setSrcFullFileName(String srcFullFileName) {
         this.srcFullFileName = srcFullFileName;
     }
 
+    @Override
     public void setMethodsInfo(List<IMethodInfo> methodsInfo) {
         this.methodsInfo = methodsInfo;
     }

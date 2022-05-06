@@ -1,20 +1,17 @@
 package asynchJavaParser.eventDrivenJavaParser.visitors;
 
-import asynchJavaParser.eventDrivenJavaParser.reports.IMethodInfo;
-import asynchJavaParser.eventDrivenJavaParser.reports.InterfaceReport;
-import asynchJavaParser.eventDrivenJavaParser.reports.MethodInfo;
-import asynchJavaParser.eventDrivenJavaParser.reports.ParameterInfo;
+import asynchJavaParser.eventDrivenJavaParser.reports.*;
 import com.github.javaparser.ast.PackageDeclaration;
 import com.github.javaparser.ast.body.ClassOrInterfaceDeclaration;
 import com.github.javaparser.ast.body.MethodDeclaration;
 import com.github.javaparser.ast.visitor.VoidVisitorAdapter;
 
 public class InterfaceVisitor extends VoidVisitorAdapter<Void> implements Visitor {
-    private InterfaceReport interfaceReport;
+    private IInterfaceReport interfaceReport;
     private IMethodInfo methodInfo;
 
-    public InterfaceVisitor() {
-        this.interfaceReport = new InterfaceReport();
+    public InterfaceVisitor(IInterfaceReport interfaceReport) {
+        this.interfaceReport = interfaceReport;
     }
 
     @Override

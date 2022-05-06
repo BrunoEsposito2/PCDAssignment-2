@@ -2,6 +2,8 @@ package asynchJavaParser.eventDrivenJavaParser;
 
 import asynchJavaParser.eventDrivenJavaParser.reports.ClassReport;
 import asynchJavaParser.eventDrivenJavaParser.reports.IClassReport;
+import asynchJavaParser.eventDrivenJavaParser.reports.IInterfaceReport;
+import asynchJavaParser.eventDrivenJavaParser.reports.InterfaceReport;
 import asynchJavaParser.eventDrivenJavaParser.visitors.ClassVisitor;
 import asynchJavaParser.eventDrivenJavaParser.visitors.InterfaceVisitor;
 import com.github.javaparser.StaticJavaParser;
@@ -22,17 +24,26 @@ public class Main {
         });*/
 
         try {
-            CompilationUnit cu = StaticJavaParser.parse(new File("src/main/java/asynchJavaParser/eventDrivenJavaParser/EDProjectAnalyzer.java"));
+            /*CompilationUnit cu = StaticJavaParser.parse(new File("src/main/java/asynchJavaParser/eventDrivenJavaParser/EDProjectAnalyzer.java"));
 
-            ClassVisitor cVisitor = new ClassVisitor();
+            IClassReport classReport = new ClassReport();
+            ClassVisitor cVisitor = new ClassVisitor(classReport);
             cVisitor.visit(cu, null);
 
-            InterfaceVisitor iVisitor = new InterfaceVisitor();
+            IInterfaceReport interfaceReport = new InterfaceReport();
+            InterfaceVisitor iVisitor = new InterfaceVisitor(interfaceReport);
             iVisitor.visit(cu, null);
-        } catch (FileNotFoundException e) {
+
+            classReport.getFieldsInfo().forEach(x -> System.out.println(x));
+            classReport.getMethodsInfo().forEach(x -> System.out.println(x.getName()));*/
+
+            Vertx vx = Vertx.vertx();
+            EDProjectAnalyzer analyzer = new EDProjectAnalyzer(vx);
+            Future<IClassReport> cr = analyzer.getClassReport("src/main/java/asynchJavaParser/eventDrivenJavaParser/EDProjectAnalyzer.java");
+            System.out.println(cr.result().toString());
+
+        } catch (Exception e) {
             e.printStackTrace();
         }
-
-
     }
 }
