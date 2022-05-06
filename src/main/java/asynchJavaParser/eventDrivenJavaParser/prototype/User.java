@@ -2,7 +2,6 @@ package asynchJavaParser.eventDrivenJavaParser.prototype;
 
 import io.vertx.core.Vertx;
 import io.vertx.core.eventbus.EventBus;
-import io.vertx.core.eventbus.MessageConsumer;
 
 import javax.swing.*;
 import java.awt.*;
@@ -16,7 +15,7 @@ public class User extends JPanel {
 
     private static final long serialVersionUID = 1L;
     private File directory;
-    private JLabel nameDirectory;
+    private static JLabel nameDirectory;
     private EventBus eventBus;
 
     private JLabel infoTitle;
@@ -26,10 +25,6 @@ public class User extends JPanel {
         createPanel();
         eventBus = v.eventBus();
         fl = new FakeLibrary(v);
-        MessageConsumer<String> consumer = eventBus.consumer("master");
-        consumer.handler(message -> {
-            nameDirectory.setText(message.body());
-        });
     }
 
     private void createPanel() {
@@ -73,9 +68,8 @@ public class User extends JPanel {
         frame.getContentPane().add(view);
         frame.pack();
         frame.setVisible(true);
-        view.fl.method();
-
-
+        view.fl.method(String -> { nameDirectory.setText(String);
+        });
     }
 }
 
