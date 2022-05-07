@@ -31,7 +31,7 @@ public class Main {
             EDProjectAnalyzer analyzer = new EDProjectAnalyzer(vx);
             Future<IClassReport> cr = analyzer.getClassReport("src/main/java/asynchJavaParser/eventDrivenJavaParser/EDProjectAnalyzer.java");
             cr.onSuccess(res -> {
-                System.out.println(res.getFullClassName());
+                System.out.println(res.getSrcFullFileName());
             });
 
             cr.onFailure(res -> {

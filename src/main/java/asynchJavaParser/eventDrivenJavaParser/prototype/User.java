@@ -1,13 +1,21 @@
 package asynchJavaParser.eventDrivenJavaParser.prototype;
 
+import asynchJavaParser.eventDrivenJavaParser.projectAnalyzer.ElemType;
+import asynchJavaParser.eventDrivenJavaParser.projectAnalyzer.ProjectElem;
+import asynchJavaParser.eventDrivenJavaParser.projectAnalyzer.ResponsiveProjectVisitor;
+import com.github.javaparser.StaticJavaParser;
+import com.github.javaparser.ast.CompilationUnit;
+import com.github.javaparser.ast.PackageDeclaration;
 import io.vertx.core.Vertx;
 import io.vertx.core.eventbus.EventBus;
+import io.vertx.core.eventbus.MessageConsumer;
 
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.File;
+import java.io.FileNotFoundException;
 
 import static javax.swing.WindowConstants.EXIT_ON_CLOSE;
 
@@ -25,6 +33,7 @@ public class User extends JPanel {
         createPanel();
         eventBus = v.eventBus();
         fl = new FakeLibrary(v);
+
     }
 
     private void createPanel() {
@@ -53,7 +62,6 @@ public class User extends JPanel {
     }
 
     private class StopEvents implements ActionListener {
-
         public void actionPerformed(ActionEvent e) {
             eventBus.publish("worker", "STOP");
         }
@@ -68,7 +76,31 @@ public class User extends JPanel {
         frame.getContentPane().add(view);
         frame.pack();
         frame.setVisible(true);
-        view.fl.method(String -> { nameDirectory.setText(String);
+        //view.fl.method(String -> {nameDirectory.setText(String);});
+        ResponsiveProjectVisitor rpv = new ResponsiveProjectVisitor(vertx);
+        CompilationUnit cu = null;
+        try {
+            cu = StaticJavaParser.parse(new File("src/main/java/asynchJavaParser/eventDrivenJavaParser/EDProjectAnalyzer.java"));
+            rpv.visit(cu, null);
+        } catch (FileNotFoundException e) {
+        }
+        /*MessageConsumer<ClassOrInterfaceDeclaration> classConsumer = vertx.eventBus().consumer("master");
+        classConsumer.handler(message -> {
+            System.out.println(message.body().getNameAsString());
+        });*/
+        MessageConsumer<ProjectElem<PackageDeclaration>> packageConsumer = vertx.eventBus().consumer("master");
+        packageConsumer.handler(message -> {
+            ProjectElem<PackageDeclaration> res = message.body();
+
+            //System.out.println(res.getType()+" aaaa");
+            /*if(message.body().getType().equals("PackageDeclaration")) {
+                System.out.println(message.body().getElem().getNameAsString());
+            }*/
+        });
+
+        MessageConsumer<String> stringConsumer = vertx.eventBus().consumer("master");
+        stringConsumer.handler(message -> {
+            System.out.println(message.body()+" aaaa");
         });
     }
 }

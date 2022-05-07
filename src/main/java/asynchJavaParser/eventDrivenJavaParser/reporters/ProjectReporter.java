@@ -1,8 +1,8 @@
-package asynchJavaParser.eventDrivenJavaParser.activeAgents.reporters;
+package asynchJavaParser.eventDrivenJavaParser.reporters;
 
-import asynchJavaParser.eventDrivenJavaParser.reports.interfaces.IPackageReport;
-import asynchJavaParser.eventDrivenJavaParser.reports.PackageReport;
-import asynchJavaParser.eventDrivenJavaParser.visitors.PackageVisitor;
+import asynchJavaParser.eventDrivenJavaParser.reports.interfaces.IProjectReport;
+import asynchJavaParser.eventDrivenJavaParser.reports.ProjectReport;
+import asynchJavaParser.eventDrivenJavaParser.visitors.ProjectVisitor;
 import com.github.javaparser.StaticJavaParser;
 import com.github.javaparser.ast.CompilationUnit;
 import io.vertx.core.AbstractVerticle;
@@ -11,11 +11,11 @@ import io.vertx.core.Promise;
 import java.io.File;
 import java.io.FileNotFoundException;
 
-public class PackageReporter extends AbstractVerticle {
-    private final Promise<IPackageReport> res;
+public class ProjectReporter extends AbstractVerticle {
+    private final Promise<IProjectReport> res;
     private final String path;
 
-    public PackageReporter(Promise<IPackageReport> res, String path){
+    public ProjectReporter(Promise<IProjectReport> res, String path){
         this.res = res;
         this.path = path;
     }
@@ -26,10 +26,10 @@ public class PackageReporter extends AbstractVerticle {
         try {
             log("task started...");
             cu = StaticJavaParser.parse(new File(this.path));
-            IPackageReport packageReport = new PackageReport();
-            PackageVisitor visitor = new PackageVisitor(packageReport);
+            IProjectReport projectReport = new ProjectReport();
+            ProjectVisitor visitor = new ProjectVisitor(projectReport);
             visitor.visit(cu, null);
-            res.complete(packageReport);
+            res.complete(projectReport);
         } catch (FileNotFoundException e) {
             log("task failed...");
             res.fail("invalid path");

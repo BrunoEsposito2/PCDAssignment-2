@@ -1,12 +1,12 @@
 package asynchJavaParser.eventDrivenJavaParser;
 
-import asynchJavaParser.eventDrivenJavaParser.activeAgents.reporters.ProjectReporter;
+import asynchJavaParser.eventDrivenJavaParser.reporters.ProjectReporter;
 import asynchJavaParser.eventDrivenJavaParser.reports.interfaces.IClassReport;
 import asynchJavaParser.eventDrivenJavaParser.reports.interfaces.IPackageReport;
 import asynchJavaParser.eventDrivenJavaParser.reports.interfaces.IProjectReport;
-import asynchJavaParser.eventDrivenJavaParser.activeAgents.reporters.ClassReporter;
-import asynchJavaParser.eventDrivenJavaParser.activeAgents.reporters.PackageReporter;
-import asynchJavaParser.eventDrivenJavaParser.reports.projectElements.IProjectElem;
+import asynchJavaParser.eventDrivenJavaParser.reporters.ClassReporter;
+import asynchJavaParser.eventDrivenJavaParser.reporters.PackageReporter;
+import asynchJavaParser.eventDrivenJavaParser.projectAnalyzer.IProjectElem;
 import io.vertx.core.Future;
 import io.vertx.core.*;
 import io.vertx.core.eventbus.EventBus;
@@ -62,6 +62,11 @@ public class EDProjectAnalyzer implements IProjectAnalyzer {
     //nel visitor andrà passanto l'oggetto Event Bus perchè per ogni elemento che trova dovrà inviare un messaggio di questo tipo
     //eventBus.send("news.uk.sport", "Yay! Someone kicked a ball");
   }
+
+  public void stopAnalyzeProject(){
+    eventBus.publish("projectVisitor", "STOP");
+  }
+
   private static void log(String msg) {
     System.out.println("" + Thread.currentThread() + " " + msg);
   }
