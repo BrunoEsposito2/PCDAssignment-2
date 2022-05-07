@@ -16,6 +16,10 @@ public class InterfaceVisitor extends VoidVisitorAdapter<Void> implements Visito
         this.interfaceReport = interfaceReport;
     }
 
+    public IInterfaceReport getInterfaceReport() {
+        return this.interfaceReport;
+    }
+
     @Override
     public void visit(PackageDeclaration fd, Void collector) {
         super.visit(fd, collector);

@@ -8,18 +8,9 @@ public class FieldInfo implements IFieldInfo {
   private String fieldTypeFullName;
   private IClassReport parent;
 
-  public FieldInfo(String name, String fieldTypeFullName, IClassReport parent) {
-    this.name = name;
-    this.fieldTypeFullName = fieldTypeFullName;
-    this.parent = parent;
-  }
-
   public FieldInfo(String name, String fieldTypeFullName) {
     this.name = name;
     this.fieldTypeFullName = fieldTypeFullName;
-  }
-
-  public FieldInfo() {
   }
 
   @Override

@@ -22,14 +22,6 @@ public class MethodInfo implements IMethodInfo {
     this.parameters = new ArrayList<>();
   }
 
-  public MethodInfo(String name, Optional<Position> srcBeginLine, Optional<Position> endBeginLine, IClassReport parent) {
-    this.name = name;
-    this.srcBeginLine = srcBeginLine;
-    this.endBeginLine = endBeginLine;
-    this.parent = parent;
-    this.parameters = new ArrayList<>();
-  }
-
   @Override
   public void addParameter(final String parameter) {
     this.parameters.add(parameter);
@@ -68,5 +60,17 @@ public class MethodInfo implements IMethodInfo {
   @Override
   public IClassReport getParent() {
     return this.parent;
+  }
+
+  @Override
+  public String toString() {
+    return "MethodInfo{" +
+            "name='" + name + '\'' +
+            ", srcBeginLine=" + srcBeginLine +
+            ", endBeginLine=" + endBeginLine +
+            ", parent=" + parent +
+            ", returnType=" + returnType +
+            ", parameters=" + parameters +
+            '}';
   }
 }

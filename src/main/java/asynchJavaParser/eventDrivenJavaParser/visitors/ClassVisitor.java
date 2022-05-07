@@ -10,14 +10,17 @@ import com.github.javaparser.ast.body.FieldDeclaration;
 import com.github.javaparser.ast.body.MethodDeclaration;
 import com.github.javaparser.ast.visitor.VoidVisitorAdapter;
 
-public class ClassVisitor extends VoidVisitorAdapter<Void> implements IClassVisitor {
+public class ClassVisitor extends VoidVisitorAdapter<Void> implements ExtendedVisitor {
     private final IClassReport classReport;
     private IMethodInfo methodInfo;
-
     private IFieldInfo fieldInfo;
 
     public ClassVisitor(IClassReport classReport) {
         this.classReport = classReport;
+    }
+
+    public IClassReport getClassReport() {
+        return this.classReport;
     }
 
     @Override

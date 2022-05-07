@@ -18,13 +18,6 @@ public class ClassReport implements IClassReport {
         this.fieldsInfo = new ArrayList<>();
     }
 
-    public ClassReport(String fullClassName, String srcFullFileName, List<IMethodInfo> methodsInfo, List<IFieldInfo> fieldsInfo) {
-        this.fullClassName = fullClassName;
-        this.srcFullFileName = srcFullFileName;
-        this.methodsInfo = methodsInfo;
-        this.fieldsInfo = fieldsInfo;
-    }
-
     @Override
     public void setFullClassName(String fullClassName) {
         this.fullClassName = fullClassName;
@@ -63,5 +56,15 @@ public class ClassReport implements IClassReport {
     @Override
     public List<IFieldInfo> getFieldsInfo() {
         return this.fieldsInfo;
+    }
+
+    @Override
+    public String toString() {
+        return "ClassReport{" +
+                "fullClassName='" + fullClassName + '\'' +
+                ", srcFullFileName='" + srcFullFileName + '\'' +
+                ", methodsInfo=" + methodsInfo +
+                ", fieldsInfo=" + fieldsInfo +
+                '}';
     }
 }

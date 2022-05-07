@@ -7,7 +7,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class InterfaceReport implements IInterfaceReport {
-
     private String fullInterfaceName;
     private String srcFullFileName;
     private List<IMethodInfo> methodsInfo;
@@ -49,5 +48,14 @@ public class InterfaceReport implements IInterfaceReport {
     @Override
     public void addMethodsInfo(IMethodInfo methodInfo) {
         this.methodsInfo.add(methodInfo);
+    }
+
+    @Override
+    public String toString() {
+        return "InterfaceReport{" +
+                "fullInterfaceName='" + fullInterfaceName + '\'' +
+                ", srcFullFileName='" + srcFullFileName + '\'' +
+                ", methodsInfo=" + methodsInfo +
+                '}';
     }
 }
