@@ -1,35 +1,44 @@
 package asynchJavaParser.eventDrivenJavaParser.reports;
 
-import asynchJavaParser.eventDrivenJavaParser.reports.interfaces.IClassReport;
+import asynchJavaParser.eventDrivenJavaParser.reports.interfaces.IPackageReport;
 import asynchJavaParser.eventDrivenJavaParser.reports.interfaces.IProjectReport;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 
 public class ProjectReport implements IProjectReport {
-  private IClassReport mainClass;
-  private Map<String, IClassReport> allClasses;
+  private String mainClass;
+  private final List<IPackageReport> packageReports;
 
-  public ProjectReport(){}
-
-  public ProjectReport(IClassReport mainClass, Map<String, IClassReport> allClasses) {
-    this.mainClass = mainClass;
-    this.allClasses = allClasses;
+  public ProjectReport() {
+    this.packageReports = new ArrayList<>();
   }
 
   @Override
-  public IClassReport getMainClass() {
+  public void setMainClass(String mainClass) {
+    this.mainClass = mainClass;
+  }
+
+  @Override
+  public void addPackageReport(IPackageReport pr) {
+    this.packageReports.add(pr);
+  }
+
+  @Override
+  public List<IPackageReport> getPackageReports() {
+    return this.packageReports;
+  }
+
+  @Override
+  public String getMainClass() {
     return this.mainClass;
   }
 
   @Override
-  public List<IClassReport> getAllClasses() {
-    return new ArrayList<>(this.allClasses.values());
-  }
-
-  @Override
-  public IClassReport getClassReport(String fullClassName) {
-    return this.allClasses.get(fullClassName);
+  public String toString() {
+    return "ProjectReport{" +
+            "mainClass='" + mainClass + '\'' +
+            ", packageReports=" + packageReports +
+            '}';
   }
 }

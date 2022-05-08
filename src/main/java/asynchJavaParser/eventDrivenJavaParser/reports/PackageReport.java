@@ -1,45 +1,59 @@
 package asynchJavaParser.eventDrivenJavaParser.reports;
 
-import asynchJavaParser.eventDrivenJavaParser.reports.interfaces.IFieldInfo;
-import asynchJavaParser.eventDrivenJavaParser.reports.interfaces.IMethodInfo;
+import asynchJavaParser.eventDrivenJavaParser.reports.interfaces.IClassReport;
+import asynchJavaParser.eventDrivenJavaParser.reports.interfaces.IInterfaceReport;
 import asynchJavaParser.eventDrivenJavaParser.reports.interfaces.IPackageReport;
 
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 public class PackageReport implements IPackageReport {
-  private String fullClassName;
-  private String srcFullClassName;
-  private List<IMethodInfo> methodsInfo;
-  private List<IFieldInfo> fieldsInfo;
+  private String packageName;
+  private List<IClassReport> classReports;
+  private List<IInterfaceReport> interfaceReports;
 
   public PackageReport(){
-
-  }
-
-  public PackageReport(String fullClassName, String srcFullClassName, List<IMethodInfo> methodsInfo, List<IFieldInfo> fieldsInfo) {
-    this.fullClassName = fullClassName;
-    this.srcFullClassName = srcFullClassName;
-    this.methodsInfo = methodsInfo;
-    this.fieldsInfo = fieldsInfo;
+    this.classReports = new ArrayList<>();
+    this.interfaceReports = new ArrayList<>();
   }
 
   @Override
-  public String getFullClassName() {
-    return this.fullClassName;
+  public void setSrcFullName(String srcFullName) {
+    this.packageName = srcFullName;
   }
 
   @Override
-  public String getSrcFullFileName() {
-    return this.srcFullClassName;
+  public void addClassReport(IClassReport cr) {
+    this.classReports.add(cr);
   }
 
   @Override
-  public List<IMethodInfo> getMethodsInfo() {
-    return this.methodsInfo;
+  public void addInterfaceReport(IInterfaceReport ir) {
+    this.interfaceReports.add(ir);
   }
 
   @Override
-  public List<IFieldInfo> getFieldsInfo() {
-    return this.fieldsInfo;
+  public String getSrcFullName() {
+    return this.packageName;
+  }
+
+  @Override
+  public List<IClassReport> getClassReports() {
+    return Collections.unmodifiableList(this.classReports);
+  }
+
+  @Override
+  public List<IInterfaceReport> getInterfaceReports() {
+    return Collections.unmodifiableList(this.interfaceReports);
+  }
+
+  @Override
+  public String toString() {
+    return "PackageReport{" +
+            "packageName='" + packageName + '\'' +
+            ", classReports=" + classReports +
+            ", interfaceReports=" + interfaceReports +
+            '}';
   }
 }
