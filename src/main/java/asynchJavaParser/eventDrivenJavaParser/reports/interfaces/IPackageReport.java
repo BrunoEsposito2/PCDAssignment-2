@@ -4,12 +4,16 @@ import java.util.List;
 
 public interface IPackageReport {
 
-	String getFullClassName();
+	void setSrcFullName(String srcFullName);
 
-	String getSrcFullFileName();
+	void addClassReport(IClassReport cr);
 
-	List<IMethodInfo> getMethodsInfo();
+	void addInterfaceReport(IInterfaceReport ir);
 
-	List<IFieldInfo> getFieldsInfo();
+	String getSrcFullName();
+
+	List<IClassReport> getClassReports();
+
+	List<IInterfaceReport> getInterfaceReports();
 
 }

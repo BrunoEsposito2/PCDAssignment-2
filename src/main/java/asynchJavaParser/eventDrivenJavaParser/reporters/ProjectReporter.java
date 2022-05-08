@@ -1,5 +1,11 @@
 package asynchJavaParser.eventDrivenJavaParser.reporters;
 
+import asynchJavaParser.eventDrivenJavaParser.reports.ClassReport;
+import asynchJavaParser.eventDrivenJavaParser.reports.InterfaceReport;
+import asynchJavaParser.eventDrivenJavaParser.reports.PackageReport;
+import asynchJavaParser.eventDrivenJavaParser.reports.interfaces.IClassReport;
+import asynchJavaParser.eventDrivenJavaParser.reports.interfaces.IInterfaceReport;
+import asynchJavaParser.eventDrivenJavaParser.reports.interfaces.IPackageReport;
 import asynchJavaParser.eventDrivenJavaParser.reports.interfaces.IProjectReport;
 import asynchJavaParser.eventDrivenJavaParser.reports.ProjectReport;
 import asynchJavaParser.eventDrivenJavaParser.visitors.ProjectVisitor;
@@ -27,7 +33,10 @@ public class ProjectReporter extends AbstractVerticle {
             log("task started...");
             cu = StaticJavaParser.parse(new File(this.path));
             IProjectReport projectReport = new ProjectReport();
-            ProjectVisitor visitor = new ProjectVisitor(projectReport);
+            IPackageReport packageReport = new PackageReport();
+            IClassReport classReport = new ClassReport();
+            IInterfaceReport interfaceReport = new InterfaceReport();
+            ProjectVisitor visitor = new ProjectVisitor(projectReport, packageReport, classReport, interfaceReport);
             visitor.visit(cu, null);
             res.complete(projectReport);
         } catch (FileNotFoundException e) {

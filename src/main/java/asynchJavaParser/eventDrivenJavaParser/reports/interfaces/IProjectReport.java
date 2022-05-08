@@ -4,9 +4,11 @@ import java.util.List;
 
 public interface IProjectReport {
 
-	IClassReport getMainClass();
+	void setMainClass(String mainClass);
 
-	List<IClassReport> getAllClasses();
+	void addPackageReport(IPackageReport pr);
 
-	IClassReport getClassReport(String fullClassName);
+	List<IPackageReport> getPackageReports();
+
+	String getMainClass();
 }
