@@ -3,8 +3,9 @@ package asynchJavaParser.eventDrivenJavaParser;
 import asynchJavaParser.eventDrivenJavaParser.reports.interfaces.IClassReport;
 import asynchJavaParser.eventDrivenJavaParser.reports.interfaces.IPackageReport;
 import asynchJavaParser.eventDrivenJavaParser.reports.interfaces.IProjectReport;
-import asynchJavaParser.eventDrivenJavaParser.projectAnalyzer.IProjectElem;
 import io.vertx.core.*;
+import io.vertx.core.eventbus.Message;
+
 import java.util.function.*;
 
 public interface IProjectAnalyzer {
@@ -42,6 +43,7 @@ public interface IProjectAnalyzer {
 	 *
 	 * @param srcProjectFolderName
 	 * @param callback
+	 * @param address
 	 */
-	void analyzeProject(String srcProjectFolderName, Consumer<IProjectElem> callback);
+	void analyzeProject(String srcProjectFolderName, Consumer<Message> callback, String address);
 }

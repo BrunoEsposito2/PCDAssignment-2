@@ -1,7 +1,5 @@
 package asynchJavaParser.eventDrivenJavaParser.prototype;
 
-import asynchJavaParser.eventDrivenJavaParser.projectAnalyzer.ElemType;
-import asynchJavaParser.eventDrivenJavaParser.projectAnalyzer.ProjectElem;
 import asynchJavaParser.eventDrivenJavaParser.projectAnalyzer.ResponsiveProjectVisitor;
 import com.github.javaparser.StaticJavaParser;
 import com.github.javaparser.ast.CompilationUnit;
@@ -77,31 +75,27 @@ public class User extends JPanel {
         frame.pack();
         frame.setVisible(true);
         //view.fl.method(String -> {nameDirectory.setText(String);});
-        ResponsiveProjectVisitor rpv = new ResponsiveProjectVisitor(vertx);
+        ResponsiveProjectVisitor rpv = new ResponsiveProjectVisitor(vertx, "master");
         CompilationUnit cu = null;
         try {
-            cu = StaticJavaParser.parse(new File("src/main/java/asynchJavaParser/eventDrivenJavaParser/EDProjectAnalyzer.java"));
+            cu = StaticJavaParser.parse(new File("src/main/java/"));
             rpv.visit(cu, null);
         } catch (FileNotFoundException e) {
         }
-        /*MessageConsumer<ClassOrInterfaceDeclaration> classConsumer = vertx.eventBus().consumer("master");
-        classConsumer.handler(message -> {
-            System.out.println(message.body().getNameAsString());
-        });*/
-        MessageConsumer<ProjectElem<PackageDeclaration>> packageConsumer = vertx.eventBus().consumer("master");
-        packageConsumer.handler(message -> {
-            ProjectElem<PackageDeclaration> res = message.body();
 
-            //System.out.println(res.getType()+" aaaa");
-            /*if(message.body().getType().equals("PackageDeclaration")) {
-                System.out.println(message.body().getElem().getNameAsString());
-            }*/
+
+        MessageConsumer<PackageDeclaration> packageConsumer = vertx.eventBus().consumer("master");
+        packageConsumer.handler(message -> {
+            if(message.body() instanceof PackageDeclaration) {
+                PackageDeclaration res = message.body();
+                System.out.println(res.getNameAsString());
+            }
         });
 
-        MessageConsumer<String> stringConsumer = vertx.eventBus().consumer("master");
+        /*MessageConsumer<String> stringConsumer = vertx.eventBus().consumer("master");
         stringConsumer.handler(message -> {
             System.out.println(message.body()+" aaaa");
-        });
+        });*/
     }
 }
 

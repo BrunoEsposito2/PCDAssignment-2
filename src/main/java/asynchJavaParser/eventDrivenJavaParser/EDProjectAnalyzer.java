@@ -1,28 +1,34 @@
 package asynchJavaParser.eventDrivenJavaParser;
 
+import asynchJavaParser.eventDrivenJavaParser.projectAnalyzer.ResponsiveProjectVisitor;
 import asynchJavaParser.eventDrivenJavaParser.reporters.ProjectReporter;
 import asynchJavaParser.eventDrivenJavaParser.reports.interfaces.IClassReport;
 import asynchJavaParser.eventDrivenJavaParser.reports.interfaces.IPackageReport;
 import asynchJavaParser.eventDrivenJavaParser.reports.interfaces.IProjectReport;
 import asynchJavaParser.eventDrivenJavaParser.reporters.ClassReporter;
 import asynchJavaParser.eventDrivenJavaParser.reporters.PackageReporter;
-import asynchJavaParser.eventDrivenJavaParser.projectAnalyzer.IProjectElem;
+import com.github.javaparser.StaticJavaParser;
+import com.github.javaparser.ast.CompilationUnit;
 import io.vertx.core.Future;
 import io.vertx.core.*;
 import io.vertx.core.eventbus.EventBus;
+import io.vertx.core.eventbus.Message;
 import io.vertx.core.eventbus.MessageConsumer;
 
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.util.Random;
 import java.util.function.Consumer;
 
 public class EDProjectAnalyzer implements IProjectAnalyzer {
 
   private final Vertx vertx;
   private final EventBus eventBus;
+
+
   public EDProjectAnalyzer(Vertx v){
     this.vertx = v;
     this.eventBus = v.eventBus();
-    //registra il codificatore di messaggi per projectAnalyzer
-    //eventBus.registerDefaultCodec(MyPOJO.class, myCodec);
   }
 
   @Override
@@ -50,17 +56,20 @@ public class EDProjectAnalyzer implements IProjectAnalyzer {
   }
 
   @Override
-  public void analyzeProject(String srcProjectFolderName, Consumer<IProjectElem> callback) {
+  public void analyzeProject(String srcProjectFolderName, Consumer<Message> callback, String address) {
 
     //registra l'handler dei messaggi alla loro ricezione (cioè la callback)
-    MessageConsumer<String> consumer = eventBus.consumer("news.uk.sport");
-    consumer.handler(message -> {
-      //callback.accept(message);
-      System.out.println("I have received a message: " + message.body());
-    });
+    MessageConsumer<String> consumer = eventBus.consumer(address);
+    consumer.handler(callback::accept);
 
-    //nel visitor andrà passanto l'oggetto Event Bus perchè per ogni elemento che trova dovrà inviare un messaggio di questo tipo
-    //eventBus.send("news.uk.sport", "Yay! Someone kicked a ball");
+    ResponsiveProjectVisitor rpv = new ResponsiveProjectVisitor(this.vertx, address, "projectVisitor");
+    CompilationUnit cu = null;
+    try {
+      cu = StaticJavaParser.parse(new File(srcProjectFolderName));
+    } catch (FileNotFoundException e) {
+      e.printStackTrace();
+    }
+    rpv.visit(cu, null);
   }
 
   public void stopAnalyzeProject(){
