@@ -145,7 +145,7 @@ public class VisualizerFrame extends JFrame {
 
     private class StopEvents implements ActionListener {
         public void actionPerformed(ActionEvent e) {
-            eventBus.publish("worker", "STOP");
+            lib.stopAnalyzeProject();
         }
     }
 
@@ -154,7 +154,6 @@ public class VisualizerFrame extends JFrame {
             Future<IClassReport> future = lib.getClassReport(nameDirectory.getText());
             future.onComplete(res -> {
                 IClassReport report = res.result();
-                //System.out.println("BUILD \n" + report.toString());
                 treePanel.update(report);
             });
         }
@@ -165,10 +164,7 @@ public class VisualizerFrame extends JFrame {
             Future<IPackageReport> future = lib.getPackageReport(nameDirectory.getText());
             future.onComplete(res -> {
                 IPackageReport report = res.result();
-                String result = res.result().toString();
-                //Formatter formatter = new Formatter();
-                //formatter.formatResult(result, "PackageReport");
-                System.out.println("BUILD \n" + res.result().toString());
+                treePanel.update(report);
             });
         }
     }

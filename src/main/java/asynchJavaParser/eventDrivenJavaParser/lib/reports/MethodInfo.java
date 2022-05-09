@@ -2,6 +2,7 @@ package asynchJavaParser.eventDrivenJavaParser.lib.reports;
 
 import asynchJavaParser.eventDrivenJavaParser.lib.reports.interfaces.IClassReport;
 import asynchJavaParser.eventDrivenJavaParser.lib.reports.interfaces.IMethodInfo;
+import asynchJavaParser.eventDrivenJavaParser.lib.reports.interfaces.IParameterInfo;
 import com.github.javaparser.Position;
 import com.github.javaparser.ast.type.Type;
 
@@ -13,7 +14,7 @@ public class MethodInfo implements IMethodInfo {
   private final Optional<Position> endBeginLine;
   private IClassReport parent;
   private Type returnType;
-  private List<String> parameters;
+  private List<IParameterInfo> parameters;
 
   public MethodInfo(String name, Optional<Position> srcBeginLine, Optional<Position> endBeginLine) {
     this.name = name;
@@ -23,13 +24,13 @@ public class MethodInfo implements IMethodInfo {
   }
 
   @Override
-  public void addParameter(final String parameter) {
+  public void addParameter(final IParameterInfo parameter) {
     this.parameters.add(parameter);
   }
 
   @Override
-  public List<String> getParameters() {
-    return Collections.unmodifiableList(this.parameters);
+  public List<IParameterInfo> getParameters() {
+    return this.parameters;
   }
 
   @Override

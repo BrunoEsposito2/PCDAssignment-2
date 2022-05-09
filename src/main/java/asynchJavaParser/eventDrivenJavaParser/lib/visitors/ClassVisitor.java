@@ -41,7 +41,7 @@ public class ClassVisitor extends VoidVisitorAdapter<Void> implements Visitor {
         super.visit(md, collector);
         methodInfo = new MethodInfo(md.getNameAsString(), md.getBegin(), md.getEnd());
         methodInfo.setReturnType(md.getType());
-        md.getParameters().forEach(x -> methodInfo.addParameter(new ParameterInfo(x.getNameAsString(), x.getType()).toString()));
+        md.getParameters().forEach(x -> methodInfo.addParameter(new ParameterInfo(x.getNameAsString(), x.getType())));
         this.classReport.addMethodsInfo(methodInfo);
     }
 
