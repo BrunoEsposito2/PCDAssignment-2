@@ -14,7 +14,6 @@ public class ResponsiveProjectVisitor extends VoidVisitorAdapter<Void>{
     private final String responseAddress;
     private final String stopAddress;
 
-
     public ResponsiveProjectVisitor(Vertx v, String responseAddress, String stopAddress){
         this.responseAddress = responseAddress;
         this.stopAddress = stopAddress;

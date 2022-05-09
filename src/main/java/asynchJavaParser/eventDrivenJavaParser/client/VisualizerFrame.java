@@ -149,7 +149,8 @@ public class VisualizerFrame extends JFrame {
             Future<IClassReport> future = lib.getClassReport(nameDirectory.getText());
             future.onComplete(res -> {
                 IClassReport report = res.result();
-                treePanel.update();
+                //System.out.println("BUILD \n" + report.toString());
+                treePanel.update(report);
             });
         }
     }

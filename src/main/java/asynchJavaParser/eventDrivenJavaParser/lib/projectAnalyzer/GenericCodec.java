@@ -17,7 +17,6 @@ public class GenericCodec<T> implements MessageCodec<T, T> {
         this.cls = cls;
     }
 
-
     @Override
     public void encodeToWire(Buffer buffer, T s) {
         ByteArrayOutputStream bos = new ByteArrayOutputStream();
