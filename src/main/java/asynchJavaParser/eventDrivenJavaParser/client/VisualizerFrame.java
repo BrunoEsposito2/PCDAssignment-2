@@ -1,15 +1,12 @@
 package asynchJavaParser.eventDrivenJavaParser.client;
 
 import asynchJavaParser.eventDrivenJavaParser.lib.EDProjectAnalyzer;
-import asynchJavaParser.eventDrivenJavaParser.lib.reports.PackageReport;
 import asynchJavaParser.eventDrivenJavaParser.lib.reports.interfaces.IClassReport;
 import asynchJavaParser.eventDrivenJavaParser.lib.reports.interfaces.IPackageReport;
 import asynchJavaParser.eventDrivenJavaParser.lib.reports.interfaces.IProjectReport;
-import io.vertx.core.AsyncResult;
 import io.vertx.core.Future;
 import io.vertx.core.Vertx;
 import io.vertx.core.eventbus.EventBus;
-import io.vertx.core.json.JsonObject;
 
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
@@ -47,7 +44,7 @@ public class VisualizerFrame extends JFrame {
     public void change(String path){
         getMethodButton().forEach(b -> b.setEnabled(true));
         //nameDirectory.setText(path);
-        nameDirectory.setText("src/main/java/asynchJavaParser/eventDrivenJavaParser/lib/EDProjectAnalyzer.java");
+        nameDirectory.setText("src/main/java/asynchJavaParser/eventDrivenJavaParser/lib/");
     }
 
     public void display(){
@@ -160,10 +157,10 @@ public class VisualizerFrame extends JFrame {
             Future<IPackageReport> future = lib.getPackageReport(nameDirectory.getText());
             future.onComplete(res -> {
                 IPackageReport report = res.result();
-                String result = res.result().toString();
+                //String result = res.result().toString();
                 //Formatter formatter = new Formatter();
                 //formatter.formatResult(result, "PackageReport");
-                System.out.println("BUILD \n" + res.result().toString());
+                System.out.println("BUILD \n" + report.toString());
             });
         }
     }
@@ -175,7 +172,7 @@ public class VisualizerFrame extends JFrame {
                 IProjectReport report = res.result();
                 //Formatter formatter = new Formatter();
                 //formatter.formatResult(result, "ProjectReport");
-                System.out.println("BUILD \n" + res.result().toString());
+                System.out.println("BUILD \n" + report.toString());
             });
         }
     }
