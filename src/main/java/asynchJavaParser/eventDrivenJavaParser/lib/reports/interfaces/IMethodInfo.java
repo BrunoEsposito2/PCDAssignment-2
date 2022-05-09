@@ -13,7 +13,7 @@ public interface IMethodInfo {
 	IClassReport getParent();
 	void setReturnType(Type returnType);
 	Type getReturnType();
-	void addParameter(String parameter);
-	List<String> getParameters();
+	void addParameter(IParameterInfo parameter);
+	List<IParameterInfo> getParameters();
 
 }
