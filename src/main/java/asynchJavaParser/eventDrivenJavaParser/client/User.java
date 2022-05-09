@@ -25,12 +25,12 @@ public class User extends JPanel {
     private EventBus eventBus;
 
     private JLabel infoTitle;
-    private FakeLibrary fl;
+    //private FakeLibrary fl;
     public User(Vertx v) {
         super(new BorderLayout());
         createPanel();
         eventBus = v.eventBus();
-        fl = new FakeLibrary(v);
+        //fl = new FakeLibrary(v);
 
     }
 
@@ -75,14 +75,13 @@ public class User extends JPanel {
         frame.pack();
         frame.setVisible(true);
         //view.fl.method(String -> {nameDirectory.setText(String);});
-        ResponsiveProjectVisitor rpv = new ResponsiveProjectVisitor(vertx, "master");
+        ResponsiveProjectVisitor rpv = new ResponsiveProjectVisitor(vertx, "master", "");
         CompilationUnit cu = null;
         try {
             cu = StaticJavaParser.parse(new File("src/main/java/"));
             rpv.visit(cu, null);
         } catch (FileNotFoundException e) {
         }
-
 
         MessageConsumer<PackageDeclaration> packageConsumer = vertx.eventBus().consumer("master");
         packageConsumer.handler(message -> {
@@ -98,4 +97,3 @@ public class User extends JPanel {
         });*/
     }
 }
-
