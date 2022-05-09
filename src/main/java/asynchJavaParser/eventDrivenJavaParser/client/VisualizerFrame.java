@@ -1,6 +1,7 @@
 package asynchJavaParser.eventDrivenJavaParser.client;
 
 import asynchJavaParser.eventDrivenJavaParser.lib.EDProjectAnalyzer;
+import asynchJavaParser.eventDrivenJavaParser.lib.projectAnalyzer.AnalyzeProjectConfig;
 import asynchJavaParser.eventDrivenJavaParser.lib.reports.PackageReport;
 import asynchJavaParser.eventDrivenJavaParser.lib.reports.interfaces.IClassReport;
 import asynchJavaParser.eventDrivenJavaParser.lib.reports.interfaces.IPackageReport;
@@ -51,7 +52,7 @@ public class VisualizerFrame extends JFrame {
     public void change(String path){
         getMethodButton().forEach(b -> b.setEnabled(true));
         //nameDirectory.setText(path);
-        nameDirectory.setText("src/main/java/");
+        nameDirectory.setText("src/main/java/asynchJavaParser/eventDrivenJavaParser/lib/projectAnalyzer/Courier.java");
     }
 
     public void display(){
@@ -186,7 +187,8 @@ public class VisualizerFrame extends JFrame {
 
     private class AnalyzeProject implements ActionListener {
         public void actionPerformed(ActionEvent e) {
-            lib.analyzeProject(nameDirectory.getText(), message -> {
+            AnalyzeProjectConfig conf = new AnalyzeProjectConfig("master", "master.complete", nameDirectory.getText());
+            lib.analyzeProject(conf, message -> {
                 String elemType = message.headers().get("type");
                 switch(elemType){
                     case "class":
@@ -218,7 +220,7 @@ public class VisualizerFrame extends JFrame {
                         System.out.println("not a project element");
                 }
 
-            }, "aaaa");
+            });
         }
     }
 }

@@ -1,5 +1,6 @@
 package asynchJavaParser.eventDrivenJavaParser.lib;
 
+import asynchJavaParser.eventDrivenJavaParser.lib.projectAnalyzer.AnalyzeProjectConfig;
 import asynchJavaParser.eventDrivenJavaParser.lib.projectAnalyzer.ResponsiveProjectVisitor;
 import asynchJavaParser.eventDrivenJavaParser.lib.reporters.ProjectReporter;
 import asynchJavaParser.eventDrivenJavaParser.lib.reports.interfaces.IClassReport;
@@ -7,6 +8,7 @@ import asynchJavaParser.eventDrivenJavaParser.lib.reports.interfaces.IPackageRep
 import asynchJavaParser.eventDrivenJavaParser.lib.reports.interfaces.IProjectReport;
 import asynchJavaParser.eventDrivenJavaParser.lib.reporters.ClassReporter;
 import asynchJavaParser.eventDrivenJavaParser.lib.reporters.PackageReporter;
+import asynchJavaParser.eventDrivenJavaParser.lib.visitors.ElemCounterCollector;
 import com.github.javaparser.StaticJavaParser;
 import com.github.javaparser.ast.CompilationUnit;
 import io.vertx.core.Future;
@@ -17,6 +19,7 @@ import io.vertx.core.eventbus.MessageConsumer;
 
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.util.concurrent.atomic.AtomicReference;
 import java.util.function.Consumer;
 
 public class EDProjectAnalyzer implements IProjectAnalyzer {
@@ -55,19 +58,35 @@ public class EDProjectAnalyzer implements IProjectAnalyzer {
   }
 
   @Override
-  public void analyzeProject(String srcProjectFolderName, Consumer<Message<?>> callback, String address) {
+  public void analyzeProject(AnalyzeProjectConfig conf, Consumer<Message<?>> callback) {
 
+    AtomicReference<Integer> messageReceived = new AtomicReference<>(0);
+    Integer expected = 0;
     //registra l'handler dei messaggi alla loro ricezione (cioè la callback)
-    MessageConsumer<String> consumer = eventBus.consumer(address);
-    consumer.handler(callback::accept);
 
-    ResponsiveProjectVisitor rpv = new ResponsiveProjectVisitor(this.vertx, address, "projectVisitor");
+
+    ResponsiveProjectVisitor rpv = new ResponsiveProjectVisitor(this.vertx, conf.getResponseAddress(), "projectVisitor");
     CompilationUnit cu = null;
+
+    ElemCounterCollector ecc = new ElemCounterCollector();
     try {
-      cu = StaticJavaParser.parse(new File(srcProjectFolderName));
+      cu = StaticJavaParser.parse(new File(conf.getSrcProjectFolderName()));
+      ecc.visit(cu, null);
+      expected = ecc.getCount();
+
     } catch (FileNotFoundException e) {
       e.printStackTrace();
     }
+
+    MessageConsumer<String> consumer = eventBus.consumer(conf.getResponseAddress());
+    Integer finalExpected = expected;
+    consumer.handler(message -> {
+      callback.accept(message);
+      messageReceived.getAndSet(messageReceived.get() + 1);
+      if(messageReceived.get().equals(finalExpected)){
+        vertx.eventBus().send(conf.getCompletitionNotifAddress(), "complete");
+      }
+    });
     rpv.visit(cu, null);
   }
 

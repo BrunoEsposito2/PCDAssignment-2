@@ -33,6 +33,7 @@ public class ClassVisitor extends VoidVisitorAdapter<Void> implements Visitor {
     public void visit(ClassOrInterfaceDeclaration cd, Void collector) {
         super.visit(cd, collector);
         this.classReport.setFullClassName(cd.getNameAsString());
+        System.out.println(cd.getFullyQualifiedName());
     }
 
     @Override
