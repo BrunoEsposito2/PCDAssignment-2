@@ -21,22 +21,21 @@ public class ClassReporter extends AbstractVerticle {
     }
 
     @Override
-    public void start() throws Exception {
-        CompilationUnit cu = null;
+    public void start() {
+        CompilationUnit cu;
         try {
+            log("Class reporter started...");
             cu = StaticJavaParser.parse(new File(this.path));
-
             IClassReport classReport = new ClassReport();
             ClassVisitor visitor = new ClassVisitor(classReport);
-
             visitor.visit(cu, null);
-            log("task started...");
             res.complete(classReport);
         } catch (FileNotFoundException e) {
-            log("task failed...");
+            log("Class reporter failed...");
             res.fail("invalid path");
         }
     }
+
     private static void log(String msg) {
         System.out.println("" + Thread.currentThread() + " " + msg);
     }
