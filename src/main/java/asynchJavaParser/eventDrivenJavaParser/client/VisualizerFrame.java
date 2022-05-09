@@ -200,7 +200,6 @@ public class VisualizerFrame extends JFrame {
                         ClassOrInterfaceDeclaration id = (ClassOrInterfaceDeclaration)message.body();
                         System.out.println("interface "+ id.getNameAsString());
                         break;
-
                     case "field":
                         FieldDeclaration fd = (FieldDeclaration)message.body();
                         fd.getVariables().forEach(f -> System.out.println("field "+ f.getNameAsString()));
