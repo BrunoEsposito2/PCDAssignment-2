@@ -55,7 +55,7 @@ public class EDProjectAnalyzer implements IProjectAnalyzer {
   }
 
   @Override
-  public void analyzeProject(String srcProjectFolderName, Consumer<Message> callback, String address) {
+  public void analyzeProject(String srcProjectFolderName, Consumer<Message<?>> callback, String address) {
 
     //registra l'handler dei messaggi alla loro ricezione (cioè la callback)
     MessageConsumer<String> consumer = eventBus.consumer(address);

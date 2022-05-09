@@ -45,5 +45,5 @@ public interface IProjectAnalyzer {
 	 * @param callback
 	 * @param address
 	 */
-	void analyzeProject(String srcProjectFolderName, Consumer<Message> callback, String address);
+	void analyzeProject(String srcProjectFolderName, Consumer<Message<?>> callback, String address);
 }

@@ -5,6 +5,10 @@ import asynchJavaParser.eventDrivenJavaParser.lib.reports.PackageReport;
 import asynchJavaParser.eventDrivenJavaParser.lib.reports.interfaces.IClassReport;
 import asynchJavaParser.eventDrivenJavaParser.lib.reports.interfaces.IPackageReport;
 import asynchJavaParser.eventDrivenJavaParser.lib.reports.interfaces.IProjectReport;
+import com.github.javaparser.ast.PackageDeclaration;
+import com.github.javaparser.ast.body.ClassOrInterfaceDeclaration;
+import com.github.javaparser.ast.body.FieldDeclaration;
+import com.github.javaparser.ast.body.MethodDeclaration;
 import io.vertx.core.AsyncResult;
 import io.vertx.core.Future;
 import io.vertx.core.Vertx;
@@ -47,7 +51,7 @@ public class VisualizerFrame extends JFrame {
     public void change(String path){
         getMethodButton().forEach(b -> b.setEnabled(true));
         //nameDirectory.setText(path);
-        nameDirectory.setText("src/main/java/asynchJavaParser/eventDrivenJavaParser/lib/EDProjectAnalyzer.java");
+        nameDirectory.setText("src/main/java/");
     }
 
     public void display(){
@@ -94,7 +98,7 @@ public class VisualizerFrame extends JFrame {
         JButton getProjectReport = new JButton("getProjectReport");
         getProjectReport.addActionListener(new GetProjectReport());
         JButton analyzeProject = new JButton("analyzeProject");
-        //analyzeProject.addActionListener(new AnalyzeProject());
+        analyzeProject.addActionListener(new AnalyzeProject());
 
         methodButton = new ArrayList<>();
         methodButton.add(getClassReport);
@@ -180,11 +184,42 @@ public class VisualizerFrame extends JFrame {
         }
     }
 
-/*    private class AnalyzeProject implements ActionListener {
+    private class AnalyzeProject implements ActionListener {
         public void actionPerformed(ActionEvent e) {
-            fl.method(String -> info.setText(String));
-            lib.analyzeProject(nameDirectory.getText(),...);
+            lib.analyzeProject(nameDirectory.getText(), message -> {
+                String elemType = message.headers().get("type");
+                switch(elemType){
+                    case "class":
+                        ClassOrInterfaceDeclaration cd = (ClassOrInterfaceDeclaration)message.body();
+                        System.out.println("class "+ cd.getNameAsString());
+                        break;
+
+                    case "interface":
+                        ClassOrInterfaceDeclaration id = (ClassOrInterfaceDeclaration)message.body();
+                        System.out.println("interface "+ id.getNameAsString());
+                        break;
+
+                    case "field":
+                        FieldDeclaration fd = (FieldDeclaration)message.body();
+                        fd.getVariables().forEach(f -> System.out.println("field "+ f.getNameAsString()));
+                        break;
+
+                    case "method":
+                        MethodDeclaration md = (MethodDeclaration)message.body();
+                        System.out.println("method "+ md.getNameAsString());
+                        break;
+
+                    case "package":
+                        PackageDeclaration pd = (PackageDeclaration)message.body();
+                        System.out.println("method "+ pd.getNameAsString());
+                        break;
+
+                    default:
+                        System.out.println("not a project element");
+                }
+
+            }, "aaaa");
         }
-    }*/
+    }
 }
 
