@@ -1,5 +1,6 @@
 package asynchJavaParser.eventDrivenJavaParser.lib;
 
+import asynchJavaParser.eventDrivenJavaParser.lib.projectAnalyzer.AnalyzeProjectConfig;
 import asynchJavaParser.eventDrivenJavaParser.lib.reports.interfaces.IClassReport;
 import asynchJavaParser.eventDrivenJavaParser.lib.reports.interfaces.IPackageReport;
 import asynchJavaParser.eventDrivenJavaParser.lib.reports.interfaces.IProjectReport;
@@ -41,9 +42,7 @@ public interface IProjectAnalyzer {
 	 * Async function that analyze a project given the full path of the project folder,
 	 * executing the callback each time a project element is found
 	 *
-	 * @param srcProjectFolderName
 	 * @param callback
-	 * @param address
 	 */
-	void analyzeProject(String srcProjectFolderName, Consumer<Message<?>> callback, String address);
+	void analyzeProject(AnalyzeProjectConfig conf, Consumer<Message<?>> callback);
 }
