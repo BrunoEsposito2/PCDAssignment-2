@@ -121,4 +121,26 @@ public class ProjectStructure {
             e.printStackTrace();
         }
     }
+
+    public void putField(FieldDeclaration f){
+        try{
+            ClassOrInterfaceDeclaration methodParent = (ClassOrInterfaceDeclaration) f.getParentNode().get();
+            String fullPath = (String) methodParent.getFullyQualifiedName().get();
+            String[] path = fullPath.split("[.]");
+            PackageElem p = reachPackage(path);
+
+            String className = path[path.length - 1];
+            ClassElem c = p.getInnerClasses().get(className);
+            if(c == null){
+                ClassElem newClass = new ClassElem();
+                p.addInnerClass(className, newClass);
+            }
+            p.getInnerClasses().get(className).setFieldDeclaration(f);
+
+        } catch (NullPointerException| NoSuchElementException e){
+            e.printStackTrace();
+        }
+    }
+
+    public PackageElem getRoot(){return this.root;}
 }

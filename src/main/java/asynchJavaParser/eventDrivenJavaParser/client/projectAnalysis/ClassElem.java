@@ -10,29 +10,23 @@ import java.util.Map;
 import java.util.Optional;
 
 public class ClassElem {
-    private final Map<String, FieldDeclaration> fields;
+    private Optional<FieldDeclaration> fields;
     private final Map<String, MethodDeclaration> methods;
     private Optional<ClassOrInterfaceDeclaration> elem;
 
     public ClassElem() {
-        this.fields = new HashMap<>();
+        this.fields = Optional.empty();
         this.methods = new HashMap<>();
         this.elem = Optional.empty();
     }
 
-    public void setElem(ClassOrInterfaceDeclaration elem) {
-        this.elem = Optional.of(elem);
-    }
+    public void setElem(ClassOrInterfaceDeclaration elem){this.elem = Optional.of(elem);}
 
-    public Optional<ClassOrInterfaceDeclaration> getElem() {
-        return elem;
-    }
+    public Optional<ClassOrInterfaceDeclaration> getElem(){return elem;}
 
-    public void addField(String name, FieldDeclaration f){
-        this.fields.put(name, f);
-    }
+    public void setFieldDeclaration(FieldDeclaration f){this.fields = Optional.of(f);}
 
-    public void addMethod(String name, MethodDeclaration m){
-        this.methods.put(name, m);
-    }
+    public Optional<FieldDeclaration> getFieldDeclaration(){return this.fields;}
+
+    public void addMethod(String name, MethodDeclaration m){this.methods.put(name, m);}
 }
