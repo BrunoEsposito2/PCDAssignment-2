@@ -87,6 +87,7 @@ public class EDProjectAnalyzer implements IProjectAnalyzer {
         vertx.eventBus().send(conf.getCompletitionNotifAddress(), "complete");
       }
     });
+
     rpv.visit(cu, null);
   }
 

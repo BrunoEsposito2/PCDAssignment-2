@@ -43,6 +43,12 @@ public class ResponsiveProjectVisitor extends VoidVisitorAdapter<Void>{
         if(this.shouldContinue) vertx.deployVerticle(c);
     }
 
+    @Override
+    public void visit(FieldDeclaration fd, Void collector) {
+        Courier<FieldDeclaration> c = new Courier<FieldDeclaration>(fd, (a, b)->super.visit(fd, null), responseAddress);
+        if(this.shouldContinue) vertx.deployVerticle(c);
+    }
+
     public void stop(){
         this.shouldContinue = false;
     }
