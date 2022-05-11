@@ -2,7 +2,6 @@ package asynchJavaParser.eventDrivenJavaParser.client;
 
 import asynchJavaParser.eventDrivenJavaParser.lib.EDProjectAnalyzer;
 import asynchJavaParser.eventDrivenJavaParser.lib.projectAnalyzer.AnalyzeProjectConfig;
-import asynchJavaParser.eventDrivenJavaParser.lib.reports.PackageReport;
 import asynchJavaParser.eventDrivenJavaParser.lib.reports.interfaces.IClassReport;
 import asynchJavaParser.eventDrivenJavaParser.lib.reports.interfaces.IPackageReport;
 import asynchJavaParser.eventDrivenJavaParser.lib.reports.interfaces.IProjectReport;
@@ -10,11 +9,8 @@ import com.github.javaparser.ast.PackageDeclaration;
 import com.github.javaparser.ast.body.ClassOrInterfaceDeclaration;
 import com.github.javaparser.ast.body.FieldDeclaration;
 import com.github.javaparser.ast.body.MethodDeclaration;
-import io.vertx.core.AsyncResult;
 import io.vertx.core.Future;
 import io.vertx.core.Vertx;
-import io.vertx.core.eventbus.EventBus;
-import io.vertx.core.json.JsonObject;
 
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
@@ -31,7 +27,6 @@ public class VisualizerFrame extends JFrame {
     private JTextField nameDirectory;
     private JPanel viewPanel;
     private TreePanel treePanel;
-    private EventBus eventBus;
     private List<JButton> methodButton;
     private EDProjectAnalyzer lib;
 
@@ -40,7 +35,6 @@ public class VisualizerFrame extends JFrame {
         setMinimumSize(new Dimension(1000,800));
 
         createView();
-        eventBus = v.eventBus();
         lib = new EDProjectAnalyzer(v);
         setDefaultCloseOperation(EXIT_ON_CLOSE);
     }
@@ -49,10 +43,22 @@ public class VisualizerFrame extends JFrame {
         return methodButton;
     }
 
-    public void change(String path){
+    public void changeView(String path){
         getMethodButton().forEach(b -> b.setEnabled(true));
         //nameDirectory.setText(path);
-        nameDirectory.setText("src/main/java/asynchJavaParser/eventDrivenJavaParser/lib/projectAnalyzer/Courier.java");
+        nameDirectory.setText("src/main/java/asynchJavaParser/eventDrivenJavaParser/");
+    }
+
+    public void resetView(){
+        methodButton.forEach(b -> b.setEnabled(false));
+        nameDirectory.setText("...");
+    }
+
+    public void resetTree(){
+        treePanel = new TreePanel();
+        JScrollPane treeView = new JScrollPane(treePanel.getTree());
+        treePanel.add(treeView);
+        viewPanel.add(treePanel, BorderLayout.CENTER);
     }
 
     public void display(){
@@ -81,7 +87,6 @@ public class VisualizerFrame extends JFrame {
         stop.setAlignmentX(Component.CENTER_ALIGNMENT);
 
         nameDirectory = new JTextField();
-        nameDirectory.setText("...");
         nameDirectory.setAlignmentX(Component.CENTER_ALIGNMENT);
 
         managementPanel.add(openFileChooser);
@@ -107,8 +112,6 @@ public class VisualizerFrame extends JFrame {
         methodButton.add(getProjectReport);
         methodButton.add(analyzeProject);
 
-        methodButton.forEach(b -> b.setEnabled(false));
-
         buttonPanel.add(getClassReport);
         buttonPanel.add(getPackageReport);
         buttonPanel.add(getProjectReport);
@@ -118,6 +121,8 @@ public class VisualizerFrame extends JFrame {
         treePanel = new TreePanel();
         JScrollPane treeView = new JScrollPane(treePanel.getTree());
         treePanel.add(treeView);
+
+        resetView();
 
         viewPanel.add(managementPanel, BorderLayout.NORTH);
         viewPanel.add(buttonPanel, BorderLayout.WEST);
@@ -137,7 +142,7 @@ public class VisualizerFrame extends JFrame {
                 int n = fileChooser.showOpenDialog(VisualizerFrame.this);
                 if (n == JFileChooser.APPROVE_OPTION) {
                     Formatter formatter = new Formatter();
-                    change(formatter.formatPath(fileChooser.getSelectedFile().getPath()));
+                    changeView(formatter.formatPath(fileChooser.getSelectedFile().getPath()));
                 }
             } catch (Exception ex) {}
         }
@@ -145,6 +150,8 @@ public class VisualizerFrame extends JFrame {
 
     private class StopEvents implements ActionListener {
         public void actionPerformed(ActionEvent e) {
+            resetView();
+            resetTree();
             lib.stopAnalyzeProject();
         }
     }
@@ -154,7 +161,7 @@ public class VisualizerFrame extends JFrame {
             Future<IClassReport> future = lib.getClassReport(nameDirectory.getText());
             future.onComplete(res -> {
                 IClassReport report = res.result();
-                treePanel.update(report);
+                treePanel.update(report, treePanel.getRoot());
             });
         }
     }
@@ -164,7 +171,7 @@ public class VisualizerFrame extends JFrame {
             Future<IPackageReport> future = lib.getPackageReport(nameDirectory.getText());
             future.onComplete(res -> {
                 IPackageReport report = res.result();
-                treePanel.update(report);
+                treePanel.update(report, treePanel.getRoot());
             });
         }
     }
@@ -174,9 +181,8 @@ public class VisualizerFrame extends JFrame {
             Future<IProjectReport> future = lib.getProjectReport(nameDirectory.getText());
             future.onComplete(res -> {
                 IProjectReport report = res.result();
-                //Formatter formatter = new Formatter();
-                //formatter.formatResult(result, "ProjectReport");
-                System.out.println("BUILD \n" + res.result().toString());
+                treePanel.update(report, treePanel.getRoot());
+                System.out.println(report);
             });
         }
     }
