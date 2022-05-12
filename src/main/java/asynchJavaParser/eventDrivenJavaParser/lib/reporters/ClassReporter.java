@@ -1,6 +1,5 @@
 package asynchJavaParser.eventDrivenJavaParser.lib.reporters;
 
-import asynchJavaParser.eventDrivenJavaParser.lib.reports.ClassReport;
 import asynchJavaParser.eventDrivenJavaParser.lib.reports.interfaces.IClassReport;
 import asynchJavaParser.eventDrivenJavaParser.lib.visitors.ClassVisitor;
 import com.github.javaparser.StaticJavaParser;
@@ -26,10 +25,9 @@ public class ClassReporter extends AbstractVerticle {
         try {
             log("Class reporter started...");
             cu = StaticJavaParser.parse(new File(this.path));
-            IClassReport classReport = new ClassReport();
-            ClassVisitor visitor = new ClassVisitor(classReport);
-            visitor.visit(cu, null);
-            res.complete(classReport);
+            ClassVisitor visitor = new ClassVisitor();
+            visitor.visit(cu, visitor.getClassReport());
+            res.complete(visitor.getClassReport());
         } catch (FileNotFoundException e) {
             log("Class reporter failed...");
             res.fail("invalid path");

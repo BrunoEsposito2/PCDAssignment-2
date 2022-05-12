@@ -1,7 +1,7 @@
 package asynchJavaParser.eventDrivenJavaParser.lib.visitors;
 
+import asynchJavaParser.eventDrivenJavaParser.lib.reports.ProjectReport;
 import asynchJavaParser.eventDrivenJavaParser.lib.reports.interfaces.IClassReport;
-import asynchJavaParser.eventDrivenJavaParser.lib.reports.interfaces.IInterfaceReport;
 import asynchJavaParser.eventDrivenJavaParser.lib.reports.interfaces.IPackageReport;
 import asynchJavaParser.eventDrivenJavaParser.lib.reports.interfaces.IProjectReport;
 import com.github.javaparser.ast.PackageDeclaration;
@@ -11,19 +11,24 @@ import java.util.Collection;
 import java.util.List;
 import java.util.stream.Collectors;
 
-public class ProjectVisitor extends VoidVisitorAdapter<Void> implements Visitor {
-    private final IProjectReport projectReport;
+public class ProjectVisitor extends VoidVisitorAdapter<IProjectReport> implements Visitor<IProjectReport> {
+    private IProjectReport projectReport;
     private final PackageVisitor packageVisitor;
     private List<String> mainClassList;
 
-    public ProjectVisitor(IProjectReport projectReport, IPackageReport packageReport, IClassReport cr, IInterfaceReport ir) {
-        this.projectReport = projectReport;
-        this.packageVisitor = new PackageVisitor(packageReport, cr, ir);
+    public ProjectVisitor() {
+        this.projectReport = new ProjectReport();
+        this.packageVisitor = new PackageVisitor();
+    }
+
+    public IProjectReport getProjectReport() {
+        return this.projectReport;
     }
 
     @Override
-    public void visit(PackageDeclaration pd, Void collector) {
-        this.packageVisitor.visit(pd, collector);
+    public void visit(PackageDeclaration pd, IProjectReport collector) {
+        this.packageVisitor.visit(pd, this.packageVisitor.getPackageReport());
+        this.projectReport = collector;
         this.projectReport.addPackageReport(this.packageVisitor.getPackageReport());
         if (this.mainClassExists()) {
             this.projectReport.setMainClass(this.mainClassList.get(0));

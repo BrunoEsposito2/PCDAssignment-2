@@ -1,12 +1,5 @@
 package asynchJavaParser.eventDrivenJavaParser.lib.reporters;
 
-import asynchJavaParser.eventDrivenJavaParser.lib.reports.ClassReport;
-import asynchJavaParser.eventDrivenJavaParser.lib.reports.InterfaceReport;
-import asynchJavaParser.eventDrivenJavaParser.lib.reports.PackageReport;
-import asynchJavaParser.eventDrivenJavaParser.lib.reports.ProjectReport;
-import asynchJavaParser.eventDrivenJavaParser.lib.reports.interfaces.IClassReport;
-import asynchJavaParser.eventDrivenJavaParser.lib.reports.interfaces.IInterfaceReport;
-import asynchJavaParser.eventDrivenJavaParser.lib.reports.interfaces.IPackageReport;
 import asynchJavaParser.eventDrivenJavaParser.lib.reports.interfaces.IProjectReport;
 import asynchJavaParser.eventDrivenJavaParser.lib.utils.FileExplorer;
 import asynchJavaParser.eventDrivenJavaParser.lib.visitors.ProjectVisitor;
@@ -34,24 +27,20 @@ public class ProjectReporter extends AbstractVerticle {
     public void start() {
         CompilationUnit cu;
         List<String> packages = this.fileExplorer.getAllPackageFiles();
+        ProjectVisitor visitor = new ProjectVisitor();
         // System.out.println("ALL PACKAGES: " + packages); // for debug purposes
-        IProjectReport projectReport = new ProjectReport();
         for (String p : packages) {
             // System.out.println("package and its content: " + p); // for debug purposes
             try {
                 log("Project reporter started...");
                 cu = StaticJavaParser.parse(new File(p));
-                IPackageReport packageReport = new PackageReport();
-                IClassReport classReport = new ClassReport();
-                IInterfaceReport interfaceReport = new InterfaceReport();
-                ProjectVisitor visitor = new ProjectVisitor(projectReport, packageReport, classReport, interfaceReport);
-                visitor.visit(cu, null);
+                visitor.visit(cu, visitor.getProjectReport());
             } catch (FileNotFoundException e) {
                 log("Project reporter failed...");
                 res.fail("invalid path");
             }
         }
-        res.complete(projectReport);
+        res.complete(visitor.getProjectReport());
     }
     private static void log(String msg) {
         System.out.println("" + Thread.currentThread() + " " + msg);

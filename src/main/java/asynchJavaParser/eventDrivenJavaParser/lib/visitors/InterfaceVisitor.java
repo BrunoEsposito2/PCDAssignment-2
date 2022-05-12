@@ -8,12 +8,12 @@ import com.github.javaparser.ast.body.ClassOrInterfaceDeclaration;
 import com.github.javaparser.ast.body.MethodDeclaration;
 import com.github.javaparser.ast.visitor.VoidVisitorAdapter;
 
-public class InterfaceVisitor extends VoidVisitorAdapter<Void> implements Visitor {
+public class InterfaceVisitor extends VoidVisitorAdapter<IInterfaceReport> implements Visitor<IInterfaceReport> {
     private IInterfaceReport interfaceReport;
     private IMethodInfo methodInfo;
 
-    public InterfaceVisitor(IInterfaceReport interfaceReport) {
-        this.interfaceReport = interfaceReport;
+    public InterfaceVisitor() {
+        this.interfaceReport = new InterfaceReport();
     }
 
     public IInterfaceReport getInterfaceReport() {
@@ -21,22 +21,25 @@ public class InterfaceVisitor extends VoidVisitorAdapter<Void> implements Visito
     }
 
     @Override
-    public void visit(PackageDeclaration fd, Void collector) {
+    public void visit(PackageDeclaration fd, IInterfaceReport collector) {
         super.visit(fd, collector);
+        this.interfaceReport = collector;
         this.interfaceReport.setSrcFullFileName(fd.getNameAsString());
     }
 
     @Override
-    public void visit(ClassOrInterfaceDeclaration cd, Void collector) {
+    public void visit(ClassOrInterfaceDeclaration cd, IInterfaceReport collector) {
         super.visit(cd, collector);
+        this.interfaceReport = collector;
         this.interfaceReport.setFullInterfaceName(cd.getNameAsString());
     }
 
     @Override
-    public void visit(MethodDeclaration md, Void collector) {
+    public void visit(MethodDeclaration md, IInterfaceReport collector) {
         super.visit(md, collector);
-        methodInfo = new MethodInfo(md.getNameAsString(), md.getBegin(), md.getEnd());
-        methodInfo.setReturnType(md.getType());
+        this.interfaceReport = collector;
+        this.methodInfo = new MethodInfo(md.getNameAsString(), md.getBegin(), md.getEnd());
+        this.methodInfo.setReturnType(md.getType());
         md.getParameters().forEach(x -> methodInfo.addParameter(new ParameterInfo(x.getNameAsString(), x.getType())));
         this.interfaceReport.addMethodsInfo(methodInfo);
     }

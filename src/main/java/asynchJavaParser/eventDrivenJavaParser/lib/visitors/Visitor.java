@@ -8,13 +8,13 @@ import com.github.javaparser.ast.body.MethodDeclaration;
 /**
  *
  */
-public interface Visitor {
+public interface Visitor<Reporter> {
 
-    void visit(PackageDeclaration fd, Void collector);
+    void visit(PackageDeclaration fd, Reporter collector);
 
-    void visit(ClassOrInterfaceDeclaration cd, Void collector);
+    void visit(ClassOrInterfaceDeclaration cd, Reporter collector);
 
-    void visit(MethodDeclaration md, Void collector);
+    void visit(MethodDeclaration md, Reporter collector);
 
-    void visit(FieldDeclaration fd, Void collector);
+    void visit(FieldDeclaration fd, Reporter collector);
 }
