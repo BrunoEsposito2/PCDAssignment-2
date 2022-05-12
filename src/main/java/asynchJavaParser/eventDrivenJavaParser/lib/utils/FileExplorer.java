@@ -28,12 +28,12 @@ public class FileExplorer {
         return allPackages.stream().distinct().collect(Collectors.toList());
     }
 
-    public List<String> getPackageList(String p) {
+    private List<String> getPackageList(String p) {
         File[] packages = new File(p).listFiles(File::isDirectory);
         return Arrays.stream(packages).map(File::toString).collect(Collectors.toList()); // take all outer packages
     }
 
-    public List<String> getFileList(String p) {
+    private List<String> getFileList(String p) {
         File[] files = new File(p).listFiles(File::isFile);
         return Arrays.stream(files).map(File::toString).collect(Collectors.toList());
     }
