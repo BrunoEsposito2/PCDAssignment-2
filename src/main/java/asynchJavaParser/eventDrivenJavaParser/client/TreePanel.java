@@ -1,49 +1,21 @@
 package asynchJavaParser.eventDrivenJavaParser.client;
 
-import asynchJavaParser.eventDrivenJavaParser.lib.reports.ClassReport;
-import asynchJavaParser.eventDrivenJavaParser.lib.reports.ProjectReport;
 import asynchJavaParser.eventDrivenJavaParser.lib.reports.interfaces.*;
-
 import javax.swing.*;
-import javax.swing.event.TreeModelEvent;
-import javax.swing.event.TreeModelListener;
-import javax.swing.event.TreeSelectionEvent;
-import javax.swing.event.TreeSelectionListener;
 import javax.swing.tree.DefaultMutableTreeNode;
 import javax.swing.tree.DefaultTreeCellRenderer;
-import javax.swing.tree.TreeSelectionModel;
-import java.awt.*;
+import javax.swing.tree.DefaultTreeModel;
 import java.util.ArrayList;
 import java.util.List;
 
-public class TreePanel extends JPanel implements TreeSelectionListener {
+public class TreePanel extends JPanel {
 
     private JTree tree;
-    private IProjectReport projectInfos;
-    private List<IPackageReport> packageInfos;
-    private List<IClassReport> classInfos;
-    private List<IInterfaceReport> interfaceInfos;
-    private List<IMethodInfo> methodInfos;
-    private List<IFieldInfo> fieldInfos;
+
     private DefaultMutableTreeNode root;
 
     public TreePanel() {
-        packageInfos = new ArrayList<>();
-        classInfos = new ArrayList<>();
-        interfaceInfos = new ArrayList<>();
-        fieldInfos = new ArrayList<>();
-        methodInfos = new ArrayList<>();
         createTree();
-    }
-
-    private void createTree(){
-        setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
-        root = new DefaultMutableTreeNode(" ");
-        DefaultTreeCellRenderer render = new DefaultTreeCellRenderer();
-        render.setLeafIcon(null);
-        render.setOpenIcon(null);
-        tree = new JTree(root);
-        tree.setCellRenderer(render);
     }
 
     public JTree getTree() {
@@ -55,29 +27,10 @@ public class TreePanel extends JPanel implements TreeSelectionListener {
     }
 
     public void reset(){
-        System.out.println("ResetTree");
-        removeAll();
-        if(projectInfos!=null){
-            projectInfos = null;
-        }
-        if(!packageInfos.isEmpty()){
-            packageInfos.clear();
-        }
-        if(!classInfos.isEmpty()){
-            classInfos.clear();
-        }
-        if(!interfaceInfos.isEmpty()){
-            interfaceInfos.clear();
-        }
-        if(!methodInfos.isEmpty()){
-            methodInfos.clear();
-        }
-        if(!fieldInfos.isEmpty()){
-            fieldInfos.clear();
-        }
-        createTree();
-        repaint();
-        //update();
+        DefaultTreeModel model = (DefaultTreeModel) tree.getModel();
+        DefaultMutableTreeNode treeRoot = (DefaultMutableTreeNode) model.getRoot();
+        treeRoot.removeAllChildren();
+        model.reload();
     }
 
     public void update(IClassReport report, DefaultMutableTreeNode addNode){
@@ -189,9 +142,13 @@ public class TreePanel extends JPanel implements TreeSelectionListener {
         packageInfo.forEach(p -> update(p, packageNode));
     }
 
-    @Override
-    public void valueChanged(TreeSelectionEvent e) {
-        System.out.println("CHANGES");
-        //update();
+    private void createTree(){
+        setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
+        root = new DefaultMutableTreeNode("Tree");
+        DefaultTreeCellRenderer render = new DefaultTreeCellRenderer();
+        render.setLeafIcon(null);
+        render.setOpenIcon(null);
+        tree = new JTree(root);
+        tree.setCellRenderer(render);
     }
 }
