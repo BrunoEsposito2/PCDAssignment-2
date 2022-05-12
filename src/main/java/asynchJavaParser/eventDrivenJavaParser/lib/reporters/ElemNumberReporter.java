@@ -7,6 +7,7 @@ import asynchJavaParser.eventDrivenJavaParser.lib.reports.interfaces.IClassRepor
 import asynchJavaParser.eventDrivenJavaParser.lib.reports.interfaces.IInterfaceReport;
 import asynchJavaParser.eventDrivenJavaParser.lib.reports.interfaces.IPackageReport;
 import asynchJavaParser.eventDrivenJavaParser.lib.utils.FileExplorer;
+import asynchJavaParser.eventDrivenJavaParser.lib.visitors.ElemCounterCollector;
 import asynchJavaParser.eventDrivenJavaParser.lib.visitors.PackageVisitor;
 import com.github.javaparser.StaticJavaParser;
 import com.github.javaparser.ast.CompilationUnit;
@@ -17,12 +18,12 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.util.List;
 
-public class PackageReporter extends AbstractVerticle {
-    private final Promise<IPackageReport> res;
+public class ElemNumberReporter extends AbstractVerticle {
+    private final Promise<Integer> res;
     private final String path;
     private final FileExplorer fileExplorer;
 
-    public PackageReporter(Promise<IPackageReport> res, String path){
+    public ElemNumberReporter(Promise<Integer> res, String path){
         this.res = res;
         this.path = path;
         this.fileExplorer = new FileExplorer(this.path);
@@ -31,30 +32,24 @@ public class PackageReporter extends AbstractVerticle {
     @Override
     public void start() {
         CompilationUnit cu;
-        List<String> files = this.fileExplorer.getFileList(this.path);
-        IPackageReport packageReport = new PackageReport();
+        List<String> files = this.fileExplorer.getAllPackageFiles();
+        Integer result = 0;
+        ElemCounterCollector visitor = new ElemCounterCollector();
         for (String nameFile : files) {
             // System.out.println("nome file: " + nameFile); // for debug purposes
             try {
                 log("Package reporter started...");
                 cu = StaticJavaParser.parse(new File(nameFile));
-                IClassReport classReport = new ClassReport();
-                IInterfaceReport interfaceReport = new InterfaceReport();
-                PackageVisitor visitor = new PackageVisitor(packageReport, classReport, interfaceReport);
                 visitor.visit(cu, null);
+                result = visitor.getCount();
             } catch (FileNotFoundException e) {
                 log("Package reporter failed...");
                 res.fail("invalid path");
             }
         }
-        res.complete(packageReport);
+        res.complete(result);
     }
     private static void log(String msg) {
         System.out.println("" + Thread.currentThread() + " " + msg);
     }
-
-//    private List<String> getFileList() {
-//        File[] files = new File(this.path).listFiles(File::isFile);
-//        return Arrays.stream(files).map(File::toString).collect(Collectors.toList());
-//    }
 }

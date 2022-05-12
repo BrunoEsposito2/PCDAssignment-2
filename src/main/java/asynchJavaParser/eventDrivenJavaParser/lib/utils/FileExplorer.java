@@ -6,10 +6,10 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
 
-public class Reporter {
+public class FileExplorer {
     final String path;
 
-    public Reporter(final String path) {
+    public FileExplorer(final String path) {
         this.path = path;
     }
 

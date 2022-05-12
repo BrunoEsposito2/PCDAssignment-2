@@ -1,16 +1,16 @@
 package asynchJavaParser.eventDrivenJavaParser.lib;
 
 import asynchJavaParser.eventDrivenJavaParser.lib.projectAnalyzer.AnalyzeProjectConfig;
+import asynchJavaParser.eventDrivenJavaParser.lib.projectAnalyzer.ProjectAnalyzerReporter;
 import asynchJavaParser.eventDrivenJavaParser.lib.projectAnalyzer.ResponsiveProjectVisitor;
 import asynchJavaParser.eventDrivenJavaParser.lib.reporters.ClassReporter;
+import asynchJavaParser.eventDrivenJavaParser.lib.reporters.ElemNumberReporter;
 import asynchJavaParser.eventDrivenJavaParser.lib.reporters.PackageReporter;
 import asynchJavaParser.eventDrivenJavaParser.lib.reporters.ProjectReporter;
 import asynchJavaParser.eventDrivenJavaParser.lib.reports.interfaces.IClassReport;
 import asynchJavaParser.eventDrivenJavaParser.lib.reports.interfaces.IPackageReport;
 import asynchJavaParser.eventDrivenJavaParser.lib.reports.interfaces.IProjectReport;
-import asynchJavaParser.eventDrivenJavaParser.lib.utils.Reporter;
-import asynchJavaParser.eventDrivenJavaParser.lib.visitors.ElemCounterCollector;
-import com.github.javaparser.StaticJavaParser;
+import asynchJavaParser.eventDrivenJavaParser.lib.utils.FileExplorer;
 import com.github.javaparser.ast.CompilationUnit;
 import io.vertx.core.Future;
 import io.vertx.core.Promise;
@@ -19,8 +19,6 @@ import io.vertx.core.eventbus.EventBus;
 import io.vertx.core.eventbus.Message;
 import io.vertx.core.eventbus.MessageConsumer;
 
-import java.io.File;
-import java.io.FileNotFoundException;
 import java.util.concurrent.atomic.AtomicReference;
 import java.util.function.Consumer;
 
@@ -28,8 +26,6 @@ public class EDProjectAnalyzer implements IProjectAnalyzer {
 
   private final Vertx vertx;
   private final EventBus eventBus;
-  private Reporter reporter;
-
 
   public EDProjectAnalyzer(Vertx v){
     this.vertx = v;
@@ -63,48 +59,38 @@ public class EDProjectAnalyzer implements IProjectAnalyzer {
   @Override
   public void analyzeProject(AnalyzeProjectConfig conf, Consumer<Message<?>> callback) {
 
-    AtomicReference<Integer> messageReceived = new AtomicReference<>(0);
-    Integer expected = 0;
-    //registra l'handler dei messaggi alla loro ricezione (cioè la callback)
+    AtomicReference<Integer> receivedMsgNr = new AtomicReference<>(0);
+    AtomicReference<Integer> expectedMsgNr = new AtomicReference<>(0);
 
+    Promise<Integer> promiseElemNr = Promise.promise();
+    ElemNumberReporter pnr = new ElemNumberReporter(promiseElemNr, conf.getSrcProjectFolderName());
+    this.vertx.deployVerticle(pnr);
+    Future<Integer> futureElemNr = promiseElemNr.future();
 
-    ResponsiveProjectVisitor rpv = new ResponsiveProjectVisitor(this.vertx, conf.getResponseAddress(), "projectVisitor");
-    CompilationUnit cu = null;
+    futureElemNr.onSuccess((a) -> {
 
-    this.reporter = new Reporter(conf.getSrcProjectFolderName());
+      expectedMsgNr.set(futureElemNr.result());
+      ProjectAnalyzerReporter par = new ProjectAnalyzerReporter(conf);
+      this.vertx.deployVerticle(par);
 
-    ElemCounterCollector ecc = new ElemCounterCollector();
+    }).onFailure(status -> {
+      System.out.println("error"); //TODO return failure message
+    });
 
-    for (final String pkg : reporter.getAllPackageFiles()) {
-      try {
-        cu = StaticJavaParser.parse(new File(pkg));
-        ecc.visit(cu, null);
-        expected = ecc.getCount();
-      } catch (FileNotFoundException e) {
-        e.printStackTrace();
-      }
-    }
-
+    //Message handler registration.
+    //The messages will be generated and received only after elemNumber is completed with success, setting "expected" variable.
     MessageConsumer<String> consumer = eventBus.consumer(conf.getResponseAddress());
-    Integer finalExpected = expected;
     consumer.handler(message -> {
       callback.accept(message);
-      messageReceived.getAndSet(messageReceived.get() + 1);
-      if(messageReceived.get().equals(finalExpected)){
+      receivedMsgNr.getAndSet(receivedMsgNr.get() + 1);
+      if(receivedMsgNr.get().equals(expectedMsgNr.get())){
         vertx.eventBus().send(conf.getCompletitionNotifAddress(), "complete");
       }
     });
-
-    rpv.visit(cu, null);
   }
 
   public void stopAnalyzeProject(){
     eventBus.publish("projectVisitor", "STOP");
   }
-
-  private static void log(String msg) {
-    System.out.println("" + Thread.currentThread() + " " + msg);
-  }
-
 }
 

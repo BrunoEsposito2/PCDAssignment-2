@@ -8,7 +8,7 @@ import asynchJavaParser.eventDrivenJavaParser.lib.reports.interfaces.IClassRepor
 import asynchJavaParser.eventDrivenJavaParser.lib.reports.interfaces.IInterfaceReport;
 import asynchJavaParser.eventDrivenJavaParser.lib.reports.interfaces.IPackageReport;
 import asynchJavaParser.eventDrivenJavaParser.lib.reports.interfaces.IProjectReport;
-import asynchJavaParser.eventDrivenJavaParser.lib.utils.Reporter;
+import asynchJavaParser.eventDrivenJavaParser.lib.utils.FileExplorer;
 import asynchJavaParser.eventDrivenJavaParser.lib.visitors.ProjectVisitor;
 import com.github.javaparser.StaticJavaParser;
 import com.github.javaparser.ast.CompilationUnit;
@@ -22,18 +22,18 @@ import java.util.List;
 public class ProjectReporter extends AbstractVerticle {
     private final Promise<IProjectReport> res;
     private final String path;
-    private final Reporter reporter;
+    private final FileExplorer fileExplorer;
 
     public ProjectReporter(Promise<IProjectReport> res, String path){
         this.res = res;
         this.path = path;
-        this.reporter = new Reporter(this.path);
+        this.fileExplorer = new FileExplorer(this.path);
     }
 
     @Override
     public void start() {
         CompilationUnit cu;
-        List<String> packages = this.reporter.getAllPackageFiles();
+        List<String> packages = this.fileExplorer.getAllPackageFiles();
         // System.out.println("ALL PACKAGES: " + packages); // for debug purposes
         IProjectReport projectReport = new ProjectReport();
         for (String p : packages) {

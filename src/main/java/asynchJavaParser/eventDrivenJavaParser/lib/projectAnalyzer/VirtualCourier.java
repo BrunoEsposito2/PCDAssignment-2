@@ -6,12 +6,12 @@ import io.vertx.core.AbstractVerticle;
 import io.vertx.core.eventbus.DeliveryOptions;
 import java.util.function.BiConsumer;
 
-public class Courier<X extends Node> extends AbstractVerticle {
+public class VirtualCourier<X extends Node> extends AbstractVerticle {
     private final BiConsumer<X, Void> visitor;
     private final X elem;
     private final String responseAddress;
 
-    public Courier(X elem, BiConsumer<X, Void> visitor, String responseAddress){
+    public VirtualCourier(X elem, BiConsumer<X, Void> visitor, String responseAddress){
         this.visitor = visitor;
         this.elem = elem;
         this.responseAddress = responseAddress;

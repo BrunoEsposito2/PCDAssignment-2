@@ -27,25 +27,25 @@ public class ResponsiveProjectVisitor extends VoidVisitorAdapter<Void>{
 
     @Override
     public void visit(PackageDeclaration fd, Void collector) {
-        Courier<PackageDeclaration> c = new Courier<PackageDeclaration>(fd, (a, b)->super.visit(fd, null), responseAddress);
+        VirtualCourier<PackageDeclaration> c = new VirtualCourier<PackageDeclaration>(fd, (a, b)->super.visit(fd, null), responseAddress);
         if(this.shouldContinue) vertx.deployVerticle(c);
     }
 
     @Override
     public void visit(ClassOrInterfaceDeclaration cd, Void collector) {
-        Courier<ClassOrInterfaceDeclaration> c = new Courier<ClassOrInterfaceDeclaration>(cd, (a, b)->super.visit(cd, null), responseAddress);
+        VirtualCourier<ClassOrInterfaceDeclaration> c = new VirtualCourier<ClassOrInterfaceDeclaration>(cd, (a, b)->super.visit(cd, null), responseAddress);
         if(this.shouldContinue) vertx.deployVerticle(c);
     }
 
     @Override
     public void visit(MethodDeclaration md, Void collector) {
-        Courier<MethodDeclaration> c = new Courier<MethodDeclaration>(md, (a, b)->super.visit(md, null), responseAddress);
+        VirtualCourier<MethodDeclaration> c = new VirtualCourier<MethodDeclaration>(md, (a, b)->super.visit(md, null), responseAddress);
         if(this.shouldContinue) vertx.deployVerticle(c);
     }
 
     @Override
     public void visit(FieldDeclaration fd, Void collector) {
-        Courier<FieldDeclaration> c = new Courier<FieldDeclaration>(fd, (a, b)->super.visit(fd, null), responseAddress);
+        VirtualCourier<FieldDeclaration> c = new VirtualCourier<FieldDeclaration>(fd, (a, b)->super.visit(fd, null), responseAddress);
         if(this.shouldContinue) vertx.deployVerticle(c);
     }
 
