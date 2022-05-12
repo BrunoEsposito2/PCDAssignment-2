@@ -2,17 +2,19 @@ package asynchJavaParser.eventDrivenJavaParser.lib;
 
 import asynchJavaParser.eventDrivenJavaParser.lib.projectAnalyzer.AnalyzeProjectConfig;
 import asynchJavaParser.eventDrivenJavaParser.lib.projectAnalyzer.ResponsiveProjectVisitor;
+import asynchJavaParser.eventDrivenJavaParser.lib.reporters.ClassReporter;
+import asynchJavaParser.eventDrivenJavaParser.lib.reporters.PackageReporter;
 import asynchJavaParser.eventDrivenJavaParser.lib.reporters.ProjectReporter;
 import asynchJavaParser.eventDrivenJavaParser.lib.reports.interfaces.IClassReport;
 import asynchJavaParser.eventDrivenJavaParser.lib.reports.interfaces.IPackageReport;
 import asynchJavaParser.eventDrivenJavaParser.lib.reports.interfaces.IProjectReport;
-import asynchJavaParser.eventDrivenJavaParser.lib.reporters.ClassReporter;
-import asynchJavaParser.eventDrivenJavaParser.lib.reporters.PackageReporter;
+import asynchJavaParser.eventDrivenJavaParser.lib.utils.Reporter;
 import asynchJavaParser.eventDrivenJavaParser.lib.visitors.ElemCounterCollector;
 import com.github.javaparser.StaticJavaParser;
 import com.github.javaparser.ast.CompilationUnit;
 import io.vertx.core.Future;
-import io.vertx.core.*;
+import io.vertx.core.Promise;
+import io.vertx.core.Vertx;
 import io.vertx.core.eventbus.EventBus;
 import io.vertx.core.eventbus.Message;
 import io.vertx.core.eventbus.MessageConsumer;
@@ -26,6 +28,7 @@ public class EDProjectAnalyzer implements IProjectAnalyzer {
 
   private final Vertx vertx;
   private final EventBus eventBus;
+  private Reporter reporter;
 
 
   public EDProjectAnalyzer(Vertx v){
@@ -68,14 +71,18 @@ public class EDProjectAnalyzer implements IProjectAnalyzer {
     ResponsiveProjectVisitor rpv = new ResponsiveProjectVisitor(this.vertx, conf.getResponseAddress(), "projectVisitor");
     CompilationUnit cu = null;
 
-    ElemCounterCollector ecc = new ElemCounterCollector();
-    try {
-      cu = StaticJavaParser.parse(new File(conf.getSrcProjectFolderName()));
-      ecc.visit(cu, null);
-      expected = ecc.getCount();
+    this.reporter = new Reporter(conf.getSrcProjectFolderName());
 
-    } catch (FileNotFoundException e) {
-      e.printStackTrace();
+    ElemCounterCollector ecc = new ElemCounterCollector();
+
+    for (final String pkg : reporter.getAllPackageFiles()) {
+      try {
+        cu = StaticJavaParser.parse(new File(pkg));
+        ecc.visit(cu, null);
+        expected = ecc.getCount();
+      } catch (FileNotFoundException e) {
+        e.printStackTrace();
+      }
     }
 
     MessageConsumer<String> consumer = eventBus.consumer(conf.getResponseAddress());
