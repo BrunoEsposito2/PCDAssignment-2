@@ -1,29 +1,13 @@
 package asynchJavaParser.eventDrivenJavaParser.client;
 
 import asynchJavaParser.eventDrivenJavaParser.lib.EDProjectAnalyzer;
-import asynchJavaParser.eventDrivenJavaParser.lib.projectAnalyzer.AnalyzeProjectConfig;
-import asynchJavaParser.eventDrivenJavaParser.lib.reports.PackageReport;
-import asynchJavaParser.eventDrivenJavaParser.lib.reports.interfaces.IClassReport;
-import asynchJavaParser.eventDrivenJavaParser.lib.reports.interfaces.IPackageReport;
-import asynchJavaParser.eventDrivenJavaParser.lib.reports.interfaces.IProjectReport;
-import com.github.javaparser.ast.PackageDeclaration;
-import com.github.javaparser.ast.body.ClassOrInterfaceDeclaration;
-import com.github.javaparser.ast.body.FieldDeclaration;
-import com.github.javaparser.ast.body.MethodDeclaration;
-import io.vertx.core.AsyncResult;
-import io.vertx.core.Future;
 import io.vertx.core.Vertx;
-import io.vertx.core.eventbus.EventBus;
-import io.vertx.core.json.JsonObject;
-
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.lang.reflect.InvocationTargetException;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.HashMap;
+import java.util.Map;
 
 public class VisualizerFrame extends JFrame {
 
@@ -31,8 +15,9 @@ public class VisualizerFrame extends JFrame {
     private JTextField nameDirectory;
     private JPanel viewPanel;
     private TreePanel treePanel;
-    private EventBus eventBus;
-    private List<JButton> methodButton;
+    private JScrollPane treeView;
+    private JButton stop;
+    private Map<String, JButton> methodButtons;
     private EDProjectAnalyzer lib;
 
     public VisualizerFrame(Vertx v) {
@@ -40,19 +25,48 @@ public class VisualizerFrame extends JFrame {
         setMinimumSize(new Dimension(1000,800));
 
         createView();
-        eventBus = v.eventBus();
         lib = new EDProjectAnalyzer(v);
         setDefaultCloseOperation(EXIT_ON_CLOSE);
     }
 
-    public List<JButton> getMethodButton() {
-        return methodButton;
+    public JTextField getNameDirectory() {
+        return nameDirectory;
     }
 
-    public void change(String path){
-        getMethodButton().forEach(b -> b.setEnabled(true));
+    public Map<String, JButton> getMethodButtons(){
+        return methodButtons;
+    }
+
+    public EDProjectAnalyzer getLib() {
+        return lib;
+    }
+
+    public TreePanel getTreePanel(){
+        return treePanel;
+    }
+
+    public JButton getStopButton(){
+        return this.stop;
+    }
+
+    public void changeView(String path){
+        getMethodButtons().forEach((k, v) -> v.setEnabled(true));
         //nameDirectory.setText(path);
-        nameDirectory.setText("src/main/java/asynchJavaParser/eventDrivenJavaParser/lib/projectAnalyzer/Courier.java");
+        nameDirectory.setText("src/main/java/asynchJavaParser/eventDrivenJavaParser/");
+    }
+
+    public void resetView(){
+        methodButtons.forEach((k, v) -> v.setEnabled(false));
+        nameDirectory.setText("...");
+    }
+
+    public void resetTree(){
+        treePanel.reset();
+    }
+
+    public void errorMessage(){
+        JOptionPane.showMessageDialog(null, "My Goodness, this is so concise");
+        resetView();
     }
 
     public void display(){
@@ -73,15 +87,15 @@ public class VisualizerFrame extends JFrame {
         managementPanel.setBorder(new EmptyBorder(30,15,30,15));
 
         JButton openFileChooser = new JButton("Select project");
-        openFileChooser.addActionListener(new OpenFolderChooser());
+        openFileChooser.addActionListener(new OpenFolderChooser(this));
         openFileChooser.setAlignmentX(Component.CENTER_ALIGNMENT);
 
-        JButton stop = new JButton("STOP");
-        stop.addActionListener(new StopEvents());
+        stop = new JButton("STOP");
+        stop.setEnabled(false);
+        stop.addActionListener(new StopEvents(this));
         stop.setAlignmentX(Component.CENTER_ALIGNMENT);
 
         nameDirectory = new JTextField();
-        nameDirectory.setText("...");
         nameDirectory.setAlignmentX(Component.CENTER_ALIGNMENT);
 
         managementPanel.add(openFileChooser);
@@ -93,21 +107,22 @@ public class VisualizerFrame extends JFrame {
         buttonPanel.setBorder(new EmptyBorder(40,15,40,15));
 
         JButton getClassReport = new JButton("getClassReport");
-        getClassReport.addActionListener(new GetClassReport());
+        getClassReport.addActionListener(new GetClassReport(this));
+
         JButton getPackageReport = new JButton("getPackageReport");
-        getPackageReport.addActionListener(new GetPackageReport());
+        getPackageReport.addActionListener(new GetPackageReport(this));
+
         JButton getProjectReport = new JButton("getProjectReport");
-        getProjectReport.addActionListener(new GetProjectReport());
+        getProjectReport.addActionListener(new GetProjectReport(this));
+
         JButton analyzeProject = new JButton("analyzeProject");
-        analyzeProject.addActionListener(new AnalyzeProject());
+        analyzeProject.addActionListener(new AnalyzeProject(this));
 
-        methodButton = new ArrayList<>();
-        methodButton.add(getClassReport);
-        methodButton.add(getPackageReport);
-        methodButton.add(getProjectReport);
-        methodButton.add(analyzeProject);
-
-        methodButton.forEach(b -> b.setEnabled(false));
+        methodButtons = new HashMap<>();
+        methodButtons.put(getClassReport.getText(), getClassReport);
+        methodButtons.put(getPackageReport.getText(), getPackageReport);
+        methodButtons.put(getProjectReport.getText(), getProjectReport);
+        methodButtons.put(analyzeProject.getText(), analyzeProject);
 
         buttonPanel.add(getClassReport);
         buttonPanel.add(getPackageReport);
@@ -116,107 +131,15 @@ public class VisualizerFrame extends JFrame {
 
         // CENTER
         treePanel = new TreePanel();
-        JScrollPane treeView = new JScrollPane(treePanel.getTree());
+        treeView = new JScrollPane(treePanel.getTree());
         treePanel.add(treeView);
+
+        resetView();
 
         viewPanel.add(managementPanel, BorderLayout.NORTH);
         viewPanel.add(buttonPanel, BorderLayout.WEST);
         viewPanel.add(treePanel, BorderLayout.CENTER);
         setContentPane(viewPanel);
-    }
-
-    private class OpenFolderChooser implements ActionListener {
-
-        public void actionPerformed(ActionEvent e) {
-            try {
-                JFileChooser fileChooser = new JFileChooser();
-                fileChooser.setCurrentDirectory(new java.io.File("./src/"));
-                fileChooser.setDialogTitle("Project chooser");
-                fileChooser.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
-                fileChooser.setAcceptAllFileFilterUsed(false);
-                int n = fileChooser.showOpenDialog(VisualizerFrame.this);
-                if (n == JFileChooser.APPROVE_OPTION) {
-                    Formatter formatter = new Formatter();
-                    change(formatter.formatPath(fileChooser.getSelectedFile().getPath()));
-                }
-            } catch (Exception ex) {}
-        }
-    }
-
-    private class StopEvents implements ActionListener {
-        public void actionPerformed(ActionEvent e) {
-            lib.stopAnalyzeProject();
-        }
-    }
-
-    private class GetClassReport implements ActionListener {
-        public void actionPerformed(ActionEvent e) {
-            Future<IClassReport> future = lib.getClassReport(nameDirectory.getText());
-            future.onComplete(res -> {
-                IClassReport report = res.result();
-                treePanel.update(report);
-            });
-        }
-    }
-
-    private class GetPackageReport implements ActionListener {
-        public void actionPerformed(ActionEvent e) {
-            Future<IPackageReport> future = lib.getPackageReport(nameDirectory.getText());
-            future.onComplete(res -> {
-                IPackageReport report = res.result();
-                treePanel.update(report);
-            });
-        }
-    }
-
-    private class GetProjectReport implements ActionListener {
-        public void actionPerformed(ActionEvent e) {
-            Future<IProjectReport> future = lib.getProjectReport(nameDirectory.getText());
-            future.onComplete(res -> {
-                IProjectReport report = res.result();
-                //Formatter formatter = new Formatter();
-                //formatter.formatResult(result, "ProjectReport");
-                System.out.println("BUILD \n" + res.result().toString());
-            });
-        }
-    }
-
-    private class AnalyzeProject implements ActionListener {
-        public void actionPerformed(ActionEvent e) {
-            AnalyzeProjectConfig conf = new AnalyzeProjectConfig("master", "master.complete", nameDirectory.getText());
-            lib.analyzeProject(conf, message -> {
-                String elemType = message.headers().get("type");
-                switch(elemType){
-                    case "class":
-                        ClassOrInterfaceDeclaration cd = (ClassOrInterfaceDeclaration)message.body();
-                        System.out.println("class "+ cd.getNameAsString());
-                        break;
-
-                    case "interface":
-                        ClassOrInterfaceDeclaration id = (ClassOrInterfaceDeclaration)message.body();
-                        System.out.println("interface "+ id.getNameAsString());
-                        break;
-                    case "field":
-                        FieldDeclaration fd = (FieldDeclaration)message.body();
-                        fd.getVariables().forEach(f -> System.out.println("field "+ f.getNameAsString()));
-                        break;
-
-                    case "method":
-                        MethodDeclaration md = (MethodDeclaration)message.body();
-                        System.out.println("method "+ md.getNameAsString());
-                        break;
-
-                    case "package":
-                        PackageDeclaration pd = (PackageDeclaration)message.body();
-                        System.out.println("method "+ pd.getNameAsString());
-                        break;
-
-                    default:
-                        System.out.println("not a project element");
-                }
-
-            });
-        }
     }
 }
 
