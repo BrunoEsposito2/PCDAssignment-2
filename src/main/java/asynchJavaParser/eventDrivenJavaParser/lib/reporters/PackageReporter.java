@@ -26,7 +26,7 @@ public class PackageReporter extends AbstractVerticle {
     @Override
     public void start() {
         CompilationUnit cu;
-        List<String> files = this.fileExplorer.getFileList(this.path);
+        List<String> files = this.fileExplorer.getAllPackageFiles();
         PackageVisitor visitor = new PackageVisitor();
         for (String nameFile : files) {
             // System.out.println("nome file: " + nameFile); // for debug purposes
@@ -45,8 +45,4 @@ public class PackageReporter extends AbstractVerticle {
         System.out.println("" + Thread.currentThread() + " " + msg);
     }
 
-//    private List<String> getFileList() {
-//        File[] files = new File(this.path).listFiles(File::isFile);
-//        return Arrays.stream(files).map(File::toString).collect(Collectors.toList());
-//    }
 }
