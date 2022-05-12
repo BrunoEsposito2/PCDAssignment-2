@@ -24,31 +24,31 @@ public class AnalyzeProject implements ActionListener {
         view.getStopButton().setEnabled(true);
         AnalyzeProjectConfig conf = new AnalyzeProjectConfig("master", "master.complete", view.getNameDirectory().getText());
         view.getLib().analyzeProject(conf, message -> {
-            System.out.println("IN");
+            //System.out.println("IN");
             String elemType = message.headers().get("type");
             switch(elemType){
-                case "class":
+                case "Class":
                     ClassOrInterfaceDeclaration cd = (ClassOrInterfaceDeclaration)message.body();
                     System.out.println("class "+ cd.getNameAsString());
                     break;
-                case "interface":
+                case "Interface":
                     ClassOrInterfaceDeclaration id = (ClassOrInterfaceDeclaration)message.body();
                     System.out.println("interface "+ id.getNameAsString());
                     break;
-                case "field":
+                case "Field":
                     FieldDeclaration fd = (FieldDeclaration)message.body();
                     fd.getVariables().forEach(f -> System.out.println("field "+ f.getNameAsString()));
                     break;
-                case "method":
+                case "Method":
                     MethodDeclaration md = (MethodDeclaration)message.body();
                     System.out.println("method "+ md.getNameAsString());
                     break;
-                case "package":
+                case "Package":
                     PackageDeclaration pd = (PackageDeclaration)message.body();
                     System.out.println("method "+ pd.getNameAsString());
                     break;
                 default:
-                    System.out.println("not a project element");
+                    System.out.println("not a project element " + elemType);
             }
         });
     }

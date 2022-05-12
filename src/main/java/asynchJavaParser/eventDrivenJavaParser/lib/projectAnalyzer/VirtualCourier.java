@@ -21,8 +21,10 @@ public class VirtualCourier<X extends Node> extends AbstractVerticle {
     public void start(){
         visitor.accept(elem, null);
 
-        String elemType = elem.getClass().getName().replace("Declaration", "");
-        if(elemType == "ClassOrInterface"){
+        String[] completeClassName = elem.getClass().getName().split("[.]");
+        String elemType = completeClassName[completeClassName.length - 1].replace("Declaration", "");
+
+        if(elemType.equals("ClassOrInterface")){
             ClassOrInterfaceDeclaration cd = (ClassOrInterfaceDeclaration) elem;
             elemType = cd.isInterface() ? elemType.replace("ClassOr", "") : elemType.replace("OrInterface", "");
         }
