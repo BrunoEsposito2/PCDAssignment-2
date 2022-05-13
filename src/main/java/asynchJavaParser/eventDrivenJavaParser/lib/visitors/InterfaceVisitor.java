@@ -9,31 +9,29 @@ import com.github.javaparser.ast.body.MethodDeclaration;
 import com.github.javaparser.ast.visitor.VoidVisitorAdapter;
 
 public class InterfaceVisitor extends VoidVisitorAdapter<IInterfaceReport> implements Visitor<IInterfaceReport> {
-    private IInterfaceReport interfaceReport;
     private IMethodInfo methodInfo;
 
-    public InterfaceVisitor(InterfaceReport interfaceReport) {
-        this.interfaceReport = interfaceReport;
+    public InterfaceVisitor() {
     }
 
     @Override
-    public void visit(PackageDeclaration fd, IInterfaceReport collector) {
-        super.visit(fd, collector);
-        this.interfaceReport.setSrcFullFileName(fd.getNameAsString());
+    public void visit(PackageDeclaration fd, IInterfaceReport interfaceReport) {
+        super.visit(fd, interfaceReport);
+        interfaceReport.setSrcFullFileName(fd.getNameAsString());
     }
 
     @Override
-    public void visit(ClassOrInterfaceDeclaration cd, IInterfaceReport collector) {
-        super.visit(cd, collector);
-        this.interfaceReport.setFullInterfaceName(cd.getNameAsString());
+    public void visit(ClassOrInterfaceDeclaration cd, IInterfaceReport interfaceReport) {
+        super.visit(cd, interfaceReport);
+        interfaceReport.setFullInterfaceName(cd.getNameAsString());
     }
 
     @Override
-    public void visit(MethodDeclaration md, IInterfaceReport collector) {
-        super.visit(md, collector);
+    public void visit(MethodDeclaration md, IInterfaceReport interfaceReport) {
+        super.visit(md, interfaceReport);
         this.methodInfo = new MethodInfo(md.getNameAsString(), md.getBegin(), md.getEnd());
         this.methodInfo.setReturnType(md.getType());
         md.getParameters().forEach(x -> methodInfo.addParameter(new ParameterInfo(x.getNameAsString(), x.getType())));
-        this.interfaceReport.addMethodsInfo(methodInfo);
+        interfaceReport.addMethodsInfo(methodInfo);
     }
 }

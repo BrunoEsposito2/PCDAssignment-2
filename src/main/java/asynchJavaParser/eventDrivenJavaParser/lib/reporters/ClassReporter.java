@@ -27,7 +27,7 @@ public class ClassReporter extends AbstractVerticle {
             log("Class reporter started...");
             cu = StaticJavaParser.parse(new File(this.path));
             ClassReport classReport = new ClassReport();
-            ClassVisitor visitor = new ClassVisitor(classReport);
+            ClassVisitor visitor = new ClassVisitor();
             visitor.visit(cu, classReport);
             res.complete(classReport);
         } catch (FileNotFoundException e) {
