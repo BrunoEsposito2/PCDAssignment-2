@@ -1,10 +1,13 @@
 package asynchJavaParser.eventDrivenJavaParser.lib.visitors;
 
+import asynchJavaParser.eventDrivenJavaParser.lib.reports.ClassReport;
+import asynchJavaParser.eventDrivenJavaParser.lib.reports.InterfaceReport;
 import asynchJavaParser.eventDrivenJavaParser.lib.reports.ProjectReport;
 import asynchJavaParser.eventDrivenJavaParser.lib.reports.interfaces.IClassReport;
 import asynchJavaParser.eventDrivenJavaParser.lib.reports.interfaces.IPackageReport;
 import asynchJavaParser.eventDrivenJavaParser.lib.reports.interfaces.IProjectReport;
 import com.github.javaparser.ast.PackageDeclaration;
+import com.github.javaparser.ast.body.ClassOrInterfaceDeclaration;
 import com.github.javaparser.ast.visitor.VoidVisitorAdapter;
 
 import java.util.Collection;
@@ -13,12 +16,14 @@ import java.util.stream.Collectors;
 
 public class ProjectVisitor extends VoidVisitorAdapter<IProjectReport> implements Visitor<IProjectReport> {
     private IProjectReport projectReport;
+    private IPackageReport packageReport;
     private final PackageVisitor packageVisitor;
     private List<String> mainClassList;
 
-    public ProjectVisitor() {
-        this.projectReport = new ProjectReport();
-        this.packageVisitor = new PackageVisitor();
+    public ProjectVisitor(ProjectReport projectReport, IPackageReport packageReport, ClassReport cr, InterfaceReport ir) {
+        this.projectReport = projectReport;
+        this.packageReport = packageReport;
+        this.packageVisitor = new PackageVisitor(this.packageReport, cr, ir);
     }
 
     public IProjectReport getProjectReport() {
@@ -27,14 +32,19 @@ public class ProjectVisitor extends VoidVisitorAdapter<IProjectReport> implement
 
     @Override
     public void visit(PackageDeclaration pd, IProjectReport collector) {
-        this.packageVisitor.visit(pd, this.packageVisitor.getPackageReport());
-        this.projectReport = collector;
-        this.projectReport.addPackageReport(this.packageVisitor.getPackageReport());
+        this.packageVisitor.visit(pd, this.packageReport);
+        this.projectReport.addPackageReport(this.packageReport);
         if (this.mainClassExists()) {
             this.projectReport.setMainClass(this.mainClassList.get(0));
         } else {
             this.projectReport.setMainClass("Main class does not exists");
         }
+    }
+
+    @Override
+    public void visit(ClassOrInterfaceDeclaration cd, IProjectReport collector) {
+        this.packageVisitor.visit(cd, this.packageReport);
+        this.projectReport.addPackageReport(this.packageReport);
     }
 
     private boolean mainClassExists() {
