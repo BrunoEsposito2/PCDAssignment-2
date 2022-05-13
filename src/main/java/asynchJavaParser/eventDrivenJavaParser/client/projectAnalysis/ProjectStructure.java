@@ -32,6 +32,7 @@ public class ProjectStructure {
                 PackageElem newPE = new PackageElem();
                 if(i == individualPackages.length-1) newPE.setElem(p);
                 packages.put(individualPackages[i], newPE);
+                alreadySavedPackage = packages.get(individualPackages[i]);
             } else {
                 //if the package is in the map but the element is not present (and we are in last nesting level)...
                 if(alreadySavedPackage.getElem().isEmpty() && i == individualPackages.length-1){
@@ -45,6 +46,7 @@ public class ProjectStructure {
 
     public void putClassOrInterface(ClassOrInterfaceDeclaration c){
         String fullPath = c.getFullyQualifiedName().get();
+        System.out.println("fp: "+fullPath);
         String[] path = fullPath.split("[.]");
         PackageElem p = reachPackage(path);
 
@@ -80,10 +82,11 @@ public class ProjectStructure {
                 //if it's not saved, save the name
                 PackageElem newPE = new PackageElem();
                 packages.put(path[i], newPE);
-
+                alreadySavedPackage = packages.get(path[i]);
             }
             if(i == path.length - 2) return packages.get(path[i]);
             //increment nesting level
+
             packages = alreadySavedPackage.getInnerPackages();
         }
         return null;
