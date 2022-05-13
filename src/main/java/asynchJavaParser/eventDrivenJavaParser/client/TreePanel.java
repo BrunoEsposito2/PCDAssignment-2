@@ -1,5 +1,8 @@
 package asynchJavaParser.eventDrivenJavaParser.client;
 
+import asynchJavaParser.eventDrivenJavaParser.client.projectAnalysis.InterfaceElem;
+import asynchJavaParser.eventDrivenJavaParser.client.projectAnalysis.PackageElem;
+import asynchJavaParser.eventDrivenJavaParser.client.projectAnalysis.ProjectStructure;
 import asynchJavaParser.eventDrivenJavaParser.lib.reports.interfaces.*;
 import javax.swing.*;
 import javax.swing.tree.DefaultMutableTreeNode;
@@ -7,6 +10,8 @@ import javax.swing.tree.DefaultTreeCellRenderer;
 import javax.swing.tree.DefaultTreeModel;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
 
 public class TreePanel extends JPanel {
 
@@ -37,8 +42,8 @@ public class TreePanel extends JPanel {
         IClassReport res = report;
         List<IMethodInfo> methodInfo = new ArrayList<>();
         List<IFieldInfo> fieldInfo = new ArrayList<>();
-        methodInfo.addAll(res.getMethodsInfo());
-        fieldInfo.addAll(res.getFieldsInfo());
+        res.getMethodsInfo().forEach(m -> methodInfo.add(m));
+        res.getFieldsInfo().forEach(f -> fieldInfo.add(f));
 
         DefaultMutableTreeNode className;
         List<DefaultMutableTreeNode> fieldName = new ArrayList<>();
@@ -107,9 +112,12 @@ public class TreePanel extends JPanel {
     public void update(IPackageReport report, DefaultMutableTreeNode addNode) {
         IPackageReport res = report;
         List<IClassReport> classInfo = new ArrayList<>();
-        classInfo.addAll(res.getClassReports());
         List<IInterfaceReport> interfaceInfo = new ArrayList<>();
-        interfaceInfo.addAll(res.getInterfaceReports());
+        res.getClassReports().forEach(c -> {
+            classInfo.add(c);
+            System.out.println(c);
+        });
+        res.getInterfaceReports().forEach(i -> interfaceInfo.add(i));
 
         DefaultMutableTreeNode packageName;
         DefaultMutableTreeNode classNode = new DefaultMutableTreeNode("CLASSES");
@@ -140,6 +148,27 @@ public class TreePanel extends JPanel {
         projectName.add(packageNode);
 
         packageInfo.forEach(p -> update(p, packageNode));
+    }
+
+    public void update(ProjectStructure ps){
+        reset();
+        PackageElem psRoot = ps.getRoot();
+        ps.getRoot().getInnerInterfaces().forEach((k,v) -> System.out.println(k+" KEY"));
+        Map<String, PackageElem> innerPackages = psRoot.getInnerPackages();
+        Map<String, InterfaceElem> innerInterfaces = psRoot.getInnerInterfaces();
+
+        DefaultMutableTreeNode packageDeclaration = new DefaultMutableTreeNode(ps.getRoot().getElem().isEmpty() ? "**" : ps.getRoot().getElem().get().getName());
+        root.add(packageDeclaration);
+
+        if(!ps.getRoot().getInnerPackages().isEmpty()){
+
+        }
+
+        innerInterfaces.forEach((k, v) -> {
+            DefaultMutableTreeNode name = new DefaultMutableTreeNode(k);
+            packageDeclaration.add(name);
+        });
+        //getMethodButtons().forEach((k, v) -> v.setEnabled(true));
     }
 
     private void createTree(){

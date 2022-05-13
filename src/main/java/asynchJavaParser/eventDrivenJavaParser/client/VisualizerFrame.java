@@ -13,6 +13,7 @@ public class VisualizerFrame extends JFrame {
 
     private static final long serialVersionUID = 1L;
     private JTextField nameDirectory;
+    private JLabel status;
     private JPanel viewPanel;
     private TreePanel treePanel;
     private JScrollPane treeView;
@@ -33,6 +34,10 @@ public class VisualizerFrame extends JFrame {
         return nameDirectory;
     }
 
+    public JLabel getStatus(){
+        return status;
+    }
+
     public Map<String, JButton> getMethodButtons(){
         return methodButtons;
     }
@@ -51,13 +56,14 @@ public class VisualizerFrame extends JFrame {
 
     public void changeView(String path){
         getMethodButtons().forEach((k, v) -> v.setEnabled(true));
-        //nameDirectory.setText(path);
-        nameDirectory.setText("src/main/java/asynchJavaParser/eventDrivenJavaParser/");
+        nameDirectory.setText(path);
+        //nameDirectory.setText("src/main/java/asynchJavaParser/eventDrivenJavaParser/lib/");
     }
 
     public void resetView(){
         methodButtons.forEach((k, v) -> v.setEnabled(false));
         nameDirectory.setText("...");
+        status.setText("");
     }
 
     public void resetTree(){
@@ -118,6 +124,9 @@ public class VisualizerFrame extends JFrame {
         JButton analyzeProject = new JButton("analyzeProject");
         analyzeProject.addActionListener(new AnalyzeProject(this));
 
+        status = new JLabel();
+        status.setAlignmentX(Component.CENTER_ALIGNMENT);
+
         methodButtons = new HashMap<>();
         methodButtons.put(getClassReport.getText(), getClassReport);
         methodButtons.put(getPackageReport.getText(), getPackageReport);
@@ -128,6 +137,7 @@ public class VisualizerFrame extends JFrame {
         buttonPanel.add(getPackageReport);
         buttonPanel.add(getProjectReport);
         buttonPanel.add(analyzeProject);
+        buttonPanel.add(status);
 
         // CENTER
         treePanel = new TreePanel();
