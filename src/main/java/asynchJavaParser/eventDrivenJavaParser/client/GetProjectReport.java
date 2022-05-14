@@ -20,10 +20,13 @@ public class GetProjectReport implements ActionListener {
         view.getStopButton().setEnabled(true);
         view.getMethodButtons().get("getProjectReport").setEnabled(false);
         Future<IProjectReport> future = view.getLib().getProjectReport(view.getNameDirectory().getText());
-        future.onComplete(res -> {
-            IProjectReport report = res.result();
+        future.onSuccess(res -> {
+            IProjectReport report = res;
             view.getTreePanel().update(report, view.getTreePanel().getRoot());
-            System.out.println(report);
+        });
+        future.onFailure(res -> {
+            System.out.println("ERROR");
+            view.errorMessage();
         });
     }
 }

@@ -20,9 +20,13 @@ public class GetPackageReport implements ActionListener {
         view.getStopButton().setEnabled(true);
         view.getMethodButtons().get("getPackageReport").setEnabled(false);
         Future<IPackageReport> future = view.getLib().getPackageReport(view.getNameDirectory().getText());
-        future.onComplete(res -> {
-            IPackageReport report = res.result();
+        future.onSuccess(res -> {
+            IPackageReport report = res;
             view.getTreePanel().update(report, view.getTreePanel().getRoot());
+        });
+        future.onFailure(res -> {
+            System.out.println("ERROR");
+            view.errorMessage();
         });
     }
 }

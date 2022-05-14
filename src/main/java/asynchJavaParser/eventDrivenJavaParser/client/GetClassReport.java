@@ -20,8 +20,8 @@ public class GetClassReport implements ActionListener {
         view.getStopButton().setEnabled(true);
         view.getMethodButtons().get("getClassReport").setEnabled(false);
         Future<IClassReport> future = view.getLib().getClassReport(view.getNameDirectory().getText());
-        future.onComplete(res -> {
-            IClassReport report = res.result();
+        future.onSuccess(res -> {
+            IClassReport report = res;
             view.getTreePanel().update(report, view.getTreePanel().getRoot());
         });
         future.onFailure(res -> {

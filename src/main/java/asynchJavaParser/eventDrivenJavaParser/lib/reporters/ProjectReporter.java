@@ -1,5 +1,6 @@
 package asynchJavaParser.eventDrivenJavaParser.lib.reporters;
 
+import asynchJavaParser.eventDrivenJavaParser.lib.reports.ProjectReport;
 import asynchJavaParser.eventDrivenJavaParser.lib.reports.interfaces.IProjectReport;
 import asynchJavaParser.eventDrivenJavaParser.lib.utils.FileExplorer;
 import asynchJavaParser.eventDrivenJavaParser.lib.visitors.ProjectVisitor;
@@ -27,20 +28,21 @@ public class ProjectReporter extends AbstractVerticle {
     public void start() {
         CompilationUnit cu;
         List<String> packages = this.fileExplorer.getAllPackageFiles();
-        ProjectVisitor visitor = new ProjectVisitor();
+        ProjectReport projectReport = new ProjectReport();
         // System.out.println("ALL PACKAGES: " + packages); // for debug purposes
         for (String p : packages) {
             // System.out.println("package and its content: " + p); // for debug purposes
             try {
                 log("Project reporter started...");
                 cu = StaticJavaParser.parse(new File(p));
-                visitor.visit(cu, visitor.getProjectReport());
+                ProjectVisitor visitor = new ProjectVisitor();
+                visitor.visit(cu, projectReport);
             } catch (FileNotFoundException e) {
                 log("Project reporter failed...");
                 res.fail("invalid path");
             }
         }
-        res.complete(visitor.getProjectReport());
+        res.complete(projectReport);
     }
     private static void log(String msg) {
         System.out.println("" + Thread.currentThread() + " " + msg);

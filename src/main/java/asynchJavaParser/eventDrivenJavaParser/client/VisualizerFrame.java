@@ -2,6 +2,8 @@ package asynchJavaParser.eventDrivenJavaParser.client;
 
 import asynchJavaParser.eventDrivenJavaParser.lib.EDProjectAnalyzer;
 import io.vertx.core.Vertx;
+import io.vertx.core.eventbus.EventBus;
+
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
 import java.awt.*;
@@ -20,6 +22,7 @@ public class VisualizerFrame extends JFrame {
     private JButton stop;
     private Map<String, JButton> methodButtons;
     private EDProjectAnalyzer lib;
+    private EventBus eventBus;
 
     public VisualizerFrame(Vertx v) {
         setTitle("ProjectChooserDemo");
@@ -27,6 +30,7 @@ public class VisualizerFrame extends JFrame {
 
         createView();
         lib = new EDProjectAnalyzer(v);
+        eventBus = this.eventBus = v.eventBus();
         setDefaultCloseOperation(EXIT_ON_CLOSE);
     }
 
@@ -54,6 +58,10 @@ public class VisualizerFrame extends JFrame {
         return this.stop;
     }
 
+    public EventBus getEventBus() {
+        return eventBus;
+    }
+
     public void changeView(String path){
         getMethodButtons().forEach((k, v) -> v.setEnabled(true));
         nameDirectory.setText(path);
@@ -71,7 +79,7 @@ public class VisualizerFrame extends JFrame {
     }
 
     public void errorMessage(){
-        JOptionPane.showMessageDialog(null, "My Goodness, this is so concise");
+        JOptionPane.showMessageDialog(null, "Errore!! Seleziona correttamente");
         resetView();
     }
 
