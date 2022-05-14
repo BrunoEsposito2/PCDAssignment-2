@@ -1,5 +1,6 @@
 package asynchJavaParser.eventDrivenJavaParser.client;
 
+import asynchJavaParser.eventDrivenJavaParser.client.projectAnalysis.ClassElem;
 import asynchJavaParser.eventDrivenJavaParser.client.projectAnalysis.InterfaceElem;
 import asynchJavaParser.eventDrivenJavaParser.client.projectAnalysis.PackageElem;
 import asynchJavaParser.eventDrivenJavaParser.client.projectAnalysis.ProjectStructure;
@@ -9,9 +10,9 @@ import javax.swing.tree.DefaultMutableTreeNode;
 import javax.swing.tree.DefaultTreeCellRenderer;
 import javax.swing.tree.DefaultTreeModel;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.stream.Collectors;
 
 public class TreePanel extends JPanel {
 
@@ -150,25 +151,53 @@ public class TreePanel extends JPanel {
         packageInfo.forEach(p -> update(p, packageNode));
     }
 
-    public void update(ProjectStructure ps){
-        reset();
+    public void dynamicUpdate(ProjectStructure ps){
         PackageElem psRoot = ps.getRoot();
-        ps.getRoot().getInnerInterfaces().forEach((k,v) -> System.out.println(k+" KEY"));
-        Map<String, PackageElem> innerPackages = psRoot.getInnerPackages();
-        Map<String, InterfaceElem> innerInterfaces = psRoot.getInnerInterfaces();
+        //System.out.println(psRoot.getElem().get()+" PROJECT ROOT");
+        //ps.getRoot().getInnerInterfaces().forEach((k,v) -> System.out.println(k+" KEY"));
+        reset();
+
+        DefaultMutableTreeNode packageNode = new DefaultMutableTreeNode("PACKAGES");
+        DefaultMutableTreeNode classNode = new DefaultMutableTreeNode("CLASSES");
+        DefaultMutableTreeNode interfaceNode = new DefaultMutableTreeNode("INTERFACES");
+
+        Map<String, PackageElem> innerPackages = new HashMap<>();
+        Map<String, InterfaceElem> innerInterfaces = new HashMap<>();
+        Map<String, ClassElem> innerClasses = new HashMap<>();
 
         DefaultMutableTreeNode packageDeclaration = new DefaultMutableTreeNode(ps.getRoot().getElem().isEmpty() ? "**" : ps.getRoot().getElem().get().getName());
         root.add(packageDeclaration);
 
-        if(!ps.getRoot().getInnerPackages().isEmpty()){
+        packageDeclaration.add(packageNode);
+        packageDeclaration.add(classNode);
+        packageDeclaration.add(interfaceNode);
 
+        if (!psRoot.getInnerPackages().isEmpty()){
+            innerPackages = psRoot.getInnerPackages();
+            innerPackages.forEach((k, v) -> {
+                System.out.println("*** " + k +" ***");
+                DefaultMutableTreeNode name = new DefaultMutableTreeNode(k);
+                packageNode.add(name);
+            });
         }
 
-        innerInterfaces.forEach((k, v) -> {
-            DefaultMutableTreeNode name = new DefaultMutableTreeNode(k);
-            packageDeclaration.add(name);
-        });
-        //getMethodButtons().forEach((k, v) -> v.setEnabled(true));
+        if (!psRoot.getInnerInterfaces().isEmpty()){
+            innerInterfaces = psRoot.getInnerInterfaces();
+            innerInterfaces.forEach((k, v) -> {
+                System.out.println("*** " + k +" ***");
+                DefaultMutableTreeNode name = new DefaultMutableTreeNode(k);
+                interfaceNode.add(name);
+            });
+        }
+
+        if (!psRoot.getInnerClasses().isEmpty()){
+            innerClasses = psRoot.getInnerClasses();
+            innerClasses.forEach((k, v) -> {
+                System.out.println("*** " + k +" ***");
+                DefaultMutableTreeNode name = new DefaultMutableTreeNode(k);
+                classNode.add(name);
+            });
+        }
     }
 
     private void createTree(){
