@@ -1,6 +1,6 @@
 package asynchJavaParser.eventDrivenJavaParser.client;
 
-import asynchJavaParser.eventDrivenJavaParser.lib.projectAnalyzer.ResponsiveProjectVisitor;
+import asynchJavaParser.eventDrivenJavaParser.lib.projectAnalysis.ResponsiveProjectVisitor;
 import com.github.javaparser.StaticJavaParser;
 import com.github.javaparser.ast.CompilationUnit;
 import com.github.javaparser.ast.PackageDeclaration;

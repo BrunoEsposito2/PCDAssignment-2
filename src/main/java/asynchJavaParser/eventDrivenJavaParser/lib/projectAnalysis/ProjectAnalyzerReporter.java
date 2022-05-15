@@ -1,46 +1,39 @@
-package asynchJavaParser.eventDrivenJavaParser.lib.reporters;
+package asynchJavaParser.eventDrivenJavaParser.lib.projectAnalysis;
 
 import asynchJavaParser.common.utils.FileExplorer;
-import asynchJavaParser.common.visitors.ElemCounterCollector;
 import com.github.javaparser.StaticJavaParser;
 import com.github.javaparser.ast.CompilationUnit;
 import io.vertx.core.AbstractVerticle;
-import io.vertx.core.Promise;
 
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.util.List;
 
-public class ElemNumberReporter extends AbstractVerticle {
-    private final Promise<Integer> res;
-    private final String path;
+public class ProjectAnalyzerReporter extends AbstractVerticle {
+    private final AnalyzeProjectConfig conf;
     private final FileExplorer fileExplorer;
 
-    public ElemNumberReporter(Promise<Integer> res, String path){
-        this.res = res;
-        this.path = path;
-        this.fileExplorer = new FileExplorer(this.path);
+    public ProjectAnalyzerReporter(AnalyzeProjectConfig conf){
+        this.conf = conf;
+        this.fileExplorer = new FileExplorer(this.conf.getSrcProjectFolderName());
     }
 
     @Override
     public void start() {
-        CompilationUnit cu;
+        CompilationUnit cu = null;
         List<String> files = this.fileExplorer.getAllPackageFiles();
-        Integer result = 0;
-        ElemCounterCollector visitor = new ElemCounterCollector();
+        ResponsiveProjectVisitor visitor = new ResponsiveProjectVisitor(this.vertx, conf.getResponseAddress(), conf.getResponseAddress());
         for (String nameFile : files) {
             // System.out.println("nome file: " + nameFile); // for debug purposes
             try {
-                log("Package reporter started...");
+                log("Project analyzer reporter started...");
                 cu = StaticJavaParser.parse(new File(nameFile));
                 visitor.visit(cu, null);
-                result = visitor.getCount();
             } catch (FileNotFoundException e) {
-                log("Package reporter failed...");
-                res.fail("invalid path");
+                log("Project analyzer reporter failed...");
+                //TODO send failure message
             }
         }
-        res.complete(result);
     }
     private static void log(String msg) {
         System.out.println("" + Thread.currentThread() + " " + msg);

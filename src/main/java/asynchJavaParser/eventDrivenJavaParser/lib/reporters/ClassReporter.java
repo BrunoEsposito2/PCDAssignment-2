@@ -1,8 +1,8 @@
 package asynchJavaParser.eventDrivenJavaParser.lib.reporters;
 
-import asynchJavaParser.eventDrivenJavaParser.lib.reports.ClassReport;
-import asynchJavaParser.eventDrivenJavaParser.lib.reports.interfaces.IClassReport;
-import asynchJavaParser.eventDrivenJavaParser.lib.visitors.ClassVisitor;
+import asynchJavaParser.common.reports.ClassReport;
+import asynchJavaParser.common.reports.interfaces.IClassReport;
+import asynchJavaParser.common.visitors.ClassVisitor;
 import com.github.javaparser.StaticJavaParser;
 import com.github.javaparser.ast.CompilationUnit;
 import io.vertx.core.AbstractVerticle;

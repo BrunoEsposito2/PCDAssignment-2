@@ -1,9 +1,9 @@
 package asynchJavaParser.eventDrivenJavaParser.lib.reporters;
 
-import asynchJavaParser.eventDrivenJavaParser.lib.reports.ProjectReport;
-import asynchJavaParser.eventDrivenJavaParser.lib.reports.interfaces.IProjectReport;
-import asynchJavaParser.eventDrivenJavaParser.lib.utils.FileExplorer;
-import asynchJavaParser.eventDrivenJavaParser.lib.visitors.ProjectVisitor;
+import asynchJavaParser.common.reports.ProjectReport;
+import asynchJavaParser.common.reports.interfaces.IProjectReport;
+import asynchJavaParser.common.utils.FileExplorer;
+import asynchJavaParser.common.visitors.ProjectVisitor;
 import com.github.javaparser.StaticJavaParser;
 import com.github.javaparser.ast.CompilationUnit;
 import io.vertx.core.AbstractVerticle;

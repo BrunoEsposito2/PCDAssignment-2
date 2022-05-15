@@ -1,6 +1,6 @@
 package asynchJavaParser.eventDrivenJavaParser.client;
 
-import asynchJavaParser.eventDrivenJavaParser.lib.reports.interfaces.IPackageReport;
+import asynchJavaParser.common.reports.interfaces.IPackageReport;
 import io.vertx.core.Future;
 
 import java.awt.event.ActionEvent;

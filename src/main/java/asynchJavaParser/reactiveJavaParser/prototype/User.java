@@ -9,10 +9,10 @@ public class User {
         /*fl.get().subscribe(s->System.out.println(s));
         fl.getWithThreadAndParameter("aaa").subscribe(s->System.out.println(s));
         fl.getClassReport("classeeee").subscribe(c->System.out.println(c.getFullClassName()));*/
-        fl.getPackageDeclarations().subscribe(s->{
-            if(s.getType().equals("PackageDeclaration")){
-                PackageDeclaration p = (PackageDeclaration) s.getElem();
-                System.out.println(p.getNameAsString());
+        fl.analyzeProject().subscribe(s->{
+            if(s instanceof PackageDeclaration){
+                PackageDeclaration p = (PackageDeclaration) s;
+                System.out.println(p.toString());
             }
         });
 

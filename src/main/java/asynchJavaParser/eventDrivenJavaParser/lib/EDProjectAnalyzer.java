@@ -1,17 +1,14 @@
 package asynchJavaParser.eventDrivenJavaParser.lib;
 
-import asynchJavaParser.eventDrivenJavaParser.lib.projectAnalyzer.AnalyzeProjectConfig;
-import asynchJavaParser.eventDrivenJavaParser.lib.projectAnalyzer.ProjectAnalyzerReporter;
-import asynchJavaParser.eventDrivenJavaParser.lib.projectAnalyzer.ResponsiveProjectVisitor;
+import asynchJavaParser.eventDrivenJavaParser.lib.projectAnalysis.AnalyzeProjectConfig;
+import asynchJavaParser.eventDrivenJavaParser.lib.projectAnalysis.ProjectAnalyzerReporter;
 import asynchJavaParser.eventDrivenJavaParser.lib.reporters.ClassReporter;
 import asynchJavaParser.eventDrivenJavaParser.lib.reporters.ElemNumberReporter;
 import asynchJavaParser.eventDrivenJavaParser.lib.reporters.PackageReporter;
 import asynchJavaParser.eventDrivenJavaParser.lib.reporters.ProjectReporter;
-import asynchJavaParser.eventDrivenJavaParser.lib.reports.interfaces.IClassReport;
-import asynchJavaParser.eventDrivenJavaParser.lib.reports.interfaces.IPackageReport;
-import asynchJavaParser.eventDrivenJavaParser.lib.reports.interfaces.IProjectReport;
-import asynchJavaParser.eventDrivenJavaParser.lib.utils.FileExplorer;
-import com.github.javaparser.ast.CompilationUnit;
+import asynchJavaParser.common.reports.interfaces.IClassReport;
+import asynchJavaParser.common.reports.interfaces.IPackageReport;
+import asynchJavaParser.common.reports.interfaces.IProjectReport;
 import io.vertx.core.Future;
 import io.vertx.core.Promise;
 import io.vertx.core.Vertx;

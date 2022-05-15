@@ -1,7 +1,7 @@
 package asynchJavaParser.eventDrivenJavaParser.client;
 
 import asynchJavaParser.eventDrivenJavaParser.client.projectAnalysis.ProjectStructure;
-import asynchJavaParser.eventDrivenJavaParser.lib.projectAnalyzer.AnalyzeProjectConfig;
+import asynchJavaParser.eventDrivenJavaParser.lib.projectAnalysis.AnalyzeProjectConfig;
 import com.github.javaparser.ast.PackageDeclaration;
 import com.github.javaparser.ast.body.ClassOrInterfaceDeclaration;
 import com.github.javaparser.ast.body.FieldDeclaration;

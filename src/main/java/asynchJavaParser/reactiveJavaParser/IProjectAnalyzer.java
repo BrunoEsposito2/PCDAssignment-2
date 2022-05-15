@@ -1,13 +1,9 @@
-package asynchJavaParser.eventDrivenJavaParser.lib;
+package asynchJavaParser.reactiveJavaParser;
 
-import asynchJavaParser.eventDrivenJavaParser.lib.projectAnalysis.AnalyzeProjectConfig;
 import asynchJavaParser.common.reports.interfaces.IClassReport;
 import asynchJavaParser.common.reports.interfaces.IPackageReport;
 import asynchJavaParser.common.reports.interfaces.IProjectReport;
-import io.vertx.core.*;
-import io.vertx.core.eventbus.Message;
-
-import java.util.function.*;
+import io.reactivex.rxjava3.core.Observable;
 
 public interface IProjectAnalyzer {
 
@@ -18,7 +14,7 @@ public interface IProjectAnalyzer {
 	 * @param srcClassPath
 	 * @return
 	 */
-	Future<IClassReport> getClassReport(String srcClassPath);
+	Observable<IClassReport> getClassReport(String srcClassPath);
 
 	/**
 	 * Async method to retrieve the report about a package,
@@ -27,7 +23,7 @@ public interface IProjectAnalyzer {
 	 * @param srcPackagePath
 	 * @return
 	 */
-	Future<IPackageReport> getPackageReport(String srcPackagePath);
+	Observable<IPackageReport> getPackageReport(String srcPackagePath);
 
 	/**
 	 * Async method to retrieve the report about a project
@@ -36,7 +32,7 @@ public interface IProjectAnalyzer {
 	 * @param srcProjectFolderPath
 	 * @return
 	 */
-	Future<IProjectReport> getProjectReport(String srcProjectFolderPath);
+	Observable<IProjectReport> getProjectReport(String srcProjectFolderPath);
 
 	/**
 	 * Async function that analyze a project given the full path of the project folder,
@@ -44,5 +40,5 @@ public interface IProjectAnalyzer {
 	 *
 	 * @param callback
 	 */
-	void analyzeProject(AnalyzeProjectConfig conf, Consumer<Message<?>> callback);
+	Observable<?> analyzeProject(String srcProjectFolderPath);
 }

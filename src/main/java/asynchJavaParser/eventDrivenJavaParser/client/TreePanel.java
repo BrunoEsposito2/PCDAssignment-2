@@ -4,7 +4,7 @@ import asynchJavaParser.eventDrivenJavaParser.client.projectAnalysis.ClassElem;
 import asynchJavaParser.eventDrivenJavaParser.client.projectAnalysis.InterfaceElem;
 import asynchJavaParser.eventDrivenJavaParser.client.projectAnalysis.PackageElem;
 import asynchJavaParser.eventDrivenJavaParser.client.projectAnalysis.ProjectStructure;
-import asynchJavaParser.eventDrivenJavaParser.lib.reports.interfaces.*;
+import asynchJavaParser.common.reports.interfaces.*;
 import javax.swing.*;
 import javax.swing.tree.DefaultMutableTreeNode;
 import javax.swing.tree.DefaultTreeCellRenderer;
