@@ -13,6 +13,7 @@ import asynchJavaParser.common.visitors.ProjectVisitor;
 import com.github.javaparser.StaticJavaParser;
 import com.github.javaparser.ast.CompilationUnit;
 import io.reactivex.rxjava3.core.Observable;
+import io.reactivex.rxjava3.schedulers.Schedulers;
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -96,7 +97,22 @@ public class ReactiveProjectAnalyzer implements IProjectAnalyzer{
 
     @Override
     public Observable<?> analyzeProject(String srcProjectFolderPath) {
-        return null;
+        return Observable.create(emitter->{
+                    FileExplorer fileExplorer = new FileExplorer(srcProjectFolderPath);
+                    List<String> files = fileExplorer.getAllPackageFiles();
+                    EmitterVisitor fv = new EmitterVisitor(emitter);
+
+                    for (String nameFile : files) {
+                        try {
+                            CompilationUnit cu = StaticJavaParser.parse(new File(nameFile));
+                            fv.visit(cu, null);
+                        } catch (FileNotFoundException e) {
+                            e.printStackTrace();
+                        }
+                    }
+                    emitter.onComplete();
+                })
+                .observeOn(Schedulers.computation());
     }
 
     private static void log(String msg) {
