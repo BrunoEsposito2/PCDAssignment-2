@@ -1,6 +1,10 @@
 package asynchJavaParser.common.utils;
 
 import java.io.File;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -11,6 +15,16 @@ public class FileExplorer {
 
     public FileExplorer(final String path) {
         this.path = path;
+    }
+
+    public List<String> getAllSubpackageFiles() {
+        List<Path> fileList;
+        try {
+            fileList = Files.walk(Paths.get(this.path)).collect(Collectors.toList());
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+        return fileList.stream().map(Path::toString).filter(f -> f.contains(".java")).collect(Collectors.toList());
     }
 
     public List<String> getAllPackageFiles() {

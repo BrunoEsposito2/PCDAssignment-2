@@ -35,7 +35,7 @@ public class FakeLibrary {
     public Observable<?> analyzeProject() {
         return Observable.create(emitter->{
             FileExplorer fileExplorer = new FileExplorer("src/main/java");
-            List<String> files = fileExplorer.getAllPackageFiles();
+            List<String> files = fileExplorer.getAllSubpackageFiles();
             EmitterVisitor fv = new EmitterVisitor(emitter);
 
             for (String nameFile : files) {
@@ -47,8 +47,7 @@ public class FakeLibrary {
                 }
             }
             emitter.onComplete();
-        })
-                .observeOn(Schedulers.computation());
+        }).observeOn(Schedulers.computation());
     }
 
 }

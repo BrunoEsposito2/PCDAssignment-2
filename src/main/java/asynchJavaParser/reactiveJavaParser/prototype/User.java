@@ -1,7 +1,6 @@
 package asynchJavaParser.reactiveJavaParser.prototype;
 
 import com.github.javaparser.ast.PackageDeclaration;
-import io.reactivex.rxjava3.core.Observer;
 
 public class User {
     public static void main(String[] args){
@@ -12,7 +11,7 @@ public class User {
         fl.analyzeProject().subscribe(s->{
             if(s instanceof PackageDeclaration){
                 PackageDeclaration p = (PackageDeclaration) s;
-                System.out.println(p.toString());
+                System.out.println(p);
             }
         });
 

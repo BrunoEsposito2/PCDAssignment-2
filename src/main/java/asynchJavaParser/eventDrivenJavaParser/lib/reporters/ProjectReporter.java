@@ -27,7 +27,7 @@ public class ProjectReporter extends AbstractVerticle {
     @Override
     public void start() {
         CompilationUnit cu;
-        List<String> packages = this.fileExplorer.getAllPackageFiles();
+        List<String> packages = this.fileExplorer.getAllSubpackageFiles();
         ProjectReport projectReport = new ProjectReport();
         // System.out.println("ALL PACKAGES: " + packages); // for debug purposes
         for (String p : packages) {
