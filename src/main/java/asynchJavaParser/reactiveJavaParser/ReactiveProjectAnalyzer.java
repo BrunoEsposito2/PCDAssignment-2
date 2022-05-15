@@ -74,7 +74,7 @@ public class ReactiveProjectAnalyzer implements IProjectAnalyzer{
             new Thread(() -> {
                 CompilationUnit cu;
                 FileExplorer fileExplorer = new FileExplorer(srcProjectFolderPath);
-                List<String> packages = fileExplorer.getAllPackageFiles();
+                List<String> packages = fileExplorer.getAllSubpackageFiles();
                 ProjectReport projectReport = new ProjectReport();
                 // System.out.println("ALL PACKAGES: " + packages); // for debug purposes
                 for (String p : packages) {
@@ -99,7 +99,7 @@ public class ReactiveProjectAnalyzer implements IProjectAnalyzer{
     public Observable<?> analyzeProject(String srcProjectFolderPath) {
         return Observable.create(emitter->{
                     FileExplorer fileExplorer = new FileExplorer(srcProjectFolderPath);
-                    List<String> files = fileExplorer.getAllPackageFiles();
+                    List<String> files = fileExplorer.getAllSubpackageFiles();
                     EmitterVisitor fv = new EmitterVisitor(emitter);
 
                     for (String nameFile : files) {
