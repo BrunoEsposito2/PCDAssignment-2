@@ -21,7 +21,7 @@ public class ProjectAnalyzerReporter extends AbstractVerticle {
     @Override
     public void start() {
         CompilationUnit cu = null;
-        List<String> files = this.fileExplorer.getAllPackageFiles();
+        List<String> files = this.fileExplorer.getAllSubpackageFiles();
         ResponsiveProjectVisitor visitor = new ResponsiveProjectVisitor(this.vertx, conf.getResponseAddress(), conf.getResponseAddress());
         for (String nameFile : files) {
             // System.out.println("nome file: " + nameFile); // for debug purposes

@@ -19,6 +19,7 @@ public class VirtualCourier<X extends Node> extends AbstractVerticle {
 
     @Override
     public void start(){
+
         visitor.accept(elem, null);
 
         String[] completeClassName = elem.getClass().getName().split("[.]");

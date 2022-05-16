@@ -65,7 +65,6 @@ public class EDProjectAnalyzer implements IProjectAnalyzer {
     Future<Integer> futureElemNr = promiseElemNr.future();
 
     futureElemNr.onSuccess((a) -> {
-
       expectedMsgNr.set(futureElemNr.result());
       ProjectAnalyzerReporter par = new ProjectAnalyzerReporter(conf);
       this.vertx.deployVerticle(par);

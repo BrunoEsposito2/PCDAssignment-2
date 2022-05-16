@@ -28,7 +28,7 @@ public class AnalyzeProject implements ActionListener {
         view.getStopButton().setEnabled(true);
         view.getStatus().setText("Running ...");
         AnalyzeProjectConfig conf = new AnalyzeProjectConfig("master", "master.complete", view.getNameDirectory().getText());
-        MessageConsumer<String> consumer = view.getEventBus().consumer(conf.getResponseAddress());
+        MessageConsumer<String> consumer = view.getEventBus().consumer(conf.getCompletitionNotifAddress());
         consumer.handler(message -> {
             view.getStatus().setText("Complete");
         });
@@ -39,25 +39,25 @@ public class AnalyzeProject implements ActionListener {
                     ClassOrInterfaceDeclaration cd = (ClassOrInterfaceDeclaration)message.body();
                     ps.putClassOrInterface(cd);
                     view.getTreePanel().dynamicUpdate(ps);
-                    //System.out.println("class "+ cd.getNameAsString());
+                    System.out.println("class "+ cd.getNameAsString());
                     break;
                 case "Interface":
                     ClassOrInterfaceDeclaration id = (ClassOrInterfaceDeclaration)message.body();
                     ps.putClassOrInterface(id);
                     view.getTreePanel().dynamicUpdate(ps);
-                    //System.out.println("interface "+ id.getNameAsString());
+                    System.out.println("interface "+ id.getNameAsString());
                     break;
                 case "Field":
                     FieldDeclaration fd = (FieldDeclaration)message.body();
                     ps.putField(fd);
                     view.getTreePanel().dynamicUpdate(ps);
-                    //fd.getVariables().forEach(f -> System.out.println("field "+ f.getNameAsString()));
+                    fd.getVariables().forEach(f -> System.out.println("field "+ f.getNameAsString()));
                     break;
                 case "Method":
                     MethodDeclaration md = (MethodDeclaration)message.body();
                     ps.putMethod(md);
                     view.getTreePanel().dynamicUpdate(ps);
-                    //System.out.println("method "+ md.getNameAsString());
+                    System.out.println("method "+ md.getNameAsString());
                     break;
                 case "Package":
                     PackageDeclaration pd = (PackageDeclaration)message.body();
@@ -69,5 +69,6 @@ public class AnalyzeProject implements ActionListener {
                     System.out.println("not a project element " + elemType);
             }
         });
+        view.getLib().stopAnalyzeProject();
     }
 }

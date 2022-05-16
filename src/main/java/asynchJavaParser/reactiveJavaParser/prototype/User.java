@@ -14,6 +14,5 @@ public class User {
                 System.out.println(p);
             }
         });
-
     }
 }

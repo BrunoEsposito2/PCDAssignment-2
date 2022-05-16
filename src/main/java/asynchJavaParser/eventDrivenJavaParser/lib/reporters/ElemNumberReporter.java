@@ -25,7 +25,7 @@ public class ElemNumberReporter extends AbstractVerticle {
     @Override
     public void start() {
         CompilationUnit cu;
-        List<String> files = this.fileExplorer.getAllPackageFiles();
+        List<String> files = this.fileExplorer.getAllSubpackageFiles();
         Integer result = 0;
         ElemCounterCollector visitor = new ElemCounterCollector();
         for (String nameFile : files) {
@@ -40,6 +40,7 @@ public class ElemNumberReporter extends AbstractVerticle {
                 res.fail("invalid path");
             }
         }
+        log(result.toString());
         res.complete(result);
     }
     private static void log(String msg) {

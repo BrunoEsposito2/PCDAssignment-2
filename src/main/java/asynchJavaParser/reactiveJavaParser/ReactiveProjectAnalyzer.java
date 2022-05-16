@@ -97,7 +97,7 @@ public class ReactiveProjectAnalyzer implements IProjectAnalyzer{
 
     @Override
     public Observable<?> analyzeProject(String srcProjectFolderPath) {
-        return Observable.create(emitter->{
+        return Observable.create(emitter -> {
                     FileExplorer fileExplorer = new FileExplorer(srcProjectFolderPath);
                     List<String> files = fileExplorer.getAllSubpackageFiles();
                     EmitterVisitor fv = new EmitterVisitor(emitter);
@@ -108,6 +108,7 @@ public class ReactiveProjectAnalyzer implements IProjectAnalyzer{
                             fv.visit(cu, null);
                         } catch (FileNotFoundException e) {
                             e.printStackTrace();
+                            emitter.onError(e);
                         }
                     }
                     emitter.onComplete();

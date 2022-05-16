@@ -27,20 +27,20 @@ public class ResponsiveProjectVisitor extends VoidVisitorAdapter<Void>{
 
     @Override
     public void visit(PackageDeclaration fd, Void collector) {
-        VirtualCourier<PackageDeclaration> c = new VirtualCourier<PackageDeclaration>(fd, (a, b)->super.visit(fd, null), responseAddress);
-        if(this.shouldContinue) vertx.deployVerticle(c);
+        VirtualCourier<PackageDeclaration> c = new VirtualCourier<PackageDeclaration>(fd, (a, b) -> super.visit(fd, null), responseAddress);
+        if (this.shouldContinue) vertx.deployVerticle(c);
     }
 
     @Override
     public void visit(ClassOrInterfaceDeclaration cd, Void collector) {
-        VirtualCourier<ClassOrInterfaceDeclaration> c = new VirtualCourier<ClassOrInterfaceDeclaration>(cd, (a, b)->super.visit(cd, null), responseAddress);
-        if(this.shouldContinue) vertx.deployVerticle(c);
+        VirtualCourier<ClassOrInterfaceDeclaration> c = new VirtualCourier<ClassOrInterfaceDeclaration>(cd, (a, b) -> super.visit(cd, null), responseAddress);
+        if (this.shouldContinue) vertx.deployVerticle(c);
     }
 
     @Override
     public void visit(MethodDeclaration md, Void collector) {
-        VirtualCourier<MethodDeclaration> c = new VirtualCourier<MethodDeclaration>(md, (a, b)->super.visit(md, null), responseAddress);
-        if(this.shouldContinue) vertx.deployVerticle(c);
+        VirtualCourier<MethodDeclaration> c = new VirtualCourier<MethodDeclaration>(md, (a, b) -> super.visit(md, null), responseAddress);
+        if (this.shouldContinue) vertx.deployVerticle(c);
     }
 
     @Override
