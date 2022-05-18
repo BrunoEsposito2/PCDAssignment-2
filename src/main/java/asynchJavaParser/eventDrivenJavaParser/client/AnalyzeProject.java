@@ -40,31 +40,31 @@ public class AnalyzeProject implements ActionListener {
                     ClassOrInterfaceDeclaration cd = (ClassOrInterfaceDeclaration) message.body();
                     this.ps.putClassOrInterface(cd);
                     this.view.getTreePanel().dynamicUpdate(this.ps);
-                    System.out.println("class " + cd.getNameAsString());
+                    //System.out.println("class " + cd.getNameAsString());
                     break;
                 case "Interface":
                     ClassOrInterfaceDeclaration id = (ClassOrInterfaceDeclaration) message.body();
                     this.ps.putClassOrInterface(id);
                     this.view.getTreePanel().dynamicUpdate(ps);
-                    System.out.println("interface " + id.getNameAsString());
+                    //System.out.println("interface " + id.getNameAsString());
                     break;
                 case "Field":
                     FieldDeclaration fd = (FieldDeclaration) message.body();
                     this.ps.putField(fd);
                     this.view.getTreePanel().dynamicUpdate(this.ps);
-                    fd.getVariables().forEach(f -> System.out.println("field " + f.getNameAsString()));
+                    //fd.getVariables().forEach(f -> System.out.println("field " + f.getNameAsString()));
                     break;
                 case "Method":
                     MethodDeclaration md = (MethodDeclaration) message.body();
                     this.ps.putMethod(md);
                     this.view.getTreePanel().dynamicUpdate(this.ps);
-                    System.out.println("method " + md.getNameAsString());
+                    //System.out.println("method " + md.getNameAsString());
                     break;
                 case "Package":
                     PackageDeclaration pd = (PackageDeclaration) message.body();
                     this.ps.putPackage(pd);
                     this.view.getTreePanel().dynamicUpdate(this.ps);
-                    System.out.println("package " + pd.getNameAsString());
+                    //System.out.println("package " + pd.getNameAsString());
                     break;
                 default:
                     System.out.println("not a project element " + elemType);

@@ -79,6 +79,7 @@ public class EDProjectAnalyzer implements IProjectAnalyzer {
     consumer.handler(message -> {
       callback.accept(message);
       receivedMsgNr.getAndSet(receivedMsgNr.get() + 1);
+      System.out.println(receivedMsgNr.get()+"/"+expectedMsgNr.get());
       if(receivedMsgNr.get().equals(expectedMsgNr.get())){
         vertx.eventBus().send(conf.getCompletitionNotifAddress(), "complete");
       }

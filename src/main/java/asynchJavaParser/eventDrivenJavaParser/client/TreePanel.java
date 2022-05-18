@@ -176,7 +176,6 @@ public class TreePanel extends JPanel {
         if (!psRoot.getInnerPackages().isEmpty()) {
             innerPackages = psRoot.getInnerPackages();
             innerPackages.forEach((k, v) -> {
-                System.out.println("*** " + k + " ***");
                 DefaultMutableTreeNode name = new DefaultMutableTreeNode(k);
                 packageNode.add(name);
             });
@@ -185,7 +184,6 @@ public class TreePanel extends JPanel {
         if (!psRoot.getInnerInterfaces().isEmpty()) {
             innerInterfaces = psRoot.getInnerInterfaces();
             innerInterfaces.forEach((k, v) -> {
-                System.out.println("*** " + k + " ***");
                 DefaultMutableTreeNode name = new DefaultMutableTreeNode(k);
                 interfaceNode.add(name);
             });
@@ -194,7 +192,6 @@ public class TreePanel extends JPanel {
         if (!psRoot.getInnerClasses().isEmpty()) {
             innerClasses = psRoot.getInnerClasses();
             innerClasses.forEach((k, v) -> {
-                System.out.println("*** " + k + " ***");
                 DefaultMutableTreeNode name = new DefaultMutableTreeNode(k);
                 classNode.add(name);
             });
