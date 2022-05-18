@@ -46,6 +46,7 @@ public class AnalyzeProject implements ActionListener {
             }
         });
         this.view.getLib().analyzeProject(conf, message -> {
+            this.countElem++;
             String elemType = message.headers().get("type");
             this.view.getTotalAnalyzed().setText(String.valueOf(this.countElem + "/" + this.totalElem));
             if(this.totalElem == this.countElem){
@@ -80,7 +81,7 @@ public class AnalyzeProject implements ActionListener {
                 default:
                     this.view.errorMessage("Error!!! Select a project");
             }
-            this.countElem = this.countElem + 1;
+
         });
     }
 }
