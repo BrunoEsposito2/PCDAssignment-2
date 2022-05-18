@@ -26,7 +26,7 @@ public class ProjectAnalyzerReporter extends AbstractVerticle {
         for (String nameFile : files) {
             // System.out.println("nome file: " + nameFile); // for debug purposes
             try {
-                log("Project analyzer reporter started...");
+                //log("Project analyzer reporter started...");
                 cu = StaticJavaParser.parse(new File(nameFile));
                 visitor.visit(cu, null);
             } catch (FileNotFoundException e) {

@@ -8,8 +8,8 @@ import com.github.javaparser.ast.visitor.VoidVisitorAdapter;
 
 public class ElemCounterCollector extends VoidVisitorAdapter<Void> {
     private Integer count;
-    public ElemCounterCollector(){
-        count = 0;
+    public ElemCounterCollector(Integer count){
+        this.count = count;
     }
 
     @Override
