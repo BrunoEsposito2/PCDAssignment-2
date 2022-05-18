@@ -12,6 +12,7 @@ import asynchJavaParser.common.reports.interfaces.IProjectReport;
 import io.vertx.core.Future;
 import io.vertx.core.Promise;
 import io.vertx.core.Vertx;
+import io.vertx.core.eventbus.DeliveryOptions;
 import io.vertx.core.eventbus.EventBus;
 import io.vertx.core.eventbus.Message;
 import io.vertx.core.eventbus.MessageConsumer;
@@ -65,26 +66,20 @@ public class EDProjectAnalyzer implements IProjectAnalyzer {
     Future<Integer> futureElemNr = promiseElemNr.future();
 
     futureElemNr.onSuccess((a) -> {
-      expectedMsgNr.set(futureElemNr.result());
+      DeliveryOptions options = new DeliveryOptions();
+      options.addHeader("type", "count");
+      vertx.eventBus().send(conf.getStatusNotifAddress(), a.toString(), options);
       ProjectAnalyzerReporter par = new ProjectAnalyzerReporter(conf);
       this.vertx.deployVerticle(par);
-
     }).onFailure(status -> {
-      System.out.println("error"); //TODO return failure message
+      DeliveryOptions options = new DeliveryOptions();
+      options.addHeader("type", "status");
+      vertx.eventBus().send(conf.getStatusNotifAddress(), "FAILURE", options);
     });
 
     //Message handler registration.
-    //The messages will be generated and received only after elemNumber is completed with success, setting "expected" variable.
     MessageConsumer<String> consumer = eventBus.consumer(conf.getResponseAddress());
-    consumer.handler(message -> {
-      callback.accept(message);
-      receivedMsgNr.getAndSet(receivedMsgNr.get() + 1);
-      //System.out.println(receivedMsgNr.get()+"/"+expectedMsgNr.get());
-      if(receivedMsgNr.get().equals(expectedMsgNr.get())){
-        vertx.eventBus().send(conf.getStatusNotifAddress(), "complete");
-        System.out.println("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA");
-      }
-    });
+    consumer.handler(callback::accept);
   }
 
   public void stopAnalyzeProject(){

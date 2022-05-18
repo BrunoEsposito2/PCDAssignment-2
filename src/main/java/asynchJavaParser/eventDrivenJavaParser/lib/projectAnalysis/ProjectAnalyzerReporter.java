@@ -4,6 +4,7 @@ import asynchJavaParser.common.utils.FileExplorer;
 import com.github.javaparser.StaticJavaParser;
 import com.github.javaparser.ast.CompilationUnit;
 import io.vertx.core.AbstractVerticle;
+import io.vertx.core.eventbus.DeliveryOptions;
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -22,7 +23,7 @@ public class ProjectAnalyzerReporter extends AbstractVerticle {
     public void start() {
         CompilationUnit cu = null;
         List<String> files = this.fileExplorer.getAllSubpackageFiles();
-        ResponsiveProjectVisitor visitor = new ResponsiveProjectVisitor(this.vertx, conf.getResponseAddress(), conf.getResponseAddress());
+        ResponsiveProjectVisitor visitor = new ResponsiveProjectVisitor(this.vertx, conf.getResponseAddress(), conf.getResponseAddress(), conf.getStatusNotifAddress());
         for (String nameFile : files) {
             // System.out.println("nome file: " + nameFile); // for debug purposes
             try {
@@ -31,7 +32,9 @@ public class ProjectAnalyzerReporter extends AbstractVerticle {
                 visitor.visit(cu, null);
             } catch (FileNotFoundException e) {
                 log("Project analyzer reporter failed...");
-                //TODO send failure message
+                DeliveryOptions options = new DeliveryOptions();
+                options.addHeader("type", "status");
+                vertx.eventBus().send(conf.getStatusNotifAddress(), "FAILURE", options);
             }
         }
     }
