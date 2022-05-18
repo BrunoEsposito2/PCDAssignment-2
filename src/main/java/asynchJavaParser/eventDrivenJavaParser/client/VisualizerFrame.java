@@ -23,6 +23,8 @@ public class VisualizerFrame extends JFrame {
 
     private JLabel status;
 
+    private JLabel totalAnalyzed;
+
     private JPanel viewPanel;
 
     private TreePanel treePanel;
@@ -49,6 +51,10 @@ public class VisualizerFrame extends JFrame {
 
     public JLabel getStatus() {
         return this.status;
+    }
+
+    public JLabel getTotalAnalyzed(){
+        return  this.totalAnalyzed;
     }
 
     public Map<String, JButton> getMethodButtons() {
@@ -80,6 +86,7 @@ public class VisualizerFrame extends JFrame {
         this.methodButtons.forEach((k, v) -> v.setEnabled(false));
         this.nameDirectory.setText("...");
         this.status.setText("");
+        this.totalAnalyzed.setText("");
     }
 
     public void resetTree() {
@@ -87,8 +94,14 @@ public class VisualizerFrame extends JFrame {
     }
 
     public void errorMessage(final String error) {
-        JOptionPane.showMessageDialog(null, error);
-        resetView();
+        int ret = JOptionPane.showOptionDialog(null, error, "ERROR", JOptionPane.DEFAULT_OPTION,
+                JOptionPane.INFORMATION_MESSAGE, null, null, null);
+
+        if(ret == 0){
+            getStopButton().setEnabled(false);
+            resetView();
+            getLib().stopAnalyzeProject();
+        }
     }
 
     public void display() {
@@ -140,6 +153,9 @@ public class VisualizerFrame extends JFrame {
         JButton analyzeProject = new JButton("analyzeProject");
         analyzeProject.addActionListener(new AnalyzeProject(this));
 
+        this.totalAnalyzed = new JLabel();
+        this.totalAnalyzed.setAlignmentX(Component.CENTER_ALIGNMENT);
+
         this.status = new JLabel();
         this.status.setAlignmentX(Component.CENTER_ALIGNMENT);
 
@@ -153,6 +169,7 @@ public class VisualizerFrame extends JFrame {
         buttonPanel.add(getPackageReport);
         buttonPanel.add(getProjectReport);
         buttonPanel.add(analyzeProject);
+        buttonPanel.add(this.totalAnalyzed);
         buttonPanel.add(this.status);
 
         // CENTER
