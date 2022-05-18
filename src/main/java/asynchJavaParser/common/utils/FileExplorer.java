@@ -17,6 +17,10 @@ public class FileExplorer {
         this.path = path;
     }
 
+    public String getPath() {
+        return this.path;
+    }
+
     public List<String> getAllSubpackageFiles() {
         List<Path> fileList;
         try {
