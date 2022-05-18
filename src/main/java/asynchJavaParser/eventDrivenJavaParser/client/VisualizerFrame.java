@@ -14,76 +14,84 @@ import java.util.Map;
 public class VisualizerFrame extends JFrame {
 
     private static final long serialVersionUID = 1L;
-    private JTextField nameDirectory;
-    private JLabel status;
-    private JPanel viewPanel;
-    private TreePanel treePanel;
-    private JScrollPane treeView;
-    private JButton stop;
-    private Map<String, JButton> methodButtons;
-    private EDProjectAnalyzer lib;
-    private EventBus eventBus;
 
-    public VisualizerFrame(Vertx v) {
+    private final EDProjectAnalyzer lib;
+
+    private final EventBus eventBus;
+
+    private JTextField nameDirectory;
+
+    private JLabel status;
+
+    private JPanel viewPanel;
+
+    private TreePanel treePanel;
+
+    private JScrollPane treeView;
+
+    private JButton stop;
+
+    private Map<String, JButton> methodButtons;
+
+    public VisualizerFrame(final Vertx v) {
         setTitle("ProjectChooserDemo");
-        setMinimumSize(new Dimension(1000,800));
+        setMinimumSize(new Dimension(1000, 800));
 
         createView();
-        lib = new EDProjectAnalyzer(v);
-        eventBus = this.eventBus = v.eventBus();
+        this.lib = new EDProjectAnalyzer(v);
+        this.eventBus = v.eventBus();
         setDefaultCloseOperation(EXIT_ON_CLOSE);
     }
 
     public JTextField getNameDirectory() {
-        return nameDirectory;
+        return this.nameDirectory;
     }
 
-    public JLabel getStatus(){
-        return status;
+    public JLabel getStatus() {
+        return this.status;
     }
 
-    public Map<String, JButton> getMethodButtons(){
-        return methodButtons;
+    public Map<String, JButton> getMethodButtons() {
+        return this.methodButtons;
     }
 
     public EDProjectAnalyzer getLib() {
-        return lib;
+        return this.lib;
     }
 
-    public TreePanel getTreePanel(){
-        return treePanel;
+    public TreePanel getTreePanel() {
+        return this.treePanel;
     }
 
-    public JButton getStopButton(){
+    public JButton getStopButton() {
         return this.stop;
     }
 
     public EventBus getEventBus() {
-        return eventBus;
+        return this.eventBus;
     }
 
-    public void changeView(String path){
+    public void changeView(final String path) {
         getMethodButtons().forEach((k, v) -> v.setEnabled(true));
-        nameDirectory.setText(path);
-        //nameDirectory.setText("src/main/java/asynchJavaParser/eventDrivenJavaParser/lib/");
+        this.nameDirectory.setText(path);
     }
 
-    public void resetView(){
-        methodButtons.forEach((k, v) -> v.setEnabled(false));
-        nameDirectory.setText("...");
-        status.setText("");
+    public void resetView() {
+        this.methodButtons.forEach((k, v) -> v.setEnabled(false));
+        this.nameDirectory.setText("...");
+        this.status.setText("");
     }
 
-    public void resetTree(){
-        treePanel.reset();
+    public void resetTree() {
+        this.treePanel.reset();
     }
 
-    public void errorMessage(){
-        JOptionPane.showMessageDialog(null, "Errore!! Seleziona correttamente");
+    public void errorMessage(final String error) {
+        JOptionPane.showMessageDialog(null, error);
         resetView();
     }
 
-    public void display(){
+    public void display() {
         try {
             SwingUtilities.invokeAndWait(() -> {
                 this.setVisible(true);
@@ -94,31 +102,31 @@ public class VisualizerFrame extends JFrame {
     }
 
     private void createView() {
-        viewPanel = new JPanel(new BorderLayout());
+        this.viewPanel = new JPanel(new BorderLayout());
         // NORTH
         JPanel managementPanel = new JPanel();
         managementPanel.setLayout(new BoxLayout(managementPanel, BoxLayout.Y_AXIS));
-        managementPanel.setBorder(new EmptyBorder(30,15,30,15));
+        managementPanel.setBorder(new EmptyBorder(30, 15, 30, 15));
 
-        JButton openFileChooser = new JButton("Select project");
+        JButton openFileChooser = new JButton("SELECT TO ANALYZE");
         openFileChooser.addActionListener(new OpenFolderChooser(this));
         openFileChooser.setAlignmentX(Component.CENTER_ALIGNMENT);
 
-        stop = new JButton("STOP");
-        stop.setEnabled(false);
-        stop.addActionListener(new StopEvents(this));
-        stop.setAlignmentX(Component.CENTER_ALIGNMENT);
+        this.stop = new JButton("STOP");
+        this.stop.setEnabled(false);
+        this.stop.addActionListener(new StopEvents(this));
+        this.stop.setAlignmentX(Component.CENTER_ALIGNMENT);
 
-        nameDirectory = new JTextField();
-        nameDirectory.setAlignmentX(Component.CENTER_ALIGNMENT);
+        this.nameDirectory = new JTextField();
+        this.nameDirectory.setAlignmentX(Component.CENTER_ALIGNMENT);
 
         managementPanel.add(openFileChooser);
-        managementPanel.add(stop);
-        managementPanel.add(nameDirectory);
+        managementPanel.add(this.stop);
+        managementPanel.add(this.nameDirectory);
 
         // WEST
-        JPanel buttonPanel = new JPanel(new GridLayout(0,1,10,40));
-        buttonPanel.setBorder(new EmptyBorder(40,15,40,15));
+        JPanel buttonPanel = new JPanel(new GridLayout(0, 1, 10, 40));
+        buttonPanel.setBorder(new EmptyBorder(40, 15, 40, 15));
 
         JButton getClassReport = new JButton("getClassReport");
         getClassReport.addActionListener(new GetClassReport(this));
@@ -132,32 +140,32 @@ public class VisualizerFrame extends JFrame {
         JButton analyzeProject = new JButton("analyzeProject");
         analyzeProject.addActionListener(new AnalyzeProject(this));
 
-        status = new JLabel();
-        status.setAlignmentX(Component.CENTER_ALIGNMENT);
+        this.status = new JLabel();
+        this.status.setAlignmentX(Component.CENTER_ALIGNMENT);
 
-        methodButtons = new HashMap<>();
-        methodButtons.put(getClassReport.getText(), getClassReport);
-        methodButtons.put(getPackageReport.getText(), getPackageReport);
-        methodButtons.put(getProjectReport.getText(), getProjectReport);
-        methodButtons.put(analyzeProject.getText(), analyzeProject);
+        this.methodButtons = new HashMap<>();
+        this.methodButtons.put(getClassReport.getText(), getClassReport);
+        this.methodButtons.put(getPackageReport.getText(), getPackageReport);
+        this.methodButtons.put(getProjectReport.getText(), getProjectReport);
+        this.methodButtons.put(analyzeProject.getText(), analyzeProject);
 
         buttonPanel.add(getClassReport);
         buttonPanel.add(getPackageReport);
         buttonPanel.add(getProjectReport);
         buttonPanel.add(analyzeProject);
-        buttonPanel.add(status);
+        buttonPanel.add(this.status);
 
         // CENTER
-        treePanel = new TreePanel();
-        treeView = new JScrollPane(treePanel.getTree());
-        treePanel.add(treeView);
+        this.treePanel = new TreePanel();
+        this.treeView = new JScrollPane(this.treePanel.getTree());
+        this.treePanel.add(this.treeView);
 
         resetView();
 
-        viewPanel.add(managementPanel, BorderLayout.NORTH);
-        viewPanel.add(buttonPanel, BorderLayout.WEST);
-        viewPanel.add(treePanel, BorderLayout.CENTER);
-        setContentPane(viewPanel);
+        this.viewPanel.add(managementPanel, BorderLayout.NORTH);
+        this.viewPanel.add(buttonPanel, BorderLayout.WEST);
+        this.viewPanel.add(this.treePanel, BorderLayout.CENTER);
+        setContentPane(this.viewPanel);
     }
 }
 

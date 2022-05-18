@@ -6,10 +6,10 @@ import java.awt.event.ActionListener;
 
 public class OpenFolderChooser implements ActionListener {
 
-    private VisualizerFrame view;
+    private final VisualizerFrame view;
 
-    public OpenFolderChooser(VisualizerFrame frame){
-        view = frame;
+    public OpenFolderChooser(final VisualizerFrame frame) {
+        this.view = frame;
     }
 
     @Override
@@ -20,11 +20,12 @@ public class OpenFolderChooser implements ActionListener {
             fileChooser.setDialogTitle("Project chooser");
             fileChooser.setFileSelectionMode(JFileChooser.FILES_AND_DIRECTORIES);
             fileChooser.setAcceptAllFileFilterUsed(false);
-            int n = fileChooser.showOpenDialog(view);
+            int n = fileChooser.showOpenDialog(this.view);
             if (n == JFileChooser.APPROVE_OPTION) {
                 Formatter formatter = new Formatter();
-                view.changeView(formatter.formatPath(fileChooser.getSelectedFile().getPath()));
+                this.view.changeView(formatter.formatPath(fileChooser.getSelectedFile().getPath()));
             }
-        } catch (Exception ex) {}
+        } catch (Exception ex) {
+        }
     }
 }

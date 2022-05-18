@@ -8,25 +8,25 @@ import java.awt.event.ActionListener;
 
 public class GetPackageReport implements ActionListener {
 
-    private VisualizerFrame view;
+    private final VisualizerFrame view;
 
-    public GetPackageReport(VisualizerFrame frame){
-        view = frame;
+    public GetPackageReport(final VisualizerFrame frame) {
+        this.view = frame;
     }
 
     @Override
     public void actionPerformed(ActionEvent e) {
-        view.resetTree();
-        view.getStopButton().setEnabled(true);
-        view.getMethodButtons().get("getPackageReport").setEnabled(false);
-        Future<IPackageReport> future = view.getLib().getPackageReport(view.getNameDirectory().getText());
+        this.view.resetTree();
+        this.view.getStopButton().setEnabled(true);
+        this.view.getMethodButtons().get("getPackageReport").setEnabled(false);
+        Future<IPackageReport> future = this.view.getLib().getPackageReport(this.view.getNameDirectory().getText());
         future.onSuccess(res -> {
             IPackageReport report = res;
-            view.getTreePanel().update(report, view.getTreePanel().getRoot());
+            this.view.getTreePanel().update(report, this.view.getTreePanel().getRoot());
         });
         future.onFailure(res -> {
             System.out.println("ERROR");
-            view.errorMessage();
+            this.view.errorMessage("Error!!! Select a package");
         });
     }
 }

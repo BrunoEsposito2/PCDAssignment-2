@@ -5,16 +5,16 @@ import java.awt.event.ActionListener;
 
 public class StopEvents implements ActionListener {
 
-    private VisualizerFrame view;
+    private final VisualizerFrame view;
 
-    public StopEvents(VisualizerFrame frame){
-        view = frame;
+    public StopEvents(final VisualizerFrame frame) {
+        this.view = frame;
     }
 
     @Override
     public void actionPerformed(ActionEvent e) {
-        view.getStopButton().setEnabled(false);
-        view.resetView();
-        view.getLib().stopAnalyzeProject();
+        this.view.getStopButton().setEnabled(false);
+        this.view.resetView();
+        this.view.getLib().stopAnalyzeProject();
     }
 }

@@ -5,6 +5,7 @@ import asynchJavaParser.eventDrivenJavaParser.client.projectAnalysis.InterfaceEl
 import asynchJavaParser.eventDrivenJavaParser.client.projectAnalysis.PackageElem;
 import asynchJavaParser.eventDrivenJavaParser.client.projectAnalysis.ProjectStructure;
 import asynchJavaParser.common.reports.interfaces.*;
+
 import javax.swing.*;
 import javax.swing.tree.DefaultMutableTreeNode;
 import javax.swing.tree.DefaultTreeCellRenderer;
@@ -29,17 +30,17 @@ public class TreePanel extends JPanel {
     }
 
     public DefaultMutableTreeNode getRoot() {
-        return root;
+        return this.root;
     }
 
-    public void reset(){
-        DefaultTreeModel model = (DefaultTreeModel) tree.getModel();
+    public void reset() {
+        DefaultTreeModel model = (DefaultTreeModel) this.tree.getModel();
         DefaultMutableTreeNode treeRoot = (DefaultMutableTreeNode) model.getRoot();
         treeRoot.removeAllChildren();
         model.reload();
     }
 
-    public void update(IClassReport report, DefaultMutableTreeNode addNode){
+    public void update(final IClassReport report, final DefaultMutableTreeNode addNode) {
         IClassReport res = report;
         List<IMethodInfo> methodInfo = new ArrayList<>();
         List<IFieldInfo> fieldInfo = new ArrayList<>();
@@ -52,8 +53,8 @@ public class TreePanel extends JPanel {
         DefaultMutableTreeNode fieldNode = new DefaultMutableTreeNode("FIELDS");
         DefaultMutableTreeNode methodNode = new DefaultMutableTreeNode("METHODS");
 
-        className = new DefaultMutableTreeNode(res.getFullClassName()+" - Class");
-        className.add(new DefaultMutableTreeNode(res.getSrcFullFileName()+" - SrcFullFileName"));
+        className = new DefaultMutableTreeNode(res.getFullClassName() + " - Class");
+        className.add(new DefaultMutableTreeNode(res.getSrcFullFileName() + " - SrcFullFileName"));
         addNode.add(className);
 
         className.add(fieldNode);
@@ -61,7 +62,7 @@ public class TreePanel extends JPanel {
 
         fieldInfo.forEach(f -> {
             DefaultMutableTreeNode nameNode = new DefaultMutableTreeNode(f.getName());
-            DefaultMutableTreeNode typeNode = new DefaultMutableTreeNode(f.getFieldTypeFullName()+" - Type");
+            DefaultMutableTreeNode typeNode = new DefaultMutableTreeNode(f.getFieldTypeFullName() + " - Type");
             fieldName.add(nameNode);
             nameNode.add(typeNode);
         });
@@ -69,19 +70,19 @@ public class TreePanel extends JPanel {
 
         methodInfo.forEach(m -> {
             DefaultMutableTreeNode nameNode = new DefaultMutableTreeNode(m.getName());
-            DefaultMutableTreeNode retTypeNode = new DefaultMutableTreeNode(m.getReturnType()+" - ReturnType");
+            DefaultMutableTreeNode retTypeNode = new DefaultMutableTreeNode(m.getReturnType() + " - ReturnType");
             methodName.add(nameNode);
             nameNode.add(retTypeNode);
             m.getParameters().forEach(p -> {
-                DefaultMutableTreeNode parameter = new DefaultMutableTreeNode(p.getName()+" - Parameter");
+                DefaultMutableTreeNode parameter = new DefaultMutableTreeNode(p.getName() + " - Parameter");
                 nameNode.add(parameter);
-                parameter.add(new DefaultMutableTreeNode(p.getType()+" - ParamType"));
+                parameter.add(new DefaultMutableTreeNode(p.getType() + " - ParamType"));
             });
         });
         methodName.forEach(m -> methodNode.add(m));
     }
 
-    public void update(IInterfaceReport report, DefaultMutableTreeNode addNode){
+    public void update(final IInterfaceReport report, final DefaultMutableTreeNode addNode) {
         IInterfaceReport res = report;
         List<IMethodInfo> methodInfo = new ArrayList<>();
         methodInfo.addAll(res.getMethodsInfo());
@@ -90,27 +91,27 @@ public class TreePanel extends JPanel {
         List<DefaultMutableTreeNode> methodName = new ArrayList<>();
         DefaultMutableTreeNode methodNode = new DefaultMutableTreeNode("METHODS");
 
-        interfaceName = new DefaultMutableTreeNode(res.getFullInterfaceName()+" - Interface");
-        interfaceName.add(new DefaultMutableTreeNode(res.getSrcFullFileName()+" - SrcFullFileName"));
+        interfaceName = new DefaultMutableTreeNode(res.getFullInterfaceName() + " - Interface");
+        interfaceName.add(new DefaultMutableTreeNode(res.getSrcFullFileName() + " - SrcFullFileName"));
         addNode.add(interfaceName);
 
         interfaceName.add(methodNode);
 
         methodInfo.forEach(m -> {
             DefaultMutableTreeNode nameNode = new DefaultMutableTreeNode(m.getName());
-            DefaultMutableTreeNode retTypeNode = new DefaultMutableTreeNode(m.getReturnType()+" - ReturnType");
+            DefaultMutableTreeNode retTypeNode = new DefaultMutableTreeNode(m.getReturnType() + " - ReturnType");
             methodName.add(nameNode);
             nameNode.add(retTypeNode);
             m.getParameters().forEach(p -> {
-                DefaultMutableTreeNode parameter = new DefaultMutableTreeNode(p.getName()+" - Parameter");
+                DefaultMutableTreeNode parameter = new DefaultMutableTreeNode(p.getName() + " - Parameter");
                 nameNode.add(parameter);
-                parameter.add(new DefaultMutableTreeNode(p.getType()+" - ParamType"));
+                parameter.add(new DefaultMutableTreeNode(p.getType() + " - ParamType"));
             });
         });
         methodName.forEach(m -> methodNode.add(m));
     }
 
-    public void update(IPackageReport report, DefaultMutableTreeNode addNode) {
+    public void update(final IPackageReport report, final DefaultMutableTreeNode addNode) {
         IPackageReport res = report;
         List<IClassReport> classInfo = new ArrayList<>();
         List<IInterfaceReport> interfaceInfo = new ArrayList<>();
@@ -124,7 +125,7 @@ public class TreePanel extends JPanel {
         DefaultMutableTreeNode classNode = new DefaultMutableTreeNode("CLASSES");
         DefaultMutableTreeNode interfaceNode = new DefaultMutableTreeNode("INTERFACES");
 
-        packageName = new DefaultMutableTreeNode(res.getSrcFullName()+" - Package");
+        packageName = new DefaultMutableTreeNode(res.getSrcFullName() + " - Package");
         addNode.add(packageName);
 
         packageName.add(classNode);
@@ -135,7 +136,7 @@ public class TreePanel extends JPanel {
         interfaceInfo.forEach(i -> update(i, interfaceNode));
     }
 
-    public void update(IProjectReport report, DefaultMutableTreeNode addNode) {
+    public void update(final IProjectReport report, final DefaultMutableTreeNode addNode) {
         IProjectReport res = report;
         List<IPackageReport> packageInfo = new ArrayList<>();
         packageInfo.addAll(res.getPackageReports());
@@ -143,7 +144,7 @@ public class TreePanel extends JPanel {
         DefaultMutableTreeNode projectName;
         DefaultMutableTreeNode packageNode = new DefaultMutableTreeNode("PACKAGES");
 
-        projectName = new DefaultMutableTreeNode(res.getMainClass()+" - MainClass");
+        projectName = new DefaultMutableTreeNode(res.getMainClass() + " - MainClass");
         addNode.add(projectName);
 
         projectName.add(packageNode);
@@ -151,7 +152,7 @@ public class TreePanel extends JPanel {
         packageInfo.forEach(p -> update(p, packageNode));
     }
 
-    public void dynamicUpdate(ProjectStructure ps){
+    public void dynamicUpdate(final ProjectStructure ps) {
         PackageElem psRoot = ps.getRoot();
         //System.out.println(psRoot.getElem().get()+" PROJECT ROOT");
         //ps.getRoot().getInnerInterfaces().forEach((k,v) -> System.out.println(k+" KEY"));
@@ -166,47 +167,47 @@ public class TreePanel extends JPanel {
         Map<String, ClassElem> innerClasses = new HashMap<>();
 
         DefaultMutableTreeNode packageDeclaration = new DefaultMutableTreeNode(ps.getRoot().getElem().isEmpty() ? "**" : ps.getRoot().getElem().get().getName());
-        root.add(packageDeclaration);
+        this.root.add(packageDeclaration);
 
         packageDeclaration.add(packageNode);
         packageDeclaration.add(classNode);
         packageDeclaration.add(interfaceNode);
 
-        if (!psRoot.getInnerPackages().isEmpty()){
+        if (!psRoot.getInnerPackages().isEmpty()) {
             innerPackages = psRoot.getInnerPackages();
             innerPackages.forEach((k, v) -> {
-                System.out.println("*** " + k +" ***");
+                System.out.println("*** " + k + " ***");
                 DefaultMutableTreeNode name = new DefaultMutableTreeNode(k);
                 packageNode.add(name);
             });
         }
 
-        if (!psRoot.getInnerInterfaces().isEmpty()){
+        if (!psRoot.getInnerInterfaces().isEmpty()) {
             innerInterfaces = psRoot.getInnerInterfaces();
             innerInterfaces.forEach((k, v) -> {
-                System.out.println("*** " + k +" ***");
+                System.out.println("*** " + k + " ***");
                 DefaultMutableTreeNode name = new DefaultMutableTreeNode(k);
                 interfaceNode.add(name);
             });
         }
 
-        if (!psRoot.getInnerClasses().isEmpty()){
+        if (!psRoot.getInnerClasses().isEmpty()) {
             innerClasses = psRoot.getInnerClasses();
             innerClasses.forEach((k, v) -> {
-                System.out.println("*** " + k +" ***");
+                System.out.println("*** " + k + " ***");
                 DefaultMutableTreeNode name = new DefaultMutableTreeNode(k);
                 classNode.add(name);
             });
         }
     }
 
-    private void createTree(){
+    private void createTree() {
         setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
-        root = new DefaultMutableTreeNode("Tree");
+        this.root = new DefaultMutableTreeNode("Tree");
         DefaultTreeCellRenderer render = new DefaultTreeCellRenderer();
         render.setLeafIcon(null);
         render.setOpenIcon(null);
-        tree = new JTree(root);
-        tree.setCellRenderer(render);
+        this.tree = new JTree(this.root);
+        this.tree.setCellRenderer(render);
     }
 }

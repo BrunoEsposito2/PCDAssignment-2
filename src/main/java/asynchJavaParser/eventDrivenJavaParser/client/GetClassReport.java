@@ -8,25 +8,25 @@ import java.awt.event.ActionListener;
 
 public class GetClassReport implements ActionListener {
 
-    private VisualizerFrame view;
+    private final VisualizerFrame view;
 
-    public GetClassReport(VisualizerFrame frame){
-        view = frame;
+    public GetClassReport(final VisualizerFrame frame) {
+        this.view = frame;
     }
 
     @Override
     public void actionPerformed(ActionEvent e) {
-        view.resetTree();
-        view.getStopButton().setEnabled(true);
-        view.getMethodButtons().get("getClassReport").setEnabled(false);
-        Future<IClassReport> future = view.getLib().getClassReport(view.getNameDirectory().getText());
+        this.view.resetTree();
+        this.view.getStopButton().setEnabled(true);
+        this.view.getMethodButtons().get("getClassReport").setEnabled(false);
+        Future<IClassReport> future = this.view.getLib().getClassReport(this.view.getNameDirectory().getText());
         future.onSuccess(res -> {
             IClassReport report = res;
-            view.getTreePanel().update(report, view.getTreePanel().getRoot());
+            this.view.getTreePanel().update(report, this.view.getTreePanel().getRoot());
         });
         future.onFailure(res -> {
             System.out.println("ERROR");
-            view.errorMessage();
+            this.view.errorMessage("Error!!! Select a Java file");
         });
     }
 }

@@ -8,25 +8,25 @@ import java.awt.event.ActionListener;
 
 public class GetProjectReport implements ActionListener {
 
-    private VisualizerFrame view;
+    private final VisualizerFrame view;
 
-    public GetProjectReport(VisualizerFrame frame){
-        view = frame;
+    public GetProjectReport(final VisualizerFrame frame) {
+        this.view = frame;
     }
 
     @Override
     public void actionPerformed(ActionEvent e) {
-        view.resetTree();
-        view.getStopButton().setEnabled(true);
-        view.getMethodButtons().get("getProjectReport").setEnabled(false);
-        Future<IProjectReport> future = view.getLib().getProjectReport(view.getNameDirectory().getText());
+        this.view.resetTree();
+        this.view.getStopButton().setEnabled(true);
+        this.view.getMethodButtons().get("getProjectReport").setEnabled(false);
+        Future<IProjectReport> future = this.view.getLib().getProjectReport(this.view.getNameDirectory().getText());
         future.onSuccess(res -> {
             IProjectReport report = res;
-            view.getTreePanel().update(report, view.getTreePanel().getRoot());
+            this.view.getTreePanel().update(report, this.view.getTreePanel().getRoot());
         });
         future.onFailure(res -> {
             System.out.println("ERROR");
-            view.errorMessage();
+            this.view.errorMessage("Error!!! Select a project");
         });
     }
 }
