@@ -154,8 +154,6 @@ public class TreePanel extends JPanel {
 
     public void dynamicUpdate(final ProjectStructure ps) {
         PackageElem psRoot = ps.getRoot();
-        //System.out.println(psRoot.getElem().get()+" PROJECT ROOT");
-        //ps.getRoot().getInnerInterfaces().forEach((k,v) -> System.out.println(k+" KEY"));
         reset();
 
         DefaultMutableTreeNode packageNode = new DefaultMutableTreeNode("PACKAGES");
@@ -173,29 +171,15 @@ public class TreePanel extends JPanel {
         packageDeclaration.add(classNode);
         packageDeclaration.add(interfaceNode);
 
-        if (!psRoot.getInnerPackages().isEmpty()) {
+        if(!psRoot.getInnerPackages().isEmpty()){
             innerPackages = psRoot.getInnerPackages();
             innerPackages.forEach((k, v) -> {
-                DefaultMutableTreeNode name = new DefaultMutableTreeNode(k);
-                packageNode.add(name);
+                packageUpdate(v, root);
             });
         }
 
-        if (!psRoot.getInnerInterfaces().isEmpty()) {
-            innerInterfaces = psRoot.getInnerInterfaces();
-            innerInterfaces.forEach((k, v) -> {
-                DefaultMutableTreeNode name = new DefaultMutableTreeNode(k);
-                interfaceNode.add(name);
-            });
-        }
-
-        if (!psRoot.getInnerClasses().isEmpty()) {
-            innerClasses = psRoot.getInnerClasses();
-            innerClasses.forEach((k, v) -> {
-                DefaultMutableTreeNode name = new DefaultMutableTreeNode(k);
-                classNode.add(name);
-            });
-        }
+        classUpdate(psRoot, classNode);
+        interfaceUpdate(psRoot, interfaceNode);
     }
 
     private void createTree() {
@@ -206,5 +190,40 @@ public class TreePanel extends JPanel {
         render.setOpenIcon(null);
         this.tree = new JTree(this.root);
         this.tree.setCellRenderer(render);
+    }
+
+    private void classUpdate(final PackageElem packageElem, final DefaultMutableTreeNode addNode){
+        if (!packageElem.getInnerClasses().isEmpty()) {
+            Map<String, ClassElem> innerClasses = packageElem.getInnerClasses();
+            innerClasses.forEach((k, v) -> {
+                DefaultMutableTreeNode name = new DefaultMutableTreeNode(k);
+                addNode.add(name);
+            });
+        }
+    }
+
+    private void interfaceUpdate(final PackageElem packageElem, final DefaultMutableTreeNode addNode){
+        if (!packageElem.getInnerInterfaces().isEmpty()) {
+            Map<String, InterfaceElem> innerInterfaces = packageElem.getInnerInterfaces();
+            innerInterfaces.forEach((k, v) -> {
+                DefaultMutableTreeNode name = new DefaultMutableTreeNode(k);
+                addNode.add(name);
+            });
+        }
+    }
+
+    private void packageUpdate(final PackageElem packageElem, final DefaultMutableTreeNode addNode){
+
+        if (!packageElem.getInnerPackages().isEmpty()) {
+            Map<String, PackageElem> packages = packageElem.getInnerPackages();
+            packages.forEach((k, v) -> {
+                DefaultMutableTreeNode packName = new DefaultMutableTreeNode(k);
+                addNode.add(packName);
+                packageUpdate(v, packName);
+            });
+        }
+
+        classUpdate(packageElem, addNode);
+        interfaceUpdate(packageElem, addNode);
     }
 }

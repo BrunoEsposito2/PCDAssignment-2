@@ -42,7 +42,7 @@ public class AnalyzeProject implements ActionListener {
                 this.totalElem = Integer.parseInt(message.body());
             }else if(message.headers().get("type") == "status"){
                 // error messages
-                this.view.errorMessage("Error!!!" + message.body());
+                this.view.getStatus().setText(message.body());
             }
         });
         this.view.getLib().analyzeProject(conf, message -> {
@@ -51,39 +51,35 @@ public class AnalyzeProject implements ActionListener {
             if(this.totalElem == this.countElem){
                 this.view.getStatus().setText("Complete");
             }
+            this.countElem++;
             switch (elemType) {
                 case "Class":
                     ClassOrInterfaceDeclaration cd = (ClassOrInterfaceDeclaration) message.body();
                     this.ps.putClassOrInterface(cd);
-                    this.countElem ++;
                     this.view.getTreePanel().dynamicUpdate(this.ps);
                     //System.out.println("class " + cd.getNameAsString());
                     break;
                 case "Interface":
                     ClassOrInterfaceDeclaration id = (ClassOrInterfaceDeclaration) message.body();
                     this.ps.putClassOrInterface(id);
-                    this.countElem ++;
                     this.view.getTreePanel().dynamicUpdate(ps);
                     //System.out.println("interface " + id.getNameAsString());
                     break;
                 case "Field":
                     FieldDeclaration fd = (FieldDeclaration) message.body();
                     this.ps.putField(fd);
-                    this.countElem ++;
                     this.view.getTreePanel().dynamicUpdate(this.ps);
                     //fd.getVariables().forEach(f -> System.out.println("field " + f.getNameAsString()));
                     break;
                 case "Method":
                     MethodDeclaration md = (MethodDeclaration) message.body();
                     this.ps.putMethod(md);
-                    this.countElem ++;
                     this.view.getTreePanel().dynamicUpdate(this.ps);
                     //System.out.println("method " + md.getNameAsString());
                     break;
                 case "Package":
                     PackageDeclaration pd = (PackageDeclaration) message.body();
                     this.ps.putPackage(pd);
-                    this.countElem ++;
                     this.view.getTreePanel().dynamicUpdate(this.ps);
                     //System.out.println("package " + pd.getNameAsString());
                     break;
