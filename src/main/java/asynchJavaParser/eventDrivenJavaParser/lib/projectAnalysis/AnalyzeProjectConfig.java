@@ -2,12 +2,12 @@ package asynchJavaParser.eventDrivenJavaParser.lib.projectAnalysis;
 
 public class AnalyzeProjectConfig {
     private final String responseAddress;
-    private final String completitionNotifAddress;
+    private final String statusNotifAddress;
     private final String srcProjectFolderName;
 
-    public AnalyzeProjectConfig(String responseAddress, String completitionNotifAddress, String srcProjectFolderName) {
+    public AnalyzeProjectConfig(String responseAddress, String statusNotifAddress, String srcProjectFolderName) {
         this.responseAddress = responseAddress;
-        this.completitionNotifAddress = completitionNotifAddress;
+        this.statusNotifAddress = statusNotifAddress;
         this.srcProjectFolderName = srcProjectFolderName;
     }
 
@@ -15,8 +15,8 @@ public class AnalyzeProjectConfig {
         return responseAddress;
     }
 
-    public String getCompletitionNotifAddress() {
-        return completitionNotifAddress;
+    public String getStatusNotifAddress() {
+        return statusNotifAddress;
     }
 
     public String getSrcProjectFolderName() {

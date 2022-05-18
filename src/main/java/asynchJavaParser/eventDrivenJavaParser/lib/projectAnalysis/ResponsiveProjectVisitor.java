@@ -6,6 +6,7 @@ import com.github.javaparser.ast.body.FieldDeclaration;
 import com.github.javaparser.ast.body.MethodDeclaration;
 import com.github.javaparser.ast.visitor.VoidVisitorAdapter;
 import io.vertx.core.Vertx;
+import io.vertx.core.eventbus.DeliveryOptions;
 import io.vertx.core.eventbus.MessageConsumer;
 
 public class ResponsiveProjectVisitor extends VoidVisitorAdapter<Void>{
@@ -13,10 +14,12 @@ public class ResponsiveProjectVisitor extends VoidVisitorAdapter<Void>{
     private boolean shouldContinue;
     private final String responseAddress;
     private final String stopAddress;
+    private final String statusNotifAddress;
 
-    public ResponsiveProjectVisitor(Vertx v, String responseAddress, String stopAddress){
+    public ResponsiveProjectVisitor(Vertx v, String responseAddress, String stopAddress, String statusNotifAddress){
         this.responseAddress = responseAddress;
         this.stopAddress = stopAddress;
+        this.statusNotifAddress = statusNotifAddress;
         this.shouldContinue = true;
         vertx = v;
 
@@ -50,7 +53,11 @@ public class ResponsiveProjectVisitor extends VoidVisitorAdapter<Void>{
     }
 
     public void stop(){
+
         this.shouldContinue = false;
+        DeliveryOptions options = new DeliveryOptions();
+        options.addHeader("type", "status");
+        vertx.eventBus().send(this.statusNotifAddress, "STOPPED", options);
     }
 
     private void registerCodecs(){

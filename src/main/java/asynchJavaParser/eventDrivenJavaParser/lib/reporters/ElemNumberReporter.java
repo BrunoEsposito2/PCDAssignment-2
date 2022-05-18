@@ -16,6 +16,7 @@ public class ElemNumberReporter extends AbstractVerticle {
     private final String path;
     private final FileExplorer fileExplorer;
 
+
     public ElemNumberReporter(Promise<Integer> res, String path){
         this.res = res;
         this.path = path;
@@ -27,11 +28,11 @@ public class ElemNumberReporter extends AbstractVerticle {
         CompilationUnit cu;
         List<String> files = this.fileExplorer.getAllSubpackageFiles();
         Integer result = 0;
-        ElemCounterCollector visitor = new ElemCounterCollector();
+        ElemCounterCollector visitor = new ElemCounterCollector(result);
         for (String nameFile : files) {
             // System.out.println("nome file: " + nameFile); // for debug purposes
             try {
-                log("Package reporter started...");
+                //log("Package reporter started...");
                 cu = StaticJavaParser.parse(new File(nameFile));
                 visitor.visit(cu, null);
                 result = visitor.getCount();

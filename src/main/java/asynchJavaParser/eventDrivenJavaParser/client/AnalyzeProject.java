@@ -35,7 +35,7 @@ public class AnalyzeProject implements ActionListener {
         this.view.getStopButton().setEnabled(true);
         this.view.getStatus().setText("Running ...");
         AnalyzeProjectConfig conf = new AnalyzeProjectConfig("master", "master.complete", this.view.getNameDirectory().getText());
-        MessageConsumer<String> consumer = this.view.getEventBus().consumer(conf.getCompletitionNotifAddress());
+        MessageConsumer<String> consumer = this.view.getEventBus().consumer(conf.getStatusNotifAddress());
         consumer.handler(message -> {
             if(message.headers().get("type") == "count"){
                 // total number of elements to process
