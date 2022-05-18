@@ -27,6 +27,10 @@ public class ProjectReporter extends AbstractVerticle {
     @Override
     public void start() {
         CompilationUnit cu;
+        if (this.fileExplorer.getPath().contains(".java")) {
+            res.fail("invalid path for Project Report");
+            return;
+        }
         List<String> packages = this.fileExplorer.getAllSubpackageFiles();
         ProjectReport projectReport = new ProjectReport();
         // System.out.println("ALL PACKAGES: " + packages); // for debug purposes

@@ -27,6 +27,10 @@ public class PackageReporter extends AbstractVerticle {
     @Override
     public void start() {
         CompilationUnit cu;
+        if (this.fileExplorer.getPath().contains(".java")) {
+            res.fail("invalid path for Package Report");
+            return;
+        }
         List<String> files = this.fileExplorer.getAllPackageFiles();
         IPackageReport packageReport = new PackageReport();
         for (String nameFile : files) {
