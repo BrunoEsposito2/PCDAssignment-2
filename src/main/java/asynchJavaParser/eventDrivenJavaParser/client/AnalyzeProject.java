@@ -71,6 +71,5 @@ public class AnalyzeProject implements ActionListener {
                     this.view.errorMessage("Error!!! Select a project");
             }
         });
-        this.view.getLib().stopAnalyzeProject();
     }
 }
