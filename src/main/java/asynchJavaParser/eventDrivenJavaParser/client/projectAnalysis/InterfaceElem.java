@@ -28,4 +28,8 @@ public class InterfaceElem {
     public void addMethod(String name, MethodDeclaration m){
         this.methods.put(name, m);
     }
+
+    public Map<String, MethodDeclaration> getMethods() {
+        return this.methods;
+    }
 }

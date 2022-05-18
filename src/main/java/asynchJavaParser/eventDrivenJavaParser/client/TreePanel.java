@@ -160,21 +160,13 @@ public class TreePanel extends JPanel {
         DefaultMutableTreeNode classNode = new DefaultMutableTreeNode("CLASSES");
         DefaultMutableTreeNode interfaceNode = new DefaultMutableTreeNode("INTERFACES");
 
-        Map<String, PackageElem> innerPackages = new HashMap<>();
-        Map<String, InterfaceElem> innerInterfaces = new HashMap<>();
-        Map<String, ClassElem> innerClasses = new HashMap<>();
-
-        DefaultMutableTreeNode packageDeclaration = new DefaultMutableTreeNode(ps.getRoot().getElem().isEmpty() ? "**" : ps.getRoot().getElem().get().getName());
-        this.root.add(packageDeclaration);
-
-        packageDeclaration.add(packageNode);
-        packageDeclaration.add(classNode);
-        packageDeclaration.add(interfaceNode);
+        Map<String, PackageElem> innerPackages;
 
         if(!psRoot.getInnerPackages().isEmpty()){
+            this.root.add(packageNode);
             innerPackages = psRoot.getInnerPackages();
             innerPackages.forEach((k, v) -> {
-                packageUpdate(v, root);
+                packageUpdate(v, packageNode);
             });
         }
 
@@ -195,9 +187,40 @@ public class TreePanel extends JPanel {
     private void classUpdate(final PackageElem packageElem, final DefaultMutableTreeNode addNode){
         if (!packageElem.getInnerClasses().isEmpty()) {
             Map<String, ClassElem> innerClasses = packageElem.getInnerClasses();
+            DefaultMutableTreeNode classNode = new DefaultMutableTreeNode("CLASSES");
+
+            addNode.add(classNode);
+
             innerClasses.forEach((k, v) -> {
-                DefaultMutableTreeNode name = new DefaultMutableTreeNode(k);
-                addNode.add(name);
+                List<DefaultMutableTreeNode> fieldName = new ArrayList<>();
+                List<DefaultMutableTreeNode> methodsName = new ArrayList<>();
+                DefaultMutableTreeNode fieldNode = new DefaultMutableTreeNode("FIELDS");
+                DefaultMutableTreeNode methodNode = new DefaultMutableTreeNode("METHODS");
+                DefaultMutableTreeNode name = new DefaultMutableTreeNode(k+ " - Class");
+
+                classNode.add(name);
+                name.add(fieldNode);
+                name.add(methodNode);
+
+                if(!v.getFieldDeclaration().isEmpty()){
+                    v.getFieldDeclaration().get().getVariables().forEach(f -> {
+                        DefaultMutableTreeNode nameNode = new DefaultMutableTreeNode(f.getName());
+                        DefaultMutableTreeNode typeNode = new DefaultMutableTreeNode(f.getType() + " - Type");
+                        fieldName.add(nameNode);
+                        nameNode.add(typeNode);
+                    });
+                    fieldName.forEach(fn -> fieldNode.add(fn));
+                }
+
+                if (!v.getMethods().isEmpty()){
+                    v.getMethods().forEach((x, y) -> {
+                        DefaultMutableTreeNode mName = new DefaultMutableTreeNode(x);
+                        DefaultMutableTreeNode retTypeNode = new DefaultMutableTreeNode(y.getType() + " - ReturnType");
+                        methodsName.add(mName);
+                        mName.add(retTypeNode);
+                    });
+                    methodsName.forEach(m -> methodNode.add(m));
+                }
             });
         }
     }
@@ -205,20 +228,41 @@ public class TreePanel extends JPanel {
     private void interfaceUpdate(final PackageElem packageElem, final DefaultMutableTreeNode addNode){
         if (!packageElem.getInnerInterfaces().isEmpty()) {
             Map<String, InterfaceElem> innerInterfaces = packageElem.getInnerInterfaces();
+            DefaultMutableTreeNode interfaceNode = new DefaultMutableTreeNode("INTERFACES");
+
+            addNode.add(interfaceNode);
+
             innerInterfaces.forEach((k, v) -> {
-                DefaultMutableTreeNode name = new DefaultMutableTreeNode(k);
-                addNode.add(name);
+                List<DefaultMutableTreeNode> methodsName = new ArrayList<>();
+                DefaultMutableTreeNode methodNode = new DefaultMutableTreeNode("METHODS");
+                DefaultMutableTreeNode interfaceName = new DefaultMutableTreeNode(k+ " - Interface");
+
+                interfaceNode.add(interfaceName);
+                interfaceName.add(methodNode);
+
+                if (!v.getMethods().isEmpty()){
+                    v.getMethods().forEach((x, y) -> {
+                        DefaultMutableTreeNode mName = new DefaultMutableTreeNode(x);
+                        DefaultMutableTreeNode retTypeNode = new DefaultMutableTreeNode(y.getType() + " - ReturnType");
+                        methodsName.add(mName);
+                        mName.add(retTypeNode);
+                    });
+                    methodsName.forEach(m -> methodNode.add(m));
+                }
             });
         }
     }
 
     private void packageUpdate(final PackageElem packageElem, final DefaultMutableTreeNode addNode){
-
         if (!packageElem.getInnerPackages().isEmpty()) {
             Map<String, PackageElem> packages = packageElem.getInnerPackages();
+            DefaultMutableTreeNode packageNode = new DefaultMutableTreeNode("PACKAGES");
+
+            addNode.add(packageNode);
+
             packages.forEach((k, v) -> {
-                DefaultMutableTreeNode packName = new DefaultMutableTreeNode(k);
-                addNode.add(packName);
+                DefaultMutableTreeNode packName = new DefaultMutableTreeNode(k+ " - Package");
+                packageNode.add(packName);
                 packageUpdate(v, packName);
             });
         }

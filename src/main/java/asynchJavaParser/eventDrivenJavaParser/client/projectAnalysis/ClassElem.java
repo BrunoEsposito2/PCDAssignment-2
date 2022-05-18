@@ -22,11 +22,15 @@ public class ClassElem {
 
     public void setElem(ClassOrInterfaceDeclaration elem){this.elem = Optional.of(elem);}
 
-    public Optional<ClassOrInterfaceDeclaration> getElem(){return elem;}
+    public Optional<ClassOrInterfaceDeclaration> getElem(){return this.elem;}
 
     public void setFieldDeclaration(FieldDeclaration f){this.fields = Optional.of(f);}
 
     public Optional<FieldDeclaration> getFieldDeclaration(){return this.fields;}
 
     public void addMethod(String name, MethodDeclaration m){this.methods.put(name, m);}
+
+    public Map<String, MethodDeclaration> getMethods() {
+        return this.methods;
+    }
 }
