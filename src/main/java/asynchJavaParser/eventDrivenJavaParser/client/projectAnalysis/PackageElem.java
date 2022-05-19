@@ -1,8 +1,6 @@
 package asynchJavaParser.eventDrivenJavaParser.client.projectAnalysis;
 
 import com.github.javaparser.ast.PackageDeclaration;
-
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
