@@ -81,7 +81,6 @@ public class AnalyzeProject implements ActionListener {
                 default:
                     this.view.errorMessage("Error!!! Select a project");
             }
-
         });
     }
 }

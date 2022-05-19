@@ -5,15 +5,13 @@ import asynchJavaParser.eventDrivenJavaParser.client.projectAnalysis.InterfaceEl
 import asynchJavaParser.eventDrivenJavaParser.client.projectAnalysis.PackageElem;
 import asynchJavaParser.eventDrivenJavaParser.client.projectAnalysis.ProjectStructure;
 import asynchJavaParser.common.reports.interfaces.*;
+import com.github.javaparser.ast.body.ClassOrInterfaceDeclaration;
 
 import javax.swing.*;
 import javax.swing.tree.DefaultMutableTreeNode;
 import javax.swing.tree.DefaultTreeCellRenderer;
 import javax.swing.tree.DefaultTreeModel;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 public class TreePanel extends JPanel {
 
@@ -166,7 +164,9 @@ public class TreePanel extends JPanel {
             this.root.add(packageNode);
             innerPackages = psRoot.getInnerPackages();
             innerPackages.forEach((k, v) -> {
-                packageUpdate(v, packageNode);
+                DefaultMutableTreeNode packageName = new DefaultMutableTreeNode(k+ " - Package");
+                packageNode.add(packageName);
+                packageUpdate(v, packageName);
             });
         }
 
@@ -192,34 +192,51 @@ public class TreePanel extends JPanel {
             addNode.add(classNode);
 
             innerClasses.forEach((k, v) -> {
-                List<DefaultMutableTreeNode> fieldName = new ArrayList<>();
-                List<DefaultMutableTreeNode> methodsName = new ArrayList<>();
-                DefaultMutableTreeNode fieldNode = new DefaultMutableTreeNode("FIELDS");
-                DefaultMutableTreeNode methodNode = new DefaultMutableTreeNode("METHODS");
-                DefaultMutableTreeNode name = new DefaultMutableTreeNode(k+ " - Class");
+                if(Optional.of(v.getElem()).get().isPresent()){
+                    DefaultMutableTreeNode name = new DefaultMutableTreeNode(k+ " - Class");
 
-                classNode.add(name);
-                name.add(fieldNode);
-                name.add(methodNode);
+                    classNode.add(name);
 
-                if(!v.getFieldDeclaration().isEmpty()){
-                    v.getFieldDeclaration().get().getVariables().forEach(f -> {
-                        DefaultMutableTreeNode nameNode = new DefaultMutableTreeNode(f.getName());
-                        DefaultMutableTreeNode typeNode = new DefaultMutableTreeNode(f.getType() + " - Type");
-                        fieldName.add(nameNode);
-                        nameNode.add(typeNode);
-                    });
-                    fieldName.forEach(fn -> fieldNode.add(fn));
-                }
+                    ClassOrInterfaceDeclaration c = Optional.of(v.getElem()).get().get();
 
-                if (!v.getMethods().isEmpty()){
-                    v.getMethods().forEach((x, y) -> {
-                        DefaultMutableTreeNode mName = new DefaultMutableTreeNode(x);
-                        DefaultMutableTreeNode retTypeNode = new DefaultMutableTreeNode(y.getType() + " - ReturnType");
-                        methodsName.add(mName);
-                        mName.add(retTypeNode);
-                    });
-                    methodsName.forEach(m -> methodNode.add(m));
+                    name.add(new DefaultMutableTreeNode(c.getFullyQualifiedName().get()  + " - SrcFullFileName"));
+
+                    if(Optional.of(v.getFieldDeclaration()).get().isPresent()){
+                        List<DefaultMutableTreeNode> fieldsName = new ArrayList<>();
+                        DefaultMutableTreeNode fieldNode = new DefaultMutableTreeNode("FIELDS");
+
+                        name.add(fieldNode);
+
+                        Optional.of(v.getFieldDeclaration()).get().get().getVariables().forEach(f -> {
+                            DefaultMutableTreeNode nameNode = new DefaultMutableTreeNode(f.getName());
+                            DefaultMutableTreeNode typeNode = new DefaultMutableTreeNode(f.getType() + " - Type");
+                            fieldsName.add(nameNode);
+                            nameNode.add(typeNode);
+                            System.out.println(f.getName() + "-NAME");
+                        });
+                        fieldsName.forEach(fn -> fieldNode.add(fn));
+                    }
+
+                    if (!v.getMethods().isEmpty()){
+                        List<DefaultMutableTreeNode> methodsName = new ArrayList<>();
+                        DefaultMutableTreeNode methodNode = new DefaultMutableTreeNode("METHODS");
+
+                        name.add(methodNode);
+
+                        v.getMethods().forEach((x, y) -> {
+                            DefaultMutableTreeNode mName = new DefaultMutableTreeNode(x);
+                            DefaultMutableTreeNode retTypeNode = new DefaultMutableTreeNode(y.getType() + " - ReturnType");
+                            methodsName.add(mName);
+                            mName.add(retTypeNode);
+
+                            y.getParameters().forEach(p -> {
+                                DefaultMutableTreeNode parameter = new DefaultMutableTreeNode(p.getNameAsString() + " - Parameter");
+                                mName.add(parameter);
+                                parameter.add(new DefaultMutableTreeNode(p.getType() + " - ParamType"));
+                            });
+                        });
+                        methodsName.forEach(m -> methodNode.add(m));
+                    }
                 }
             });
         }
@@ -233,21 +250,30 @@ public class TreePanel extends JPanel {
             addNode.add(interfaceNode);
 
             innerInterfaces.forEach((k, v) -> {
-                List<DefaultMutableTreeNode> methodsName = new ArrayList<>();
-                DefaultMutableTreeNode methodNode = new DefaultMutableTreeNode("METHODS");
-                DefaultMutableTreeNode interfaceName = new DefaultMutableTreeNode(k+ " - Interface");
+                if(Optional.of(v.getElem()).get().isPresent()){
+                    DefaultMutableTreeNode interfaceName = new DefaultMutableTreeNode(k+ " - Interface");
 
-                interfaceNode.add(interfaceName);
-                interfaceName.add(methodNode);
+                    interfaceNode.add(interfaceName);
 
-                if (!v.getMethods().isEmpty()){
-                    v.getMethods().forEach((x, y) -> {
-                        DefaultMutableTreeNode mName = new DefaultMutableTreeNode(x);
-                        DefaultMutableTreeNode retTypeNode = new DefaultMutableTreeNode(y.getType() + " - ReturnType");
-                        methodsName.add(mName);
-                        mName.add(retTypeNode);
-                    });
-                    methodsName.forEach(m -> methodNode.add(m));
+                    if (!v.getMethods().isEmpty()){
+                        List<DefaultMutableTreeNode> methodsName = new ArrayList<>();
+                        DefaultMutableTreeNode methodNode = new DefaultMutableTreeNode("METHODS");
+
+                        interfaceName.add(methodNode);
+                        v.getMethods().forEach((x, y) -> {
+                            DefaultMutableTreeNode mName = new DefaultMutableTreeNode(y.getNameAsString());
+                            DefaultMutableTreeNode retTypeNode = new DefaultMutableTreeNode(y.getType() + " - ReturnType");
+                            methodsName.add(mName);
+                            mName.add(retTypeNode);
+
+                            y.getParameters().forEach(p -> {
+                                DefaultMutableTreeNode parameter = new DefaultMutableTreeNode(p.getNameAsString() + " - Parameter");
+                                mName.add(parameter);
+                                parameter.add(new DefaultMutableTreeNode(p.getType() + " - ParamType"));
+                            });
+                        });
+                        methodsName.forEach(m -> methodNode.add(m));
+                    }
                 }
             });
         }
