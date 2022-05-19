@@ -5,6 +5,8 @@ import asynchJavaParser.common.reports.interfaces.IPackageReport;
 import asynchJavaParser.common.reports.interfaces.IProjectReport;
 import io.reactivex.rxjava3.core.Observable;
 
+import java.util.Map;
+
 public interface IProjectAnalyzer {
 
 	/**
@@ -40,5 +42,5 @@ public interface IProjectAnalyzer {
 	 *
 	 * @param callback
 	 */
-	Observable<?> analyzeProject(String srcProjectFolderPath);
+	Observable<?> analyzeProject(String srcProjectFolderPath, Map<String, Integer> m);
 }

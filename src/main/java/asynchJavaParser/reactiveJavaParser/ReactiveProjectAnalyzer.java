@@ -12,12 +12,16 @@ import asynchJavaParser.common.visitors.PackageVisitor;
 import asynchJavaParser.common.visitors.ProjectVisitor;
 import com.github.javaparser.StaticJavaParser;
 import com.github.javaparser.ast.CompilationUnit;
+import com.github.javaparser.utils.Pair;
 import io.reactivex.rxjava3.core.Observable;
 import io.reactivex.rxjava3.schedulers.Schedulers;
 
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
+import java.util.Set;
 
 public class ReactiveProjectAnalyzer implements IProjectAnalyzer{
 
@@ -96,8 +100,9 @@ public class ReactiveProjectAnalyzer implements IProjectAnalyzer{
     }
 
     @Override
-    public Observable<?> analyzeProject(String srcProjectFolderPath) {
-        return Observable.create(emitter -> {
+    public Observable<?> analyzeProject(String srcProjectFolderPath, Map<String, Integer> m) {
+        return Observable
+                .create(emitter -> {
                     FileExplorer fileExplorer = new FileExplorer(srcProjectFolderPath);
                     List<String> files = fileExplorer.getAllSubpackageFiles();
                     EmitterVisitor fv = new EmitterVisitor(emitter);
@@ -113,7 +118,18 @@ public class ReactiveProjectAnalyzer implements IProjectAnalyzer{
                     }
                     emitter.onComplete();
                 })
-                .observeOn(Schedulers.computation());
+                .observeOn(Schedulers.computation())
+                .map(elem ->{
+                    m.put("count", m.get("count")+1);
+                    String className = elem.getClass().getName();
+                    Integer value = m.get(className);
+                    if(value == null)
+                        m.put(className, 1);
+                    else {
+                        m.put(className, value + 1);
+                    }
+                    return new Pair<String, Integer>(className, m.get(className));
+                });
     }
 
     private static void log(String msg) {

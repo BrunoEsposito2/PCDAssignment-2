@@ -20,6 +20,7 @@ public class EmitterVisitor extends VoidVisitorAdapter<Void> {
 
     @Override
     public void visit(PackageDeclaration p, Void collector){
+        if(emitter.isDisposed()) return;
         if(!emitter.isDisposed()){
             super.visit(p, null);
             if(!alreadySentElements.contains(p)){
@@ -31,6 +32,7 @@ public class EmitterVisitor extends VoidVisitorAdapter<Void> {
 
     @Override
     public void visit(ClassOrInterfaceDeclaration c, Void collector){
+        if(emitter.isDisposed()) return;
         if(!emitter.isDisposed()){
             super.visit(c, null);
             if(!alreadySentElements.contains(c)){
@@ -42,6 +44,7 @@ public class EmitterVisitor extends VoidVisitorAdapter<Void> {
 
     @Override
     public void visit(MethodDeclaration m, Void collector){
+        if(emitter.isDisposed()) return;
         if(!emitter.isDisposed()){
             super.visit(m, null);
             if(!alreadySentElements.contains(m)){
@@ -53,6 +56,7 @@ public class EmitterVisitor extends VoidVisitorAdapter<Void> {
 
     @Override
     public void visit(FieldDeclaration f, Void collector){
+        if(emitter.isDisposed()) return;
         if(!emitter.isDisposed()){
             super.visit(f, null);
             if(!alreadySentElements.contains(f)){
