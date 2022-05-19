@@ -42,5 +42,5 @@ public interface IProjectAnalyzer {
 	 *
 	 * @param callback
 	 */
-	Observable<?> analyzeProject(String srcProjectFolderPath, Map<String, Integer> m);
+	Observable<ProjectStructure> analyzeProject(String srcProjectFolderPath);
 }

@@ -14,6 +14,7 @@ import com.github.javaparser.StaticJavaParser;
 import com.github.javaparser.ast.CompilationUnit;
 import com.github.javaparser.utils.Pair;
 import io.reactivex.rxjava3.core.Observable;
+import io.reactivex.rxjava3.core.Scheduler;
 import io.reactivex.rxjava3.schedulers.Schedulers;
 
 import java.io.File;
@@ -22,6 +23,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.concurrent.Executors;
 
 public class ReactiveProjectAnalyzer implements IProjectAnalyzer{
 
@@ -100,35 +102,26 @@ public class ReactiveProjectAnalyzer implements IProjectAnalyzer{
     }
 
     @Override
-    public Observable<?> analyzeProject(String srcProjectFolderPath, Map<String, Integer> m) {
-        return Observable
-                .create(emitter -> {
-                    FileExplorer fileExplorer = new FileExplorer(srcProjectFolderPath);
-                    List<String> files = fileExplorer.getAllSubpackageFiles();
-                    EmitterVisitor fv = new EmitterVisitor(emitter);
+    public Observable<ProjectStructure> analyzeProject(String srcProjectFolderPath) {
+        FileExplorer fileExplorer = new FileExplorer(srcProjectFolderPath);
+        List<String> files = fileExplorer.getAllSubpackageFiles();
 
-                    for (String nameFile : files) {
-                        try {
-                            CompilationUnit cu = StaticJavaParser.parse(new File(nameFile));
-                            fv.visit(cu, null);
-                        } catch (FileNotFoundException e) {
-                            e.printStackTrace();
-                            emitter.onError(e);
-                        }
+        return Observable
+                .fromIterable(files)
+                .cast(String.class)
+                .observeOn(Schedulers.from(Executors.newFixedThreadPool(7)))
+                .map(filePath -> {
+                    CountVisitor cv = new CountVisitor();
+                    ProjectStructure collector = new ProjectStructure();
+
+                    try {
+                        CompilationUnit cu = StaticJavaParser.parse(new File(filePath));
+                        cv.visit(cu, collector);
+                    } catch (FileNotFoundException e) {
+                        e.printStackTrace();
                     }
-                    emitter.onComplete();
-                })
-                .observeOn(Schedulers.computation())
-                .map(elem ->{
-                    m.put("count", m.get("count")+1);
-                    String className = elem.getClass().getName();
-                    Integer value = m.get(className);
-                    if(value == null)
-                        m.put(className, 1);
-                    else {
-                        m.put(className, value + 1);
-                    }
-                    return new Pair<String, Integer>(className, m.get(className));
+
+                    return collector;
                 });
     }
 
