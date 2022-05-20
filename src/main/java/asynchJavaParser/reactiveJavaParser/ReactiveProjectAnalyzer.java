@@ -109,7 +109,7 @@ public class ReactiveProjectAnalyzer implements IProjectAnalyzer{
         return Observable
                 .fromIterable(files)
                 .cast(String.class)
-                .observeOn(Schedulers.from(Executors.newFixedThreadPool(7)))
+                .observeOn(Schedulers.from(Executors.newFixedThreadPool(Runtime.getRuntime().availableProcessors() + 1)))
                 .map(filePath -> {
                     CountVisitor cv = new CountVisitor();
                     ProjectStructure collector = new ProjectStructure();

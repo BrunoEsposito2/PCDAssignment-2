@@ -62,7 +62,14 @@ public class ProjectStructure {
         this.fieldsNr += p.getFieldsNr();
     }
 
-    public void printStructure(){
-        System.out.println("Packages: "+this.packagesNr+" Interfaces: "+this.interfacesNr+" Classes: "+this.classNr+" Methods: "+this.methodsNr+" Fields: "+this.fieldsNr);
+    @Override
+    public String toString() {
+        return "ProjectStructure{" +
+                "packagesNr=" + packagesNr +
+                ", interfacesNr=" + interfacesNr +
+                ", classNr=" + classNr +
+                ", methodsNr=" + methodsNr +
+                ", fieldsNr=" + fieldsNr +
+                '}';
     }
 }

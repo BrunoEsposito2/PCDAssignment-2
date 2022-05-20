@@ -33,7 +33,6 @@ public class User {
         Observable<ProjectStructure> ob = projectAnalyzer.analyzeProject("src/main/java");
         Disposable disposable = ob.subscribe(p -> {
             ps.addTo(p);
-            ps.printStructure();
         });
         /*try {
             Thread.sleep(500);
