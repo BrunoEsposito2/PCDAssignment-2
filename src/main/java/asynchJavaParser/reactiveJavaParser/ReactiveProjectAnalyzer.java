@@ -12,17 +12,12 @@ import asynchJavaParser.common.visitors.PackageVisitor;
 import asynchJavaParser.common.visitors.ProjectVisitor;
 import com.github.javaparser.StaticJavaParser;
 import com.github.javaparser.ast.CompilationUnit;
-import com.github.javaparser.utils.Pair;
 import io.reactivex.rxjava3.core.Observable;
-import io.reactivex.rxjava3.core.Scheduler;
 import io.reactivex.rxjava3.schedulers.Schedulers;
 
 import java.io.File;
 import java.io.FileNotFoundException;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Map;
-import java.util.Set;
 import java.util.concurrent.Executors;
 
 public class ReactiveProjectAnalyzer implements IProjectAnalyzer{
