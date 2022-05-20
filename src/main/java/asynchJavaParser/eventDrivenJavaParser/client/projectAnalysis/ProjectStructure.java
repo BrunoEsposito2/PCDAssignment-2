@@ -136,7 +136,7 @@ public class ProjectStructure {
                 ClassElem newClass = new ClassElem();
                 p.addInnerClass(className, newClass);
             }
-            p.getInnerClasses().get(className).setFieldDeclaration(f);
+            p.getInnerClasses().get(className).setFieldDeclaration(f.getVariables());
 
         } catch (NullPointerException| NoSuchElementException e){
             e.printStackTrace();

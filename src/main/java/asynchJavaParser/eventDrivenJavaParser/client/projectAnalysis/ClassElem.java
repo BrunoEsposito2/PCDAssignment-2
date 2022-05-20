@@ -1,21 +1,19 @@
 package asynchJavaParser.eventDrivenJavaParser.client.projectAnalysis;
 
+import com.github.javaparser.ast.NodeList;
 import com.github.javaparser.ast.body.ClassOrInterfaceDeclaration;
-import com.github.javaparser.ast.body.FieldDeclaration;
 import com.github.javaparser.ast.body.MethodDeclaration;
+import com.github.javaparser.ast.body.VariableDeclarator;
 
-import java.lang.reflect.Field;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Optional;
+import java.util.*;
 
 public class ClassElem {
-    private Optional<FieldDeclaration> fields;
+    private final List<NodeList<VariableDeclarator>> fields;
     private final Map<String, MethodDeclaration> methods;
     private Optional<ClassOrInterfaceDeclaration> elem;
 
     public ClassElem() {
-        this.fields = Optional.empty();
+        this.fields = new ArrayList<>();
         this.methods = new HashMap<>();
         this.elem = Optional.empty();
     }
@@ -24,9 +22,13 @@ public class ClassElem {
 
     public Optional<ClassOrInterfaceDeclaration> getElem(){return this.elem;}
 
-    public void setFieldDeclaration(FieldDeclaration f){this.fields = Optional.of(f);}
+    public void setFieldDeclaration(NodeList<VariableDeclarator> f) {
+        this.fields.add(f);
+    }
 
-    public Optional<FieldDeclaration> getFieldDeclaration(){return this.fields;}
+    public List<NodeList<VariableDeclarator>> getFields() {
+        return this.fields;
+    }
 
     public void addMethod(String name, MethodDeclaration m){this.methods.put(name, m);}
 

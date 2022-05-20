@@ -1,17 +1,20 @@
 package asynchJavaParser.eventDrivenJavaParser.client;
 
+import asynchJavaParser.common.reports.interfaces.*;
 import asynchJavaParser.eventDrivenJavaParser.client.projectAnalysis.ClassElem;
 import asynchJavaParser.eventDrivenJavaParser.client.projectAnalysis.InterfaceElem;
 import asynchJavaParser.eventDrivenJavaParser.client.projectAnalysis.PackageElem;
 import asynchJavaParser.eventDrivenJavaParser.client.projectAnalysis.ProjectStructure;
-import asynchJavaParser.common.reports.interfaces.*;
 import com.github.javaparser.ast.body.ClassOrInterfaceDeclaration;
 
 import javax.swing.*;
 import javax.swing.tree.DefaultMutableTreeNode;
 import javax.swing.tree.DefaultTreeCellRenderer;
 import javax.swing.tree.DefaultTreeModel;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
+import java.util.Optional;
 
 public class TreePanel extends JPanel {
 
@@ -201,18 +204,19 @@ public class TreePanel extends JPanel {
 
                     name.add(new DefaultMutableTreeNode(c.getFullyQualifiedName().get()  + " - SrcFullFileName"));
 
-                    if(Optional.of(v.getFieldDeclaration()).get().isPresent()){
+                    if(!Optional.of(v).get().getFields().isEmpty()){
                         List<DefaultMutableTreeNode> fieldsName = new ArrayList<>();
                         DefaultMutableTreeNode fieldNode = new DefaultMutableTreeNode("FIELDS");
 
                         name.add(fieldNode);
 
-                        Optional.of(v.getFieldDeclaration()).get().get().getVariables().forEach(f -> {
-                            DefaultMutableTreeNode nameNode = new DefaultMutableTreeNode(f.getName());
-                            DefaultMutableTreeNode typeNode = new DefaultMutableTreeNode(f.getType() + " - Type");
-                            fieldsName.add(nameNode);
-                            nameNode.add(typeNode);
-                            System.out.println(f.getName() + "-NAME");
+                        v.getFields().forEach(f -> {
+                            f.forEach(x -> {
+                                DefaultMutableTreeNode nameNode = new DefaultMutableTreeNode(x.getNameAsString());
+                                DefaultMutableTreeNode typeNode = new DefaultMutableTreeNode(x.getTypeAsString() + " - Type");
+                                fieldsName.add(nameNode);
+                                nameNode.add(typeNode);
+                            });
                         });
                         fieldsName.forEach(fn -> fieldNode.add(fn));
                     }
