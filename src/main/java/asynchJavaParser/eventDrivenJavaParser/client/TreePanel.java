@@ -1,5 +1,6 @@
 package asynchJavaParser.eventDrivenJavaParser.client;
 
+import asynchJavaParser.common.reports.PackageReport;
 import asynchJavaParser.common.reports.interfaces.*;
 import asynchJavaParser.eventDrivenJavaParser.client.projectAnalysis.ClassElem;
 import asynchJavaParser.eventDrivenJavaParser.client.projectAnalysis.InterfaceElem;
@@ -11,10 +12,10 @@ import javax.swing.*;
 import javax.swing.tree.DefaultMutableTreeNode;
 import javax.swing.tree.DefaultTreeCellRenderer;
 import javax.swing.tree.DefaultTreeModel;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
-import java.util.Optional;
+import java.sql.Array;
+import java.util.*;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 public class TreePanel extends JPanel {
 
@@ -139,17 +140,37 @@ public class TreePanel extends JPanel {
     public void updateProjectReport(final IProjectReport report, final DefaultMutableTreeNode addNode) {
         IProjectReport res = report;
         List<IPackageReport> packageInfo = new ArrayList<>();
+        Map<String, List<IPackageReport>> packageMap;
         packageInfo.addAll(res.getPackageReports());
 
         DefaultMutableTreeNode projectName;
         DefaultMutableTreeNode packageNode = new DefaultMutableTreeNode("PACKAGES");
+
 
         projectName = new DefaultMutableTreeNode(res.getMainClass() + " - MainClass");
         addNode.add(projectName);
 
         projectName.add(packageNode);
 
-        packageInfo.forEach(p -> updatePackageReport(p, packageNode));
+        packageMap = packageInfo.stream().collect(Collectors.groupingBy(x -> x.getSrcFullName()));
+
+        packageMap.forEach((k, v) -> {
+            DefaultMutableTreeNode classNode = new DefaultMutableTreeNode("CLASSES");
+            DefaultMutableTreeNode interfaceNode = new DefaultMutableTreeNode("INTERFACES");
+            DefaultMutableTreeNode pName = new DefaultMutableTreeNode(k);
+            packageNode.add(pName);
+
+            pName.add(classNode);
+            pName.add(interfaceNode);
+            v.forEach(x -> {
+                if (!x.getClassReports().isEmpty()){
+                    x.getClassReports().forEach(c -> updateClassReport(c,classNode));
+                }
+                if (!x.getInterfaceReports().isEmpty()) {
+                    x.getInterfaceReports().forEach(i -> updateInterfaceReport(i,interfaceNode));
+                }
+            });
+        });
     }
 
     public void dynamicUpdate(final ProjectStructure ps) {

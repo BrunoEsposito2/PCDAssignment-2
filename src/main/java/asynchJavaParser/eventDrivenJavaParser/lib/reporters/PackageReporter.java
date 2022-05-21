@@ -31,7 +31,7 @@ public class PackageReporter extends AbstractVerticle {
             res.fail("invalid path for Package Report");
             return;
         }
-        List<String> files = this.fileExplorer.getAllPackageFiles();
+        List<String> files = this.fileExplorer.getAllSubpackageFiles();
         IPackageReport packageReport = new PackageReport();
         for (String nameFile : files) {
             // System.out.println("nome file: " + nameFile); // for debug purposes
