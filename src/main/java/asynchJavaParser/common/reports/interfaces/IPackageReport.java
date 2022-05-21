@@ -2,15 +2,11 @@ package asynchJavaParser.common.reports.interfaces;
 
 import java.util.List;
 
-public interface IPackageReport {
-
-	void setSrcFullName(String srcFullName);
+public interface IPackageReport extends IReport {
 
 	void addClassReport(IClassReport cr);
 
 	void addInterfaceReport(IInterfaceReport ir);
-
-	String getSrcFullName();
 
 	List<IClassReport> getClassReports();
 

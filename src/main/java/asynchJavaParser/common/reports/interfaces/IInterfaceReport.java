@@ -2,17 +2,13 @@ package asynchJavaParser.common.reports.interfaces;
 
 import java.util.List;
 
-public interface IInterfaceReport {
+public interface IInterfaceReport extends IReport {
 
     void setFullInterfaceName(String fullInterfaceName);
-
-    void setSrcFullFileName(String srcFullFileName);
 
     void setMethodsInfo(List<IMethodInfo> methodsInfo);
 
     String getFullInterfaceName();
-
-    String getSrcFullFileName();
 
     List<IMethodInfo> getMethodsInfo();
 

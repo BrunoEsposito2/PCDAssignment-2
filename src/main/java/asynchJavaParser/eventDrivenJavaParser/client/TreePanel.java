@@ -1,6 +1,5 @@
 package asynchJavaParser.eventDrivenJavaParser.client;
 
-import asynchJavaParser.common.reports.PackageReport;
 import asynchJavaParser.common.reports.interfaces.*;
 import asynchJavaParser.eventDrivenJavaParser.client.projectAnalysis.ClassElem;
 import asynchJavaParser.eventDrivenJavaParser.client.projectAnalysis.InterfaceElem;
@@ -12,7 +11,6 @@ import javax.swing.*;
 import javax.swing.tree.DefaultMutableTreeNode;
 import javax.swing.tree.DefaultTreeCellRenderer;
 import javax.swing.tree.DefaultTreeModel;
-import java.sql.Array;
 import java.util.*;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
@@ -115,26 +113,34 @@ public class TreePanel extends JPanel {
 
     public void updatePackageReport(final IPackageReport report, final DefaultMutableTreeNode addNode) {
         IPackageReport res = report;
-        List<IClassReport> classInfo = new ArrayList<>();
-        List<IInterfaceReport> interfaceInfo = new ArrayList<>();
+        List<IReport> classInfo = new ArrayList<>();
+        List<IReport> interfaceInfo = new ArrayList<>();
+        Map<String, List<IReport>> files;
         res.getClassReports().forEach(c -> {
             classInfo.add(c);
         });
         res.getInterfaceReports().forEach(i -> interfaceInfo.add(i));
 
-        DefaultMutableTreeNode packageName;
-        DefaultMutableTreeNode classNode = new DefaultMutableTreeNode("CLASSES");
-        DefaultMutableTreeNode interfaceNode = new DefaultMutableTreeNode("INTERFACES");
+        files = Stream.concat(interfaceInfo.stream(), classInfo.stream())
+                .collect(Collectors.groupingBy(IReport::getSrcFullFileName));
 
-        packageName = new DefaultMutableTreeNode(res.getSrcFullName() + " - Package");
-        addNode.add(packageName);
+        files.forEach((k, v) -> {
+            DefaultMutableTreeNode classNode = new DefaultMutableTreeNode("CLASSES");
+            DefaultMutableTreeNode interfaceNode = new DefaultMutableTreeNode("INTERFACES");
+            DefaultMutableTreeNode packageNode = new DefaultMutableTreeNode(k + " - package");
 
-        packageName.add(classNode);
-        packageName.add(interfaceNode);
-
-        classInfo.forEach(c -> updateClassReport(c, classNode));
-
-        interfaceInfo.forEach(i -> updateInterfaceReport(i, interfaceNode));
+            packageNode.add(classNode);
+            packageNode.add(interfaceNode);
+            addNode.add(packageNode);
+            v.forEach(x -> {
+                if (String.valueOf(x.getClass()).contains("InterfaceReport")) {
+                    updateInterfaceReport((IInterfaceReport) x, interfaceNode);
+                }
+                if (String.valueOf(x.getClass()).contains("ClassReport")) {
+                    updateClassReport((IClassReport) x, classNode);
+                }
+            });
+        });
     }
 
     public void updateProjectReport(final IProjectReport report, final DefaultMutableTreeNode addNode) {
@@ -152,7 +158,7 @@ public class TreePanel extends JPanel {
 
         projectName.add(packageNode);
 
-        packageMap = packageInfo.stream().collect(Collectors.groupingBy(x -> x.getSrcFullName()));
+        packageMap = packageInfo.stream().collect(Collectors.groupingBy(x -> x.getSrcFullFileName()));
 
         packageMap.forEach((k, v) -> {
             DefaultMutableTreeNode classNode = new DefaultMutableTreeNode("CLASSES");

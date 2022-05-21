@@ -118,7 +118,7 @@ public class TreePanel extends JPanel {
         DefaultMutableTreeNode classNode = new DefaultMutableTreeNode("CLASSES");
         DefaultMutableTreeNode interfaceNode = new DefaultMutableTreeNode("INTERFACES");
 
-        packageName = new DefaultMutableTreeNode(res.getSrcFullName() + " - Package");
+        packageName = new DefaultMutableTreeNode(res.getSrcFullFileName() + " - Package");
         addNode.add(packageName);
 
         packageName.add(classNode);

@@ -23,7 +23,7 @@ public class PackageVisitor extends VoidVisitorAdapter<IPackageReport> implement
     @Override
     public void visit(PackageDeclaration pd, IPackageReport packageReport) {
         super.visit(pd, packageReport);
-        packageReport.setSrcFullName(pd.getNameAsString());
+        packageReport.setSrcFullFileName(pd.getNameAsString());
         this.classReport.setSrcFullFileName(pd.getNameAsString());
         this.interfaceReport.setSrcFullFileName(pd.getNameAsString());
     }

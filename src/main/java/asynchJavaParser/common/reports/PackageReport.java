@@ -19,7 +19,7 @@ public class PackageReport implements IPackageReport {
   }
 
   @Override
-  public void setSrcFullName(String srcFullName) {
+  public void setSrcFullFileName(String srcFullName) {
     this.packageName = srcFullName;
   }
 
@@ -34,7 +34,7 @@ public class PackageReport implements IPackageReport {
   }
 
   @Override
-  public String getSrcFullName() {
+  public String getSrcFullFileName() {
     return this.packageName;
   }
 
