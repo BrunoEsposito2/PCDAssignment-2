@@ -15,6 +15,7 @@ public class OpenFolderChooser implements ActionListener {
     @Override
     public void actionPerformed(ActionEvent e) {
         try {
+            this.view.getTreeView().setVisible(true);
             this.view.resetView();
             JFileChooser fileChooser = new JFileChooser();
             fileChooser.setCurrentDirectory(new java.io.File("./src/"));

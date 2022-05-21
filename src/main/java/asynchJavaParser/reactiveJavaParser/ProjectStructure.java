@@ -3,13 +3,13 @@ package asynchJavaParser.reactiveJavaParser;
 public class ProjectStructure {
     private int packagesNr;
     private int interfacesNr;
-    private int classNr;
+    private int classesNr;
     private int methodsNr;
     private int fieldsNr;
 
     public ProjectStructure() {
         this.packagesNr = 0;
-        this.classNr = 0;
+        this.classesNr = 0;
         this.methodsNr = 0;
         this.fieldsNr = 0;
     }
@@ -23,7 +23,7 @@ public class ProjectStructure {
     }
 
     public void incrementClasses(){
-        this.classNr++;
+        this.classesNr++;
     }
 
     public void incrementMethods(){
@@ -42,8 +42,8 @@ public class ProjectStructure {
         return interfacesNr;
     }
 
-    public int getClassNr() {
-        return classNr;
+    public int getClassesNr() {
+        return classesNr;
     }
 
     public int getMethodsNr() {
@@ -57,7 +57,7 @@ public class ProjectStructure {
     public void addTo(ProjectStructure p){
         this.packagesNr += p.getPackagesNr();
         this.interfacesNr += p.getInterfacesNr();
-        this.classNr += p.getClassNr();
+        this.classesNr += p.getClassesNr();
         this.methodsNr += p.getMethodsNr();
         this.fieldsNr += p.getFieldsNr();
     }
@@ -67,7 +67,7 @@ public class ProjectStructure {
         return "ProjectStructure{" +
                 "packagesNr=" + packagesNr +
                 ", interfacesNr=" + interfacesNr +
-                ", classNr=" + classNr +
+                ", classesNr=" + classesNr +
                 ", methodsNr=" + methodsNr +
                 ", fieldsNr=" + fieldsNr +
                 '}';

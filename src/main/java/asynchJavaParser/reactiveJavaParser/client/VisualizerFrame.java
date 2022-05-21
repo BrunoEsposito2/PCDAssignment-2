@@ -1,11 +1,6 @@
 package asynchJavaParser.reactiveJavaParser.client;
 
-import asynchJavaParser.eventDrivenJavaParser.lib.EDProjectAnalyzer;
-import asynchJavaParser.reactiveJavaParser.IProjectAnalyzer;
 import asynchJavaParser.reactiveJavaParser.ReactiveProjectAnalyzer;
-import io.vertx.core.Vertx;
-import io.vertx.core.eventbus.EventBus;
-
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
 import java.awt.*;
@@ -21,9 +16,7 @@ public class VisualizerFrame extends JFrame {
 
     private JTextField nameDirectory;
 
-    private JLabel status;
-
-    private JLabel totalAnalyzed;
+    private JTextArea infoArea;
 
     private JPanel viewPanel;
 
@@ -46,12 +39,8 @@ public class VisualizerFrame extends JFrame {
         return this.nameDirectory;
     }
 
-    public JLabel getStatus() {
-        return this.status;
-    }
-
-    public JLabel getTotalAnalyzed(){
-        return  this.totalAnalyzed;
+    public JTextArea getInfoArea(){
+        return this.infoArea;
     }
 
     public Map<String, JButton> getMethodButtons() {
@@ -66,6 +55,10 @@ public class VisualizerFrame extends JFrame {
         return this.treePanel;
     }
 
+    public JScrollPane getTreeView(){
+        return this.treeView;
+    }
+
     public void changeView(final String path) {
         getMethodButtons().forEach((k, v) -> v.setEnabled(true));
         this.nameDirectory.setText(path);
@@ -74,21 +67,11 @@ public class VisualizerFrame extends JFrame {
     public void resetView() {
         this.methodButtons.forEach((k, v) -> v.setEnabled(false));
         this.nameDirectory.setText("...");
-        this.status.setText("");
-        this.totalAnalyzed.setText("");
+        this.infoArea.setVisible(false);
     }
 
     public void resetTree() {
-        this.treePanel.reset();
-    }
-
-    public void errorMessage(final String error) {
-        int ret = JOptionPane.showOptionDialog(null, error, "ERROR", JOptionPane.DEFAULT_OPTION,
-                JOptionPane.INFORMATION_MESSAGE, null, null, null);
-
-        if(ret == 0){
-            resetView();
-        }
+        this.treePanel.resetTree();
     }
 
     public void display() {
@@ -134,12 +117,6 @@ public class VisualizerFrame extends JFrame {
         JButton analyzeProject = new JButton("analyzeProject");
         analyzeProject.addActionListener(new AnalyzeProject(this));
 
-        this.totalAnalyzed = new JLabel();
-        this.totalAnalyzed.setAlignmentX(Component.CENTER_ALIGNMENT);
-
-        this.status = new JLabel();
-        this.status.setAlignmentX(Component.CENTER_ALIGNMENT);
-
         this.methodButtons = new HashMap<>();
         this.methodButtons.put(getClassReport.getText(), getClassReport);
         this.methodButtons.put(getPackageReport.getText(), getPackageReport);
@@ -150,13 +127,15 @@ public class VisualizerFrame extends JFrame {
         buttonPanel.add(getPackageReport);
         buttonPanel.add(getProjectReport);
         buttonPanel.add(analyzeProject);
-        buttonPanel.add(this.totalAnalyzed);
-        buttonPanel.add(this.status);
 
         // CENTER
         this.treePanel = new TreePanel();
         this.treeView = new JScrollPane(this.treePanel.getTree());
         this.treePanel.add(this.treeView);
+
+        this.infoArea = new JTextArea();
+
+        this.treePanel.add(this.infoArea);
 
         resetView();
 

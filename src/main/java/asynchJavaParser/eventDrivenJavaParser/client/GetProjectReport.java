@@ -22,10 +22,9 @@ public class GetProjectReport implements ActionListener {
         Future<IProjectReport> future = this.view.getLib().getProjectReport(this.view.getNameDirectory().getText());
         future.onSuccess(res -> {
             IProjectReport report = res;
-            this.view.getTreePanel().update(report, this.view.getTreePanel().getRoot());
+            this.view.getTreePanel().updateProjectReport(report, this.view.getTreePanel().getRoot());
         });
         future.onFailure(res -> {
-            System.out.println("ERROR");
             this.view.errorMessage("Error!!! Select a project");
         });
     }

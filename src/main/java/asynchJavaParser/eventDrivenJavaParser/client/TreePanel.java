@@ -34,14 +34,14 @@ public class TreePanel extends JPanel {
         return this.root;
     }
 
-    public void reset() {
+    public void resetTree() {
         DefaultTreeModel model = (DefaultTreeModel) this.tree.getModel();
         DefaultMutableTreeNode treeRoot = (DefaultMutableTreeNode) model.getRoot();
         treeRoot.removeAllChildren();
         model.reload();
     }
 
-    public void update(final IClassReport report, final DefaultMutableTreeNode addNode) {
+    public void updateClassReport(final IClassReport report, final DefaultMutableTreeNode addNode) {
         IClassReport res = report;
         List<IMethodInfo> methodInfo = new ArrayList<>();
         List<IFieldInfo> fieldInfo = new ArrayList<>();
@@ -83,7 +83,7 @@ public class TreePanel extends JPanel {
         methodName.forEach(m -> methodNode.add(m));
     }
 
-    public void update(final IInterfaceReport report, final DefaultMutableTreeNode addNode) {
+    public void updateInterfaceReport(final IInterfaceReport report, final DefaultMutableTreeNode addNode) {
         IInterfaceReport res = report;
         List<IMethodInfo> methodInfo = new ArrayList<>();
         methodInfo.addAll(res.getMethodsInfo());
@@ -112,13 +112,12 @@ public class TreePanel extends JPanel {
         methodName.forEach(m -> methodNode.add(m));
     }
 
-    public void update(final IPackageReport report, final DefaultMutableTreeNode addNode) {
+    public void updatePackageReport(final IPackageReport report, final DefaultMutableTreeNode addNode) {
         IPackageReport res = report;
         List<IClassReport> classInfo = new ArrayList<>();
         List<IInterfaceReport> interfaceInfo = new ArrayList<>();
         res.getClassReports().forEach(c -> {
             classInfo.add(c);
-            System.out.println(c);
         });
         res.getInterfaceReports().forEach(i -> interfaceInfo.add(i));
 
@@ -132,12 +131,12 @@ public class TreePanel extends JPanel {
         packageName.add(classNode);
         packageName.add(interfaceNode);
 
-        classInfo.forEach(c -> update(c, classNode));
+        classInfo.forEach(c -> updateClassReport(c, classNode));
 
-        interfaceInfo.forEach(i -> update(i, interfaceNode));
+        interfaceInfo.forEach(i -> updateInterfaceReport(i, interfaceNode));
     }
 
-    public void update(final IProjectReport report, final DefaultMutableTreeNode addNode) {
+    public void updateProjectReport(final IProjectReport report, final DefaultMutableTreeNode addNode) {
         IProjectReport res = report;
         List<IPackageReport> packageInfo = new ArrayList<>();
         packageInfo.addAll(res.getPackageReports());
@@ -150,12 +149,12 @@ public class TreePanel extends JPanel {
 
         projectName.add(packageNode);
 
-        packageInfo.forEach(p -> update(p, packageNode));
+        packageInfo.forEach(p -> updatePackageReport(p, packageNode));
     }
 
     public void dynamicUpdate(final ProjectStructure ps) {
         PackageElem psRoot = ps.getRoot();
-        reset();
+        resetTree();
 
         DefaultMutableTreeNode packageNode = new DefaultMutableTreeNode("PACKAGES");
         DefaultMutableTreeNode classNode = new DefaultMutableTreeNode("CLASSES");
@@ -179,7 +178,7 @@ public class TreePanel extends JPanel {
 
     private void createTree() {
         setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
-        this.root = new DefaultMutableTreeNode("Tree");
+        this.root = new DefaultMutableTreeNode("* Tree *");
         DefaultTreeCellRenderer render = new DefaultTreeCellRenderer();
         render.setLeafIcon(null);
         render.setOpenIcon(null);

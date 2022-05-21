@@ -90,7 +90,7 @@ public class VisualizerFrame extends JFrame {
     }
 
     public void resetTree() {
-        this.treePanel.reset();
+        this.treePanel.resetTree();
     }
 
     public void errorMessage(final String error) {

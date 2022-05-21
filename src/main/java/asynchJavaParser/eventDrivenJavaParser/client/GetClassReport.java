@@ -22,10 +22,9 @@ public class GetClassReport implements ActionListener {
         Future<IClassReport> future = this.view.getLib().getClassReport(this.view.getNameDirectory().getText());
         future.onSuccess(res -> {
             IClassReport report = res;
-            this.view.getTreePanel().update(report, this.view.getTreePanel().getRoot());
+            this.view.getTreePanel().updateClassReport(report, this.view.getTreePanel().getRoot());
         });
         future.onFailure(res -> {
-            System.out.println("ERROR");
             this.view.errorMessage("Error!!! Select a Java file");
         });
     }

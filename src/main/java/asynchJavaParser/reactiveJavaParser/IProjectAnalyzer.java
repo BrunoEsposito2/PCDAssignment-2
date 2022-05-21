@@ -40,7 +40,7 @@ public interface IProjectAnalyzer {
 	 * Async function that analyze a project given the full path of the project folder,
 	 * executing the callback each time a project element is found
 	 *
-	 * @param callback
+	 * @param srcProjectFolderPath
 	 */
 	Observable<ProjectStructure> analyzeProject(String srcProjectFolderPath);
 }
