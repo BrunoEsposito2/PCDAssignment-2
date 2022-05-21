@@ -113,14 +113,9 @@ public class TreePanel extends JPanel {
 
     public void updatePackageReport(final IPackageReport report, final DefaultMutableTreeNode addNode) {
         IPackageReport res = report;
-        List<IReport> classInfo = new ArrayList<>();
-        List<IReport> interfaceInfo = new ArrayList<>();
         Map<String, List<IReport>> files;
 
-        classInfo.addAll(res.getClassReports());
-        interfaceInfo.addAll(res.getInterfaceReports());
-
-        files = Stream.concat(interfaceInfo.stream(), classInfo.stream())
+        files = Stream.concat(res.getInterfaceReports().stream(), res.getClassReports().stream())
                 .collect(Collectors.groupingBy(IReport::getSrcFullFileName));
 
         files.forEach((k, v) -> {
