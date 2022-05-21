@@ -116,10 +116,9 @@ public class TreePanel extends JPanel {
         List<IReport> classInfo = new ArrayList<>();
         List<IReport> interfaceInfo = new ArrayList<>();
         Map<String, List<IReport>> files;
-        res.getClassReports().forEach(c -> {
-            classInfo.add(c);
-        });
-        res.getInterfaceReports().forEach(i -> interfaceInfo.add(i));
+
+        classInfo.addAll(res.getClassReports());
+        interfaceInfo.addAll(res.getInterfaceReports());
 
         files = Stream.concat(interfaceInfo.stream(), classInfo.stream())
                 .collect(Collectors.groupingBy(IReport::getSrcFullFileName));
