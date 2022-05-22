@@ -6,6 +6,10 @@ import io.vertx.core.Future;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
+/**
+ * Class to handle the action on getProjectReport button
+ * calling the getProjectReport library function
+ * */
 public class GetProjectReport implements ActionListener {
 
     private final VisualizerFrame view;

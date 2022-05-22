@@ -6,6 +6,9 @@ import javax.swing.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
+/**
+ * Class to handle the action on fileChooser button
+ * */
 public class OpenFolderChooser implements ActionListener {
 
     private final VisualizerFrame view;

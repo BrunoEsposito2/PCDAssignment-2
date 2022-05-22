@@ -12,6 +12,9 @@ import java.lang.reflect.InvocationTargetException;
 import java.util.HashMap;
 import java.util.Map;
 
+/**
+ * Class to create and modify the entire GUI
+ * */
 public class VisualizerFrame extends JFrame {
 
     private static final long serialVersionUID = 1L;
@@ -117,7 +120,7 @@ public class VisualizerFrame extends JFrame {
 
     private void createView() {
         this.viewPanel = new JPanel(new BorderLayout());
-        // NORTH
+        // NORTH Panel
         JPanel managementPanel = new JPanel();
         managementPanel.setLayout(new BoxLayout(managementPanel, BoxLayout.Y_AXIS));
         managementPanel.setBorder(new EmptyBorder(30, 15, 30, 15));
@@ -138,7 +141,7 @@ public class VisualizerFrame extends JFrame {
         managementPanel.add(this.stop);
         managementPanel.add(this.nameDirectory);
 
-        // WEST
+        // WEST Panel
         JPanel buttonPanel = new JPanel(new GridLayout(0, 1, 10, 40));
         buttonPanel.setBorder(new EmptyBorder(40, 15, 40, 15));
 
@@ -173,7 +176,7 @@ public class VisualizerFrame extends JFrame {
         buttonPanel.add(this.totalAnalyzed);
         buttonPanel.add(this.status);
 
-        // CENTER
+        // CENTER Panel
         this.treePanelController = new TreePanelController();
         this.treeView = new JScrollPane(this.treePanelController.getTree());
         this.treePanelController.add(this.treeView);

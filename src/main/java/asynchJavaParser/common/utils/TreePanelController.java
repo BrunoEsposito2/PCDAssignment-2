@@ -15,6 +15,10 @@ import java.util.*;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+/**
+ * Class to create and modify a JTree component
+ * according to the structure of the class/interface/package/project provided
+ * */
 public class TreePanelController extends JPanel {
 
     private JTree tree;
@@ -40,6 +44,7 @@ public class TreePanelController extends JPanel {
         model.reload();
     }
 
+    // tree update for getInterfaceReport if selected a class
     public void updateClassReport(final IClassReport report, final DefaultMutableTreeNode addNode) {
         IClassReport res = report;
         List<IMethodInfo> methodInfo = new ArrayList<>();
@@ -82,6 +87,7 @@ public class TreePanelController extends JPanel {
         methodName.forEach(m -> methodNode.add(m));
     }
 
+    // tree update for getClassReport if selected an interface
     public void updateInterfaceReport(final IInterfaceReport report, final DefaultMutableTreeNode addNode) {
         IInterfaceReport res = report;
         List<IMethodInfo> methodInfo = new ArrayList<>();
@@ -111,6 +117,7 @@ public class TreePanelController extends JPanel {
         methodName.forEach(m -> methodNode.add(m));
     }
 
+    // tree update for getPackageReport
     public void updatePackageReport(final IPackageReport report, final DefaultMutableTreeNode addNode) {
         IPackageReport res = report;
         Map<String, List<IReport>> files;
@@ -137,6 +144,7 @@ public class TreePanelController extends JPanel {
         });
     }
 
+    // tree update for getProjectReport
     public void updateProjectReport(final IProjectReport report, final DefaultMutableTreeNode addNode) {
         IProjectReport res = report;
         List<IPackageReport> packageInfo = new ArrayList<>();
@@ -173,6 +181,7 @@ public class TreePanelController extends JPanel {
         });
     }
 
+    // tree dynamic update for analyzeProject in eventDrivenJavaParser
     public void dynamicUpdate(final ProjectStructure ps) {
         PackageElem psRoot = ps.getRoot();
         resetTree();

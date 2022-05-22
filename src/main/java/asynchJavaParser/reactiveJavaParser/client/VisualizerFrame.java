@@ -9,6 +9,9 @@ import java.util.HashMap;
 import java.util.Map;
 import asynchJavaParser.common.utils.TreePanelController;
 
+/**
+ * Class to create and modify the entire GUI
+ * */
 public class VisualizerFrame extends JFrame {
 
     private static final long serialVersionUID = 1L;

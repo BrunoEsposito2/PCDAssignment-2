@@ -3,6 +3,10 @@ package asynchJavaParser.eventDrivenJavaParser.client;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
+/**
+ * Class to handle the action on stopEvents button
+ * calling the stopAnalyzeProject library function
+ * */
 public class StopEvents implements ActionListener {
 
     private final VisualizerFrame view;

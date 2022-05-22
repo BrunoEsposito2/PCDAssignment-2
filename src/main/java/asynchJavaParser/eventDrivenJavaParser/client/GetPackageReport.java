@@ -6,6 +6,10 @@ import io.vertx.core.Future;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
+/**
+ * Class to handle the action on getPackageReport button
+ * calling the getPackageReport library function
+ * */
 public class GetPackageReport implements ActionListener {
 
     private final VisualizerFrame view;

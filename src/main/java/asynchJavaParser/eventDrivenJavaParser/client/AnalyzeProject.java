@@ -11,6 +11,10 @@ import io.vertx.core.eventbus.MessageConsumer;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
+/**
+ * Class to handle the action on analyzeProject button
+ * calling the analyzeProject library function
+ * */
 public class AnalyzeProject implements ActionListener {
 
     private final VisualizerFrame view;

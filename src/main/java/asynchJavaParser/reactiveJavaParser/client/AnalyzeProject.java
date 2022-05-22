@@ -1,11 +1,14 @@
 package asynchJavaParser.reactiveJavaParser.client;
 
-import asynchJavaParser.common.reports.interfaces.IPackageReport;
 import asynchJavaParser.reactiveJavaParser.ProjectStructure;
 import io.reactivex.rxjava3.core.Observable;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
+/**
+ * Class to handle the action on analyzeProject button
+ * calling the analyzeProject library function
+ * */
 public class AnalyzeProject implements ActionListener {
 
     private final VisualizerFrame view;

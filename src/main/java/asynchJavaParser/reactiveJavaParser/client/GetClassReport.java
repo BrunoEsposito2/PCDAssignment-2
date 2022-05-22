@@ -6,6 +6,10 @@ import io.reactivex.rxjava3.core.Observable;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
+/**
+ * Class to handle the action on getClassReport button
+ * calling the getClassReport library function
+ * */
 public class GetClassReport implements ActionListener {
 
     private final VisualizerFrame view;
