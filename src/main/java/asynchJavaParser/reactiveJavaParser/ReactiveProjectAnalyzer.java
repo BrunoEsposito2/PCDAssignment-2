@@ -20,6 +20,7 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.util.List;
 import java.util.concurrent.Executors;
+import java.util.stream.Collectors;
 
 public class ReactiveProjectAnalyzer implements IProjectAnalyzer{
 
@@ -100,25 +101,22 @@ public class ReactiveProjectAnalyzer implements IProjectAnalyzer{
     @Override
     public Observable<ProjectStructure> analyzeProject(String srcProjectFolderPath) {
         FileExplorer fileExplorer = new FileExplorer(srcProjectFolderPath);
-        List<String> files = fileExplorer.getAllSubpackageFiles();
-
-        files.addAll(Formatter.extractPackages(files));
+        List<String> files = fileExplorer.getAllSubpackageFiles()
+                .stream().sorted().collect(Collectors.toList());
+        CountVisitor cv = new CountVisitor(Formatter.extractPackages(files));
 
         return Observable
                 .fromIterable(files)
                 .cast(String.class)
                 .observeOn(Schedulers.from(Executors.newFixedThreadPool(Runtime.getRuntime().availableProcessors() + 1)))
                 .map(filePath -> {
-                    CountVisitor cv = new CountVisitor();
                     ProjectStructure collector = new ProjectStructure();
-
                     try {
                         CompilationUnit cu = StaticJavaParser.parse(new File(filePath));
                         cv.visit(cu, collector);
                     } catch (FileNotFoundException e) {
                         e.printStackTrace();
                     }
-
                     return collector;
                 });
     }

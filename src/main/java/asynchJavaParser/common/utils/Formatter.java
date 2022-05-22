@@ -23,7 +23,7 @@ public class Formatter {
             String packageName = "";
             List<String> fileName = List.of(f.split(Pattern.quote("\\")));
             for (int i = 0; i <= fileName.size() - 2; i++) {
-                packageName += "\\"+ fileName.get(i);
+                packageName += fileName.get(i) + ".";
             }
             pkgs.add(packageName);
         });
