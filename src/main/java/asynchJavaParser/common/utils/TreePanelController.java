@@ -187,9 +187,6 @@ public class TreePanelController extends JPanel {
         resetTree();
 
         DefaultMutableTreeNode packageNode = new DefaultMutableTreeNode("PACKAGES");
-        DefaultMutableTreeNode classNode = new DefaultMutableTreeNode("CLASSES");
-        DefaultMutableTreeNode interfaceNode = new DefaultMutableTreeNode("INTERFACES");
-
         Map<String, PackageElem> innerPackages;
 
         if(!psRoot.getInnerPackages().isEmpty()){
@@ -202,16 +199,8 @@ public class TreePanelController extends JPanel {
             });
         }
 
-        if(!psRoot.getInnerClasses().isEmpty()) {
-            this.root.add(classNode);
-        }
-
-        if(!psRoot.getInnerInterfaces().isEmpty()) {
-            this.root.add(interfaceNode);
-        }
-
-        classUpdate(psRoot, classNode);
-        interfaceUpdate(psRoot, interfaceNode);
+        classUpdate(psRoot, this.root);
+        interfaceUpdate(psRoot, this.root);
     }
 
     private void createTree() {
