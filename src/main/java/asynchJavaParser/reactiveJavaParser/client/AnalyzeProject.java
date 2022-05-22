@@ -2,6 +2,8 @@ package asynchJavaParser.reactiveJavaParser.client;
 
 import asynchJavaParser.reactiveJavaParser.ProjectStructure;
 import io.reactivex.rxjava3.core.Observable;
+import io.reactivex.rxjava3.disposables.Disposable;
+
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
@@ -15,6 +17,8 @@ public class AnalyzeProject implements ActionListener {
 
     private ProjectStructure ps;
 
+    private Disposable disposable;
+
     public AnalyzeProject(final VisualizerFrame frame) {
         this.view = frame;
     }
@@ -24,6 +28,7 @@ public class AnalyzeProject implements ActionListener {
         String path = this.view.getNameDirectory().getText();
         this.ps = new ProjectStructure();
 
+        this.view.getStopButton().setEnabled(true);
         this.view.getTreeView().setVisible(false);
         this.view.getInfoArea().setVisible(true);
         this.view.resetTree();
@@ -31,7 +36,7 @@ public class AnalyzeProject implements ActionListener {
 
         if(!path.contains(".java")){
             Observable<ProjectStructure> ob = this.view.getLib().analyzeProject(path);
-            ob.subscribe(p -> {
+            disposable = ob.subscribe(p -> {
                 ps.addTo(p);
                 this.view.getInfoArea().setText("DIRECTORY ->   " + this.view.getNameDirectory().getText() + "\n");
                 this.view.getInfoArea().append("PACKAGES NR:    " + ps.getPackagesNr() + "\n");
@@ -43,5 +48,9 @@ public class AnalyzeProject implements ActionListener {
         }else{
             this.view.errorMessage("Error!!! Select a project");
         }
+    }
+
+    public Disposable getDisposable(){
+        return this.disposable;
     }
 }

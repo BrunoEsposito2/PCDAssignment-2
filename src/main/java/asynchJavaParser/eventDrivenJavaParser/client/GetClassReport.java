@@ -21,7 +21,7 @@ public class GetClassReport implements ActionListener {
     @Override
     public void actionPerformed(ActionEvent e) {
         this.view.resetTree();
-        this.view.getStopButton().setEnabled(true);
+        this.view.getStopButton().setEnabled(false);
         this.view.getMethodButtons().get("getClassReport").setEnabled(false);
         Future<IClassReport> future = this.view.getLib().getClassReport(this.view.getNameDirectory().getText());
         future.onSuccess(res -> {

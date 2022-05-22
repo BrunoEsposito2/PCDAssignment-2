@@ -28,7 +28,11 @@ public class VisualizerFrame extends JFrame {
 
     private JScrollPane treeView;
 
+    private JButton stop;
+
     private Map<String, JButton> methodButtons;
+
+    private AnalyzeProject analyzeProject;
 
     public VisualizerFrame() {
         setTitle("ProjectChooserDemo");
@@ -37,6 +41,14 @@ public class VisualizerFrame extends JFrame {
         createView();
         this.lib = new ReactiveProjectAnalyzer();
         setDefaultCloseOperation(EXIT_ON_CLOSE);
+    }
+
+    public AnalyzeProject getAnalyzeProject(){
+        return this.analyzeProject;
+    }
+
+    public JButton getStopButton(){
+        return this.stop;
     }
 
     public JTextField getNameDirectory() {
@@ -71,7 +83,9 @@ public class VisualizerFrame extends JFrame {
     public void resetView() {
         this.methodButtons.forEach((k, v) -> v.setEnabled(false));
         this.nameDirectory.setText("...");
+        this.stop.setEnabled(false);
         this.infoArea.setVisible(false);
+        this.treeView.setVisible(true);
     }
 
     public void resetTree() {
@@ -108,10 +122,15 @@ public class VisualizerFrame extends JFrame {
         openFileChooser.addActionListener(new OpenFolderChooser(this));
         openFileChooser.setAlignmentX(Component.CENTER_ALIGNMENT);
 
+        this.stop = new JButton("STOP");
+        this.stop.addActionListener(new StopEvents(this));
+        this.stop.setAlignmentX(Component.CENTER_ALIGNMENT);
+
         this.nameDirectory = new JTextField();
         this.nameDirectory.setAlignmentX(Component.CENTER_ALIGNMENT);
 
         managementPanel.add(openFileChooser);
+        managementPanel.add(this.stop);
         managementPanel.add(this.nameDirectory);
 
         // WEST
@@ -127,19 +146,20 @@ public class VisualizerFrame extends JFrame {
         JButton getProjectReport = new JButton("getProjectReport");
         getProjectReport.addActionListener(new GetProjectReport(this));
 
-        JButton analyzeProject = new JButton("analyzeProject");
-        analyzeProject.addActionListener(new AnalyzeProject(this));
+        JButton analyzeProjectButton = new JButton("analyzeProject");
+        this.analyzeProject = new AnalyzeProject(this);
+        analyzeProjectButton.addActionListener(this.analyzeProject);
 
         this.methodButtons = new HashMap<>();
         this.methodButtons.put(getClassReport.getText(), getClassReport);
         this.methodButtons.put(getPackageReport.getText(), getPackageReport);
         this.methodButtons.put(getProjectReport.getText(), getProjectReport);
-        this.methodButtons.put(analyzeProject.getText(), analyzeProject);
+        this.methodButtons.put(analyzeProjectButton.getText(), analyzeProjectButton);
 
         buttonPanel.add(getClassReport);
         buttonPanel.add(getPackageReport);
         buttonPanel.add(getProjectReport);
-        buttonPanel.add(analyzeProject);
+        buttonPanel.add(analyzeProjectButton);
 
         // CENTER
         this.treePanelController = new TreePanelController();

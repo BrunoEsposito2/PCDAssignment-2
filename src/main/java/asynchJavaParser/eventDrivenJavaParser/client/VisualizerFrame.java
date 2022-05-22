@@ -91,6 +91,7 @@ public class VisualizerFrame extends JFrame {
         this.nameDirectory.setText("...");
         this.status.setText("");
         this.totalAnalyzed.setText("");
+        this.stop.setEnabled(false);
     }
 
     public void resetTree() {
