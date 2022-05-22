@@ -37,7 +37,7 @@ public class ProjectReporter extends AbstractVerticle {
         for (String p : packages) {
             // System.out.println("package and its content: " + p); // for debug purposes
             try {
-                log("Project reporter started...");
+                // log("Project reporter started...");
                 cu = StaticJavaParser.parse(new File(p));
                 ProjectVisitor visitor = new ProjectVisitor();
                 visitor.visit(cu, projectReport);

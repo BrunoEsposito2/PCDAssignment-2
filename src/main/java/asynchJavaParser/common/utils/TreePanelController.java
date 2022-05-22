@@ -202,6 +202,14 @@ public class TreePanelController extends JPanel {
             });
         }
 
+        if(!psRoot.getInnerClasses().isEmpty()) {
+            this.root.add(classNode);
+        }
+
+        if(!psRoot.getInnerInterfaces().isEmpty()) {
+            this.root.add(interfaceNode);
+        }
+
         classUpdate(psRoot, classNode);
         interfaceUpdate(psRoot, interfaceNode);
     }

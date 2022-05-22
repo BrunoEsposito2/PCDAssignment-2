@@ -46,7 +46,7 @@ public class ProjectStructure {
 
     public void putClassOrInterface(ClassOrInterfaceDeclaration c){
         String fullPath = c.getFullyQualifiedName().get();
-        System.out.println("fp: "+fullPath);
+        // System.out.println("fp: "+fullPath);
         String[] path = fullPath.split("[.]");
         PackageElem p = reachPackage(path);
 
