@@ -26,8 +26,7 @@ public class OpenFolderChooser implements ActionListener {
             fileChooser.setAcceptAllFileFilterUsed(false);
             int n = fileChooser.showOpenDialog(this.view);
             if (n == JFileChooser.APPROVE_OPTION) {
-                Formatter formatter = new Formatter();
-                this.view.changeView(formatter.formatPath(fileChooser.getSelectedFile().getPath()));
+                this.view.changeView(Formatter.formatPath(fileChooser.getSelectedFile().getPath()));
             }
         } catch (Exception ex) {
         }

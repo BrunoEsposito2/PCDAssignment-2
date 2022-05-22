@@ -7,6 +7,7 @@ import asynchJavaParser.common.reports.interfaces.IClassReport;
 import asynchJavaParser.common.reports.interfaces.IPackageReport;
 import asynchJavaParser.common.reports.interfaces.IProjectReport;
 import asynchJavaParser.common.utils.FileExplorer;
+import asynchJavaParser.common.utils.Formatter;
 import asynchJavaParser.common.visitors.ClassVisitor;
 import asynchJavaParser.common.visitors.PackageVisitor;
 import asynchJavaParser.common.visitors.ProjectVisitor;
@@ -100,6 +101,8 @@ public class ReactiveProjectAnalyzer implements IProjectAnalyzer{
     public Observable<ProjectStructure> analyzeProject(String srcProjectFolderPath) {
         FileExplorer fileExplorer = new FileExplorer(srcProjectFolderPath);
         List<String> files = fileExplorer.getAllSubpackageFiles();
+
+        files.addAll(Formatter.extractPackages(files));
 
         return Observable
                 .fromIterable(files)
