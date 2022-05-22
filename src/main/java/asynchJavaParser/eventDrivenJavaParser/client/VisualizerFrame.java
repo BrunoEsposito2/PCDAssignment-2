@@ -1,5 +1,6 @@
 package asynchJavaParser.eventDrivenJavaParser.client;
 
+import asynchJavaParser.common.utils.TreePanelController;
 import asynchJavaParser.eventDrivenJavaParser.lib.EDProjectAnalyzer;
 import io.vertx.core.Vertx;
 import io.vertx.core.eventbus.EventBus;
@@ -27,7 +28,7 @@ public class VisualizerFrame extends JFrame {
 
     private JPanel viewPanel;
 
-    private TreePanel treePanel;
+    private TreePanelController treePanelController;
 
     private JScrollPane treeView;
 
@@ -65,8 +66,8 @@ public class VisualizerFrame extends JFrame {
         return this.lib;
     }
 
-    public TreePanel getTreePanel() {
-        return this.treePanel;
+    public TreePanelController getTreePanel() {
+        return this.treePanelController;
     }
 
     public JButton getStopButton() {
@@ -90,7 +91,7 @@ public class VisualizerFrame extends JFrame {
     }
 
     public void resetTree() {
-        this.treePanel.resetTree();
+        this.treePanelController.resetTree();
     }
 
     public void errorMessage(final String error) {
@@ -173,15 +174,15 @@ public class VisualizerFrame extends JFrame {
         buttonPanel.add(this.status);
 
         // CENTER
-        this.treePanel = new TreePanel();
-        this.treeView = new JScrollPane(this.treePanel.getTree());
-        this.treePanel.add(this.treeView);
+        this.treePanelController = new TreePanelController();
+        this.treeView = new JScrollPane(this.treePanelController.getTree());
+        this.treePanelController.add(this.treeView);
 
         resetView();
 
         this.viewPanel.add(managementPanel, BorderLayout.NORTH);
         this.viewPanel.add(buttonPanel, BorderLayout.WEST);
-        this.viewPanel.add(this.treePanel, BorderLayout.CENTER);
+        this.viewPanel.add(this.treePanelController, BorderLayout.CENTER);
         setContentPane(this.viewPanel);
     }
 }

@@ -3,6 +3,7 @@ package asynchJavaParser.eventDrivenJavaParser.client;
 import javax.swing.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import asynchJavaParser.common.utils.Formatter;
 
 public class OpenFolderChooser implements ActionListener {
 

@@ -1,4 +1,4 @@
-package asynchJavaParser.reactiveJavaParser.client;
+package asynchJavaParser.common.utils;
 
 import java.util.List;
 import java.util.stream.Collectors;

@@ -1,4 +1,4 @@
-package asynchJavaParser.eventDrivenJavaParser.client;
+package asynchJavaParser.common.utils;
 
 import asynchJavaParser.common.reports.interfaces.*;
 import asynchJavaParser.eventDrivenJavaParser.client.projectAnalysis.ClassElem;
@@ -15,13 +15,13 @@ import java.util.*;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-public class TreePanel extends JPanel {
+public class TreePanelController extends JPanel {
 
     private JTree tree;
 
     private DefaultMutableTreeNode root;
 
-    public TreePanel() {
+    public TreePanelController() {
         createTree();
     }
 

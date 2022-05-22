@@ -7,6 +7,7 @@ import java.awt.*;
 import java.lang.reflect.InvocationTargetException;
 import java.util.HashMap;
 import java.util.Map;
+import asynchJavaParser.common.utils.TreePanelController;
 
 public class VisualizerFrame extends JFrame {
 
@@ -20,7 +21,7 @@ public class VisualizerFrame extends JFrame {
 
     private JPanel viewPanel;
 
-    private TreePanel treePanel;
+    private TreePanelController treePanelController;
 
     private JScrollPane treeView;
 
@@ -51,8 +52,8 @@ public class VisualizerFrame extends JFrame {
         return this.lib;
     }
 
-    public TreePanel getTreePanel() {
-        return this.treePanel;
+    public TreePanelController getTreePanel() {
+        return this.treePanelController;
     }
 
     public JScrollPane getTreeView(){
@@ -71,7 +72,16 @@ public class VisualizerFrame extends JFrame {
     }
 
     public void resetTree() {
-        this.treePanel.resetTree();
+        this.treePanelController.resetTree();
+    }
+
+    public void errorMessage(final String error) {
+        int ret = JOptionPane.showOptionDialog(null, error, "ERROR", JOptionPane.DEFAULT_OPTION,
+                JOptionPane.INFORMATION_MESSAGE, null, null, null);
+
+        if(ret == 0){
+            resetView();
+        }
     }
 
     public void display() {
@@ -129,19 +139,19 @@ public class VisualizerFrame extends JFrame {
         buttonPanel.add(analyzeProject);
 
         // CENTER
-        this.treePanel = new TreePanel();
-        this.treeView = new JScrollPane(this.treePanel.getTree());
-        this.treePanel.add(this.treeView);
+        this.treePanelController = new TreePanelController();
+        this.treeView = new JScrollPane(this.treePanelController.getTree());
+        this.treePanelController.add(this.treeView);
 
         this.infoArea = new JTextArea();
 
-        this.treePanel.add(this.infoArea);
+        this.treePanelController.add(this.infoArea);
 
         resetView();
 
         this.viewPanel.add(managementPanel, BorderLayout.NORTH);
         this.viewPanel.add(buttonPanel, BorderLayout.WEST);
-        this.viewPanel.add(this.treePanel, BorderLayout.CENTER);
+        this.viewPanel.add(this.treePanelController, BorderLayout.CENTER);
         setContentPane(this.viewPanel);
     }
 }

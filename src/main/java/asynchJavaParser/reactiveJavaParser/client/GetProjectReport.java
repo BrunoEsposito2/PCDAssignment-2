@@ -1,5 +1,6 @@
 package asynchJavaParser.reactiveJavaParser.client;
 
+import asynchJavaParser.common.reports.interfaces.IPackageReport;
 import asynchJavaParser.common.reports.interfaces.IProjectReport;
 import io.reactivex.rxjava3.core.Observable;
 
@@ -16,13 +17,18 @@ public class GetProjectReport implements ActionListener {
 
     @Override
     public void actionPerformed(ActionEvent e) {
+        String path = this.view.getNameDirectory().getText();
         this.view.getTreeView().setVisible(true);
         this.view.resetTree();
         this.view.getMethodButtons().get("getProjectReport").setEnabled(false);
 
-        Observable<IProjectReport> ob = this.view.getLib().getProjectReport(this.view.getNameDirectory().getText());
-        ob.subscribe(p -> {
-            this.view.getTreePanel().updateProjectReport(p, this.view.getTreePanel().getRoot());
-        });
+        if(!path.contains(".java")){
+            Observable<IProjectReport> ob = this.view.getLib().getProjectReport(path);
+            ob.subscribe(p -> {
+                this.view.getTreePanel().updateProjectReport(p, this.view.getTreePanel().getRoot());
+            });
+        }else{
+            this.view.errorMessage("Error!!! Select a project");
+        }
     }
 }

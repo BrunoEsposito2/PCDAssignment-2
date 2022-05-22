@@ -1,5 +1,7 @@
 package asynchJavaParser.reactiveJavaParser.client;
 
+import asynchJavaParser.common.utils.Formatter;
+
 import javax.swing.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;

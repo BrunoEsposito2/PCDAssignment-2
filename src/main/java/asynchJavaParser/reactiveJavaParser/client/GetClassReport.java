@@ -16,13 +16,18 @@ public class GetClassReport implements ActionListener {
 
     @Override
     public void actionPerformed(ActionEvent e) {
+        String path = this.view.getNameDirectory().getText();
         this.view.getTreeView().setVisible(true);
         this.view.resetTree();
         this.view.getMethodButtons().get("getClassReport").setEnabled(false);
 
-        Observable<IClassReport> ob = this.view.getLib().getClassReport(this.view.getNameDirectory().getText());
-        ob.subscribe(p -> {
-            this.view.getTreePanel().updateClassReport(p, this.view.getTreePanel().getRoot());
-        });
+        if(path.contains(".java")){
+            Observable<IClassReport> ob = this.view.getLib().getClassReport(path);
+            ob.subscribe(p -> {
+                this.view.getTreePanel().updateClassReport(p, this.view.getTreePanel().getRoot());
+            });
+        }else{
+            this.view.errorMessage("Error!!! Select a Java file");
+        }
     }
 }

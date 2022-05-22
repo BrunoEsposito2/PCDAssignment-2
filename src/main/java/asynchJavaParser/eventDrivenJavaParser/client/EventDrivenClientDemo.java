@@ -4,7 +4,7 @@ import io.vertx.core.Vertx;
 
 import javax.swing.*;
 
-public class ClientDemo extends JPanel {
+public class EventDrivenClientDemo extends JPanel {
 
     public static void main(String[] argv) {
         Vertx vertx = Vertx.vertx();
