@@ -69,7 +69,7 @@ public class VisualizerFrame extends JFrame implements ActionListener {
 		} catch (InvocationTargetException | InterruptedException e) {
 			e.printStackTrace();
 		}
-    };
+    }
     
     public void addListener(taskFrameworks.view.ActionListener l) {
     	this.controller = l;

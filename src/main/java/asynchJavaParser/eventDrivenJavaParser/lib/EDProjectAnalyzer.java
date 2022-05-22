@@ -16,8 +16,6 @@ import io.vertx.core.eventbus.DeliveryOptions;
 import io.vertx.core.eventbus.EventBus;
 import io.vertx.core.eventbus.Message;
 import io.vertx.core.eventbus.MessageConsumer;
-
-import java.util.concurrent.atomic.AtomicReference;
 import java.util.function.Consumer;
 
 public class EDProjectAnalyzer implements IProjectAnalyzer {
@@ -56,9 +54,6 @@ public class EDProjectAnalyzer implements IProjectAnalyzer {
 
   @Override
   public void analyzeProject(AnalyzeProjectConfig conf, Consumer<Message<?>> callback) {
-
-    AtomicReference<Integer> receivedMsgNr = new AtomicReference<>(0);
-    AtomicReference<Integer> expectedMsgNr = new AtomicReference<>(0);
 
     Promise<Integer> promiseElemNr = Promise.promise();
     ElemNumberReporter pnr = new ElemNumberReporter(promiseElemNr, conf.getSrcProjectFolderName());

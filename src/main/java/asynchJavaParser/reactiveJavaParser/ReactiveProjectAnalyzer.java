@@ -103,7 +103,8 @@ public class ReactiveProjectAnalyzer implements IProjectAnalyzer{
         FileExplorer fileExplorer = new FileExplorer(srcProjectFolderPath);
         List<String> files = fileExplorer.getAllSubpackageFiles()
                 .stream().sorted().collect(Collectors.toList());
-        CountVisitor cv = new CountVisitor(Formatter.extractPackages(files));
+        CountVisitor cv = new CountVisitor();
+        ProjectStructure totalCollector = new ProjectStructure();
 
         return Observable
                 .fromIterable(files)
@@ -117,7 +118,8 @@ public class ReactiveProjectAnalyzer implements IProjectAnalyzer{
                     } catch (FileNotFoundException e) {
                         e.printStackTrace();
                     }
-                    return collector;
+                    totalCollector.addTo(collector);
+                    return totalCollector;
                 });
     }
 

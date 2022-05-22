@@ -46,11 +46,10 @@ public class TreePanelController extends JPanel {
 
     // tree update for getInterfaceReport if selected a class
     public void updateClassReport(final IClassReport report, final DefaultMutableTreeNode addNode) {
-        IClassReport res = report;
         List<IMethodInfo> methodInfo = new ArrayList<>();
         List<IFieldInfo> fieldInfo = new ArrayList<>();
-        res.getMethodsInfo().forEach(m -> methodInfo.add(m));
-        res.getFieldsInfo().forEach(f -> fieldInfo.add(f));
+        methodInfo.addAll(report.getMethodsInfo());
+        fieldInfo.addAll(report.getFieldsInfo());
 
         DefaultMutableTreeNode className;
         List<DefaultMutableTreeNode> fieldName = new ArrayList<>();
@@ -58,8 +57,8 @@ public class TreePanelController extends JPanel {
         DefaultMutableTreeNode fieldNode = new DefaultMutableTreeNode("FIELDS");
         DefaultMutableTreeNode methodNode = new DefaultMutableTreeNode("METHODS");
 
-        className = new DefaultMutableTreeNode(res.getFullClassName() + " - Class");
-        className.add(new DefaultMutableTreeNode(res.getSrcFullFileName() + " - SrcFullFileName"));
+        className = new DefaultMutableTreeNode(report.getFullClassName() + " - Class");
+        className.add(new DefaultMutableTreeNode(report.getSrcFullFileName() + " - SrcFullFileName"));
         addNode.add(className);
 
         className.add(fieldNode);
@@ -89,16 +88,14 @@ public class TreePanelController extends JPanel {
 
     // tree update for getClassReport if selected an interface
     public void updateInterfaceReport(final IInterfaceReport report, final DefaultMutableTreeNode addNode) {
-        IInterfaceReport res = report;
-        List<IMethodInfo> methodInfo = new ArrayList<>();
-        methodInfo.addAll(res.getMethodsInfo());
+        List<IMethodInfo> methodInfo = new ArrayList<>(report.getMethodsInfo());
 
         DefaultMutableTreeNode interfaceName;
         List<DefaultMutableTreeNode> methodName = new ArrayList<>();
         DefaultMutableTreeNode methodNode = new DefaultMutableTreeNode("METHODS");
 
-        interfaceName = new DefaultMutableTreeNode(res.getFullInterfaceName() + " - Interface");
-        interfaceName.add(new DefaultMutableTreeNode(res.getSrcFullFileName() + " - SrcFullFileName"));
+        interfaceName = new DefaultMutableTreeNode(report.getFullInterfaceName() + " - Interface");
+        interfaceName.add(new DefaultMutableTreeNode(report.getSrcFullFileName() + " - SrcFullFileName"));
         addNode.add(interfaceName);
 
         interfaceName.add(methodNode);
@@ -119,10 +116,9 @@ public class TreePanelController extends JPanel {
 
     // tree update for getPackageReport
     public void updatePackageReport(final IPackageReport report, final DefaultMutableTreeNode addNode) {
-        IPackageReport res = report;
         Map<String, List<IReport>> files;
 
-        files = Stream.concat(res.getInterfaceReports().stream(), res.getClassReports().stream())
+        files = Stream.concat(report.getInterfaceReports().stream(), report.getClassReports().stream())
                 .collect(Collectors.groupingBy(IReport::getSrcFullFileName));
 
         files.forEach((k, v) -> {
@@ -146,16 +142,14 @@ public class TreePanelController extends JPanel {
 
     // tree update for getProjectReport
     public void updateProjectReport(final IProjectReport report, final DefaultMutableTreeNode addNode) {
-        IProjectReport res = report;
-        List<IPackageReport> packageInfo = new ArrayList<>();
         Map<String, List<IPackageReport>> packageMap;
-        packageInfo.addAll(res.getPackageReports());
+        List<IPackageReport> packageInfo = new ArrayList<>(report.getPackageReports());
 
         DefaultMutableTreeNode projectName;
         DefaultMutableTreeNode packageNode = new DefaultMutableTreeNode("PACKAGES");
 
 
-        projectName = new DefaultMutableTreeNode(res.getMainClass() + " - MainClass");
+        projectName = new DefaultMutableTreeNode(report.getMainClass() + " - MainClass");
         addNode.add(projectName);
 
         projectName.add(packageNode);

@@ -25,8 +25,7 @@ public class GetPackageReport implements ActionListener {
         this.view.getMethodButtons().get("getPackageReport").setEnabled(false);
         Future<IPackageReport> future = this.view.getLib().getPackageReport(this.view.getNameDirectory().getText());
         future.onSuccess(res -> {
-            IPackageReport report = res;
-            this.view.getTreePanel().updatePackageReport(report, this.view.getTreePanel().getRoot());
+            this.view.getTreePanel().updatePackageReport(res, this.view.getTreePanel().getRoot());
         });
         future.onFailure(res -> {
             this.view.errorMessage("Error!!! Select a package");

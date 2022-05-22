@@ -1,7 +1,6 @@
 package asynchJavaParser.eventDrivenJavaParser.client.projectAnalysis;
 
 import com.github.javaparser.ast.body.ClassOrInterfaceDeclaration;
-import com.github.javaparser.ast.body.FieldDeclaration;
 import com.github.javaparser.ast.body.MethodDeclaration;
 
 import java.util.HashMap;

@@ -5,17 +5,15 @@ import com.github.javaparser.ast.body.ClassOrInterfaceDeclaration;
 import com.github.javaparser.ast.body.FieldDeclaration;
 import com.github.javaparser.ast.body.MethodDeclaration;
 import com.github.javaparser.ast.visitor.VoidVisitorAdapter;
-
+import java.util.ArrayList;
 import java.util.List;
 
 public class CountVisitor extends VoidVisitorAdapter<ProjectStructure> {
 
-    private List<String> packages;
-    private String currentPackage;
+    private final List<PackageDeclaration> packages;
 
-    public CountVisitor(final List<String> files) {
-        this.packages = files;
-        this.currentPackage = "";
+    public CountVisitor() {
+        this.packages = new ArrayList<>();
     }
 
     @Override
@@ -27,11 +25,10 @@ public class CountVisitor extends VoidVisitorAdapter<ProjectStructure> {
 
     @Override
     public void visit(PackageDeclaration pd, ProjectStructure collector){
-        String current = this.getPackage(pd.getNameAsString());
-        if (!this.currentPackage.equals(current)) {
+        if (!packages.contains(pd)) {
             super.visit(pd, collector);
             collector.incrementPackages();
-            this.currentPackage = current;
+            packages.add(pd);
         }
     }
 
@@ -49,11 +46,4 @@ public class CountVisitor extends VoidVisitorAdapter<ProjectStructure> {
         }
     }
 
-    private String getPackage(String path) {
-        for (final String p : this.packages) {
-            if (p.contains(path))
-                return path;
-        }
-        return null;
-    }
 }

@@ -54,7 +54,7 @@ public class AnalyzeProject implements ActionListener {
             this.view.getLib().analyzeProject(conf, message -> {
                 this.countElem++;
                 String elemType = message.headers().get("type");
-                this.view.getTotalAnalyzed().setText(String.valueOf(this.countElem + "/" + this.totalElem));
+                this.view.getTotalAnalyzed().setText(this.countElem + "/" + this.totalElem);
                 if (this.totalElem == this.countElem) {
                     this.view.getStatus().setText("Complete");
                 }
@@ -73,7 +73,6 @@ public class AnalyzeProject implements ActionListener {
                         FieldDeclaration fd = (FieldDeclaration) message.body();
                         this.ps.putField(fd);
                         this.view.getTreePanel().dynamicUpdate(this.ps);
-                        ;
                         break;
                     case "Method":
                         MethodDeclaration md = (MethodDeclaration) message.body();

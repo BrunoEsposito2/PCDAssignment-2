@@ -22,7 +22,7 @@ public class ComputeBody implements Callable<Void>  {
 	}
 	
 	@Override
-	public Void call() throws Exception {
+	public Void call() {
 		/* compute total force on bodies */
         V2d totalForce = computeTotalForceOnBody(toCompute);
         

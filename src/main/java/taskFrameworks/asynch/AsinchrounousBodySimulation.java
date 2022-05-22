@@ -14,7 +14,7 @@ import java.util.ArrayList;
  */
 public class AsinchrounousBodySimulation {
 	
-	public static void main(String[] args) throws InterruptedException {
+	public static void main(String[] args) {
 		
 		Boundary bounds =  new Boundary(-6.0, -6.0, 6.0, 6.0);
 		BodyGenerator bg = new BodyGenerator();

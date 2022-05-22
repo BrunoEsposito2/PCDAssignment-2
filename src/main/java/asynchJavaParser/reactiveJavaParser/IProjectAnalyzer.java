@@ -5,8 +5,6 @@ import asynchJavaParser.common.reports.interfaces.IPackageReport;
 import asynchJavaParser.common.reports.interfaces.IProjectReport;
 import io.reactivex.rxjava3.core.Observable;
 
-import java.util.Map;
-
 public interface IProjectAnalyzer {
 
 	/**

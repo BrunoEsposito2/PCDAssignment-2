@@ -37,6 +37,7 @@ public class AnalyzeProject implements ActionListener {
         if(!path.contains(".java")){
             Observable<ProjectStructure> ob = this.view.getLib().analyzeProject(path);
             disposable = ob.subscribe(p -> {
+                ps = new ProjectStructure();
                 ps.addTo(p);
                 this.view.getInfoArea().setText("DIRECTORY ->   " + this.view.getNameDirectory().getText() + "\n");
                 this.view.getInfoArea().append("PACKAGES NR:    " + ps.getPackagesNr() + "\n");

@@ -25,8 +25,7 @@ public class GetProjectReport implements ActionListener {
         this.view.getMethodButtons().get("getProjectReport").setEnabled(false);
         Future<IProjectReport> future = this.view.getLib().getProjectReport(this.view.getNameDirectory().getText());
         future.onSuccess(res -> {
-            IProjectReport report = res;
-            this.view.getTreePanel().updateProjectReport(report, this.view.getTreePanel().getRoot());
+            this.view.getTreePanel().updateProjectReport(res, this.view.getTreePanel().getRoot());
         });
         future.onFailure(res -> {
             this.view.errorMessage("Error!!! Select a project");
