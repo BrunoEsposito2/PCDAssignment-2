@@ -12,7 +12,7 @@ import java.util.ArrayList;
  * Bodies simulation - legacy code: concurrent
  * 
  */
-public class AsinchrounousBodySimulation {
+public class AsynchronousBodySimulation {
 	
 	public static void main(String[] args) {
 		
